@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Poços de Caldas — Relatório Financeiro 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#04111E;--surface:#071928;--card:#0A2035;--card2:#0D2742;
+  --gold:#E8A030;--gold2:#F5C060;--gold-dim:rgba(232,160,48,.12);
+  --unit:#35C98A;--unit2:#5AEAA8;--unit-dim:rgba(53,201,138,.1);
+  --teal:#0BB5A4;--teal-dim:rgba(11,181,164,.1);
+  --green:#35C98A;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --muted:#5D7A99;--body:rgba(255,255,255,.72);
+  --border:rgba(53,201,138,.16);--border2:rgba(255,255,255,.06);--r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--ink);color:#fff;font-family:'DM Sans',system-ui,sans-serif;overflow-x:hidden;line-height:1.6}
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:.6rem 2rem;background:rgba(4,17,30,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--unit)}
+.nav-brand span{color:rgba(255,255,255,.2);margin:0 .4rem}
+.nav-back{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:.28rem .75rem;border-radius:6px;transition:all .2s}
+.nav-back:hover{color:var(--unit);border-color:rgba(53,201,138,.35)}
+.nav-links{display:flex;gap:.1rem;list-style:none}
+.nav-links a{padding:.28rem .6rem;font-size:.65rem;letter-spacing:.07em;text-transform:uppercase;font-weight:500;color:rgba(255,255,255,.38);text-decoration:none;border-radius:5px;transition:all .2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.on{color:var(--unit);background:var(--unit-dim)}
+.nav-unit-badge{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--unit-dim);color:var(--unit);border:1px solid rgba(53,201,138,.28);padding:.2rem .65rem;border-radius:20px}
+@media(max-width:860px){.nav-links{display:none}}
+#hero{min-height:95vh;display:flex;align-items:center;padding-top:64px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(53,201,138,.12) 0%,transparent 65%),var(--ink)}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(53,201,138,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(53,201,138,.02) 1px,transparent 1px);background-size:52px 52px;pointer-events:none}
+.hero-wrap{max-width:1160px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1.2fr 1fr;gap:3.5rem;align-items:center;width:100%}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(53,201,138,.1);border:1px solid rgba(53,201,138,.3);border-radius:20px;padding:.28rem .85rem;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--unit);margin-bottom:1.2rem;font-weight:500}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--unit);animation:blink 2.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.55)}}
+.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.4rem,4.8vw,4.3rem);line-height:.92;color:#fff}
+.hero-title em{color:var(--unit);font-style:normal}
+.hero-note{margin-top:1rem;font-size:.8rem;color:rgba(53,201,138,.8);background:rgba(53,201,138,.06);border:1px solid rgba(53,201,138,.18);border-radius:6px;padding:.55rem .9rem;line-height:1.5}
+.hero-sub{margin-top:.7rem;font-size:.88rem;font-weight:300;color:rgba(255,255,255,.45);max-width:440px;line-height:1.75}
+.hero-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(7,25,40,.85);padding:1rem 1.2rem;transition:background .2s}
+.hk:hover{background:rgba(13,39,66,.8)}
+.hk-v{font-family:'Syne',sans-serif;font-weight:800;font-size:1.75rem;color:var(--unit);line-height:1}
+.hk-l{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hk-d{font-size:.65rem;font-weight:500;color:var(--teal);margin-top:.15rem}
+.hero-orb{display:flex;align-items:center;justify-content:center}
+.orb-wrap{position:relative;width:300px;height:300px}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(53,201,138,.22);animation:spin 45s linear infinite}
+.orb-ring2{position:absolute;inset:28px;border-radius:50%;border:1px dashed rgba(232,160,48,.15);animation:spin 28s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:142px;height:142px;border-radius:50%;background:linear-gradient(135deg,rgba(53,201,138,.4),rgba(7,25,40,.98));border:1px solid rgba(53,201,138,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 65px rgba(53,201,138,.18)}
+.orb-v{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:var(--unit);line-height:1}
+.orb-l{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.2rem}
+.orb-sat{position:absolute;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid rgba(53,201,138,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.5rem;letter-spacing:.03em;text-transform:uppercase;color:var(--unit);font-weight:700;text-align:center;line-height:1.25}
+.os1{top:-22px;left:calc(50% - 22px)}.os2{bottom:-22px;left:calc(50% - 22px)}.os3{left:-22px;top:calc(50% - 22px)}.os4{right:-22px;top:calc(50% - 22px)}
+@media(max-width:860px){.hero-wrap{grid-template-columns:1fr}.hero-orb{display:none}}
+section{padding:4.5rem 0;position:relative}
+.sec-alt{background:var(--surface)}
+.container{max-width:1160px;margin:0 auto;padding:0 2rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-eyebrow{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--unit);font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.sec-eyebrow::before{content:'';width:14px;height:2px;background:var(--unit);border-radius:1px}
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1}
+.sec-title em{color:var(--unit);font-style:normal}
+.sec-sub{margin-top:.6rem;color:rgba(255,255,255,.45);max-width:560px;font-size:.88rem;line-height:1.7}
+.kpi-row{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:2rem 0}
+.kpi-4{grid-template-columns:repeat(4,1fr)}.kpi-5{grid-template-columns:repeat(5,1fr)}.kpi-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:800px){.kpi-4,.kpi-5{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);padding:1.15rem .88rem;text-align:center;transition:background .2s}
+.kpi:hover{background:var(--card2)}
+.kv{font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;color:var(--unit);line-height:1}
+.kd{display:inline-block;font-size:.62rem;font-weight:500;padding:.1rem .42rem;border-radius:20px;margin:.18rem 0}
+.up{background:rgba(53,201,138,.12);color:var(--green)}.dn{background:rgba(240,96,96,.1);color:var(--red)}
+.warn{background:rgba(245,160,48,.1);color:var(--amber)}.info{background:rgba(11,181,164,.1);color:var(--teal)}.blu{background:rgba(46,133,212,.1);color:var(--blue)}
+.kl{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.chart-hd{font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;font-weight:600}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.3rem}
+@media(max-width:680px){.g2{grid-template-columns:1fr}}
+.nb{background:rgba(11,181,164,.05);border:1px solid rgba(11,181,164,.18);border-radius:8px;padding:.85rem 1.2rem;margin-top:1.2rem;font-size:.82rem;color:rgba(255,255,255,.58);line-height:1.65}
+.nb strong{color:var(--teal)}
+.nb-green{background:rgba(53,201,138,.05);border-color:rgba(53,201,138,.2)}
+.nb-green strong{color:var(--unit2)}
+.nb-amber{background:rgba(245,160,48,.05);border-color:rgba(245,160,48,.18)}
+.nb-amber strong{color:#ffb850}
+.nb-red{background:rgba(240,96,96,.04);border-color:rgba(240,96,96,.16)}
+.nb-red strong{color:#f08080}
+.ft{width:100%;border-collapse:collapse}
+.ft th{background:rgba(7,25,40,.9);color:var(--unit);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.7rem .8rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ft th:first-child{text-align:left}
+.ft td{padding:.7rem .8rem;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ft td:first-child{text-align:left;font-weight:600;font-size:.81rem}
+.ft tr:last-child td{font-weight:700;background:rgba(7,25,40,.5);border-top:1px solid var(--border)}
+.ft tr:hover td{background:rgba(53,201,138,.022)}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}.tv-gd{color:var(--unit);font-weight:700}.tv-t{color:var(--teal)}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+@media(max-width:680px){.insights{grid-template-columns:1fr}}
+.ic{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.ic.pos{border-color:rgba(53,201,138,.22);background:rgba(53,201,138,.03)}
+.ic.neg{border-color:rgba(240,96,96,.22);background:rgba(240,96,96,.03)}
+.ic.wrn{border-color:rgba(245,160,48,.22);background:rgba(245,160,48,.03)}
+.ic.inf{border-color:rgba(11,181,164,.22);background:rgba(11,181,164,.03)}
+.ic-icon{font-size:1.35rem;margin-bottom:.5rem}
+.ic-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--unit);margin-bottom:.38rem}
+.ic-body{font-size:.83rem;color:rgba(255,255,255,.58);line-height:1.65}
+.be-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem;margin-top:1.5rem}
+.be-track{position:relative;height:10px;background:rgba(255,255,255,.07);border-radius:5px;margin:1rem 0;overflow:visible}
+.be-fill{position:absolute;left:0;top:0;height:100%;border-radius:5px}
+.be-line{position:absolute;top:-4px;width:2px;height:18px;background:var(--unit);border-radius:1px}
+.be-line::after{content:'BE';position:absolute;top:-16px;left:-8px;font-size:.55rem;color:var(--unit);font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.be-nums{display:flex;justify-content:space-between;font-size:.73rem;color:var(--muted)}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:rgba(53,201,138,.28);border-radius:2px}
+.leg{display:flex;gap:14px;margin-top:8px;font-size:.71rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer p{font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+footer a{font-size:.66rem;font-weight:600;color:var(--unit);text-decoration:none;border:1px solid rgba(53,201,138,.25);padding:.3rem .7rem;border-radius:6px;transition:all .2s}
+footer a:hover{background:var(--unit-dim)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Maximiano <span>·</span> Poços de Caldas</div>
+  <ul class="nav-links">
+    <li><a onclick="goto('hero')" class="on">Início</a></li>
+    <li><a onclick="goto('s-kpi')">KPIs</a></li>
+    <li><a onclick="goto('s-mes')">Mensal</a></li>
+    <li><a onclick="goto('s-rec')">Receita</a></li>
+    <li><a onclick="goto('s-be')">Break-Even</a></li>
+    <li><a onclick="goto('s-cfo')">Análise</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:.8rem">
+    <div class="nav-unit-badge">Poços · 28,4% · Melhor margem</div>
+    <a class="nav-back" href="index.html">← Voltar</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-wrap">
+    <div>
+      <div class="hero-eyebrow"><span class="pulse"></span>Unidade Poços de Caldas · 2025</div>
+      <h1 class="hero-title">MELHOR<br/><em>MARGEM</em><br/>DO GRUPO</h1>
+      <div class="hero-note">⚡ Junho/25: honorário civil atípico de R$ 311.797 — contrato específico, não recorrente. Distorceu a margem para cima. Resultado ajustado sem esse evento: R$ 221K com margem de 30,3% — ainda excelente.</div>
+      <p class="hero-sub">Segunda maior unidade do grupo, com a melhor eficiência operacional. Custo operacional baixo em relação à receita gerada.</p>
+      <div class="hero-kpis">
+        <div class="hk"><div class="hk-v">R$ 1,04M</div><div class="hk-l">Receita Total 2025</div><div class="hk-d">28,4% do consolidado</div></div>
+        <div class="hk"><div class="hk-v">R$ 533K</div><div class="hk-l">Resultado Real</div><div class="hk-d">Margem 51,2%</div></div>
+        <div class="hk"><div class="hk-v">R$ 221K</div><div class="hk-l">Resultado Ajustado ★</div><div class="hk-d">Margem 30,3% — sem Jun</div></div>
+        <div class="hk"><div class="hk-v">R$ 43K</div><div class="hk-l">Break-Even Mensal</div><div class="hk-d">Folga de ~40%</div></div>
+      </div>
+    </div>
+    <div class="hero-orb">
+      <div class="orb-wrap">
+        <div class="orb-ring"></div>
+        <div class="orb-ring2"></div>
+        <div class="orb-core"><div class="orb-v">30,3%</div><div class="orb-l">Margem Adj.</div></div>
+        <div class="orb-sat os1">R$<br/>1,04M</div>
+        <div class="orb-sat os2">R$<br/>221K</div>
+        <div class="orb-sat os3">28,4%<br/>grupo</div>
+        <div class="orb-sat os4">BE<br/>R$43K</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-kpi" class="sec-alt">
+  <div class="container">
+    <div class="sec-eyebrow rv">Indicadores</div>
+    <h2 class="sec-title rv d1">KPIs <em>Poços de Caldas 2025</em></h2>
+    <div class="kpi-row kpi-5 rv d2">
+      <div class="kpi"><div class="kv">R$ 1,04M</div><span class="kd up">2025 completo</span><div class="kl">Receita Total</div></div>
+      <div class="kpi"><div class="kv">R$ 507K</div><span class="kd up">48,8% da rec.</span><div class="kl">Custos e Despesas</div></div>
+      <div class="kpi"><div class="kv">R$ 533K</div><span class="kd up">51,2%</span><div class="kl">Resultado Real</div></div>
+      <div class="kpi"><div class="kv">R$ 221K</div><span class="kd up">30,3%</span><div class="kl">Resultado Ajustado ★</div></div>
+      <div class="kpi"><div class="kv">R$ 86,7K</div><span class="kd info">mensal médio</span><div class="kl">Receita Média</div></div>
+    </div>
+    <div class="nb nb-amber rv d3">
+      <strong>★ Sobre o resultado ajustado:</strong> junho de 2025 teve um honorário civil de R$ 311.797 — contrato atípico de alto valor, não representativo da operação regular. Mesmo excluindo esse evento, a margem de Poços permanece em 30,3%, a melhor do grupo. Isso confirma a excelente eficiência operacional da unidade.
+    </div>
+    <div class="g2 rv d3">
+      <div class="chart-box">
+        <div class="chart-hd">Receita vs. Resultado — Mês a Mês</div>
+        <canvas id="ch-res" height="200"></canvas>
+        <div class="leg"><span><span class="leg-dot" style="background:#35C98A"></span>Receita</span><span><span class="leg-dot" style="background:#0BB5A4"></span>Resultado</span></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-hd">Composição da Receita por Tipo</div>
+        <canvas id="ch-comp" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-mes">
+  <div class="container">
+    <div class="sec-eyebrow rv">Evolução Mensal</div>
+    <h2 class="sec-title rv d1">Mês a Mês <em>em Detalhe</em></h2>
+    <div class="chart-box rv d2">
+      <div class="chart-hd">Receita × Custos × Resultado — 12 Meses</div>
+      <canvas id="ch-full" height="90"></canvas>
+      <div class="nb nb-green" style="margin-top:.8rem">
+        <strong>Junho em destaque:</strong> R$ 338.965 de receita contra R$ 30.577 de custos — resultado de R$ 308.388 e margem de 91%! Isso é excepcional e ocorreu devido ao honorário civil de R$ 311.797 de um contrato específico. Nos demais meses, a margem operacional foi consistentemente positiva.
+      </div>
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.5rem;overflow-x:auto">
+      <div class="chart-hd">DRE Simplificada — Poços de Caldas 2025</div>
+      <table class="ft">
+        <thead><tr><th style="text-align:left">Mês</th><th>Receita</th><th>Custos</th><th>Resultado</th><th>Margem</th></tr></thead>
+        <tbody>
+          <tr><td>Janeiro</td><td>R$ 43.479</td><td>R$ 27.175</td><td class="tv-g">R$ 16.304</td><td class="tv-g">37,5%</td></tr>
+          <tr><td>Fevereiro</td><td>R$ 43.577</td><td>R$ 23.859</td><td class="tv-g">R$ 19.718</td><td class="tv-g">45,2%</td></tr>
+          <tr><td>Março</td><td>R$ 42.154</td><td>R$ 46.901</td><td class="tv-r">-R$ 4.747</td><td class="tv-r">-11,3%</td></tr>
+          <tr><td>Abril</td><td>R$ 59.143</td><td>R$ 50.732</td><td class="tv-g">R$ 8.411</td><td class="tv-g">14,2%</td></tr>
+          <tr><td>Maio</td><td>R$ 32.628</td><td>R$ 29.628</td><td class="tv-g">R$ 3.000</td><td class="tv-g">9,2%</td></tr>
+          <tr><td style="color:var(--unit);font-weight:700">Junho ⚡</td><td class="tv-g">R$ 338.965</td><td>R$ 30.577</td><td class="tv-g">R$ 308.388</td><td class="tv-g">91,0%</td></tr>
+          <tr><td>Julho</td><td>R$ 72.033</td><td>R$ 43.777</td><td class="tv-g">R$ 28.256</td><td class="tv-g">39,2%</td></tr>
+          <tr><td>Agosto</td><td>R$ 88.833</td><td>R$ 44.802</td><td class="tv-g">R$ 44.031</td><td class="tv-g">49,6%</td></tr>
+          <tr><td>Setembro</td><td>R$ 36.950</td><td>R$ 49.214</td><td class="tv-r">-R$ 12.264</td><td class="tv-r">-33,2%</td></tr>
+          <tr><td>Outubro</td><td>R$ 45.916</td><td>R$ 43.171</td><td class="tv-g">R$ 2.744</td><td class="tv-g">6,0%</td></tr>
+          <tr><td>Novembro</td><td>R$ 73.563</td><td>R$ 54.796</td><td class="tv-g">R$ 18.767</td><td class="tv-g">25,5%</td></tr>
+          <tr><td>Dezembro</td><td>R$ 162.663</td><td>R$ 62.751</td><td class="tv-g">R$ 99.911</td><td class="tv-g">61,4%</td></tr>
+          <tr><td><strong>TOTAL</strong></td><td class="tv-gd">R$ 1.039.902</td><td>R$ 507.383</td><td class="tv-gd">R$ 532.519</td><td class="tv-gd">51,2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-rec" class="sec-alt">
+  <div class="container">
+    <div class="sec-eyebrow rv">Composição</div>
+    <h2 class="sec-title rv d1">De onde vem a <em>receita</em></h2>
+    <div class="kpi-row kpi-4 rv d2">
+      <div class="kpi"><div class="kv">R$ 334K</div><span class="kd info">32,1%</span><div class="kl">Hon. Prev. Adm.</div></div>
+      <div class="kpi"><div class="kv">R$ 247K</div><span class="kd up">23,8%</span><div class="kl">Hon. Prev. Judicial</div></div>
+      <div class="kpi"><div class="kv">R$ 404K</div><span class="kd warn">38,9%</span><div class="kl">Hon. Civil</div></div>
+      <div class="kpi"><div class="kv">R$ 55K</div><span class="kd blu">5,2%</span><div class="kl">Demais</div></div>
+    </div>
+    <div class="nb nb-amber rv d3">
+      <strong>Atenção — Honorário Civil:</strong> os R$ 404K de Civil incluem R$ 311K de um único contrato em junho. A receita civil recorrente real é de cerca de R$ 93K no ano (~R$ 7,7K/mês). A área civil está crescendo, mas ainda é dependente de contratos pontuais de maior valor.
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.2rem">
+      <div class="chart-hd">Evolução da Receita — Prev. Adm. vs. Prev. Judicial vs. Civil</div>
+      <canvas id="ch-prev" height="90"></canvas>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-be">
+  <div class="container">
+    <div class="sec-eyebrow rv">Ponto de Equilíbrio</div>
+    <h2 class="sec-title rv d1">Break-Even <em>Poços de Caldas</em></h2>
+    <p class="sec-sub rv d2">O break-even é o valor mínimo mensal para cobrir todos os custos da unidade. Poços tem o break-even mais baixo do grupo em relação à receita — sinal de alta eficiência.</p>
+    <div class="be-card rv d2">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:.5rem">
+        <div>
+          <div style="font-size:1.6rem;font-family:'Syne',sans-serif;font-weight:800;color:var(--unit)">R$ 43.346</div>
+          <div style="font-size:.72rem;color:var(--muted)">Break-Even mensal estimado (sem junho)</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1.2rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--green)">R$ 60.675</div>
+          <div style="font-size:.72rem;color:var(--muted)">Receita média ajustada (sem junho)</div>
+        </div>
+      </div>
+      <div class="be-track" style="overflow:visible">
+        <div class="be-fill" style="width:71.5%;background:linear-gradient(90deg,rgba(53,201,138,.5),rgba(53,201,138,.9))"></div>
+        <div class="be-line" style="left:71.5%"></div>
+      </div>
+      <div class="be-nums">
+        <span>R$ 0</span>
+        <span style="color:var(--unit)">← Break-Even: R$ 43K</span>
+        <span>Rec. Média: R$ 61K →</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1.2rem">
+        <div style="background:rgba(53,201,138,.06);border:1px solid rgba(53,201,138,.2);border-radius:7px;padding:.8rem">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Folga Operacional</div>
+          <div style="font-size:1.2rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--green)">R$ 17.329</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.4)">~40% acima do BE</div>
+        </div>
+        <div style="background:rgba(53,201,138,.06);border:1px solid rgba(53,201,138,.2);border-radius:7px;padding:.8rem">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Eficiência</div>
+          <div style="font-size:1.2rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--green)">R$ 0,30</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.4)">lucro por R$ 1 faturado</div>
+        </div>
+        <div style="background:rgba(11,181,164,.06);border:1px solid rgba(11,181,164,.18);border-radius:7px;padding:.8rem">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Meses positivos</div>
+          <div style="font-size:1.2rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--teal)">10 de 12</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.4)">Alta consistência</div>
+        </div>
+      </div>
+    </div>
+    <div class="nb nb-green rv d3">
+      <strong>Poços é a unidade mais eficiente do grupo:</strong> com apenas R$ 43K de break-even mensal, a unidade tem uma estrutura de custos enxuta. Para cada R$ 100 faturados (em condições normais), R$ 30 ficam como resultado — isso é excelente para um escritório jurídico.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-cfo" class="sec-alt">
+  <div class="container">
+    <div class="sec-eyebrow rv">Análise Estratégica</div>
+    <h2 class="sec-title rv d1">Visão <em>Executiva</em></h2>
+    <div class="insights rv d2">
+      <div class="ic pos">
+        <div class="ic-icon">🏆</div>
+        <div class="ic-title">Melhor relação receita-custo</div>
+        <div class="ic-body">Poços gera R$ 507K de custos para R$ 1,04M de receita — proporção de 48,8%. Ou seja, menos da metade do que recebe vai para custos. Nenhuma outra unidade tem essa eficiência.</div>
+      </div>
+      <div class="ic wrn">
+        <div class="ic-icon">📊</div>
+        <div class="ic-title">Resultado muito dependente de junho</div>
+        <div class="ic-body">Sem o honorário civil de junho, o resultado cai de R$ 533K para R$ 221K. A unidade precisa construir uma carteira civil recorrente para não depender de contratos pontuais de grande valor.</div>
+      </div>
+      <div class="ic pos">
+        <div class="ic-icon">📈</div>
+        <div class="ic-title">Dezembro excelente — boa tendência</div>
+        <div class="ic-body">Dezembro registrou R$ 162.663 de receita com margem de 61,4%. Isso indica crescimento acelerado no final do ano, especialmente em receita previdenciária administrativa (R$ 130K em dezembro).</div>
+      </div>
+      <div class="ic inf">
+        <div class="ic-icon">⚡</div>
+        <div class="ic-title">Potencial de sede hub do grupo</div>
+        <div class="ic-body">Com a melhor eficiência operacional, Poços tem potencial de ser o centro estratégico do grupo — tanto para referência de boas práticas quanto para expansão de serviços de maior valor (civil, trabalhista).</div>
+      </div>
+    </div>
+    <div class="nb rv d3">
+      <strong>Recomendação:</strong> priorizar a construção de uma carteira civil recorrente para reduzir a dependência de contratos pontuais. A estrutura de custos enxuta é um ativo — manter esse padrão enquanto a receita cresce. O crescimento de dezembro é um sinal positivo para 2026.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Poços de Caldas · Relatório 2025 · Maximiano Advogados · Confidencial</p>
+  <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+    <a href="botelhos.html">← Botelhos</a>
+    <a href="index.html">Consolidado</a>
+    <a href="caboverde.html">Cabo Verde →</a>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+function goto(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+const M=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const rec=[43479,43577,42154,59143,32628,338965,72033,88833,36950,45916,73563,162663];
+const cus=[27175,23859,46901,50732,29628,30577,43777,44802,49214,43171,54796,62751];
+const res=rec.map((r,i)=>r-cus[i]);
+const C={responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' R$ '+c.raw.toLocaleString('pt-BR')}}}};
+new Chart('ch-res',{type:'bar',data:{labels:M,datasets:[
+  {label:'Receita',data:rec,backgroundColor:'rgba(53,201,138,.7)',borderRadius:3,order:2},
+  {label:'Resultado',data:res,backgroundColor:'rgba(11,181,164,.75)',borderRadius:3,order:1}
+]},options:{...C,plugins:{...C.plugins,legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:10}}}},scales:{x:{ticks:{color:'rgba(255,255,255,.38)',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.38)',font:{size:10},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+new Chart('ch-comp',{type:'doughnut',data:{labels:['Prev. Adm.','Prev. Judicial','Civil','Outros'],datasets:[{data:[334000,247000,404000,55000],backgroundColor:['rgba(11,181,164,.8)','rgba(53,201,138,.8)','rgba(232,160,48,.8)','rgba(46,133,212,.8)'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'rgba(255,255,255,.45)',font:{size:10},padding:12}},tooltip:{callbacks:{label:c=>' '+((c.raw/1040000)*100).toFixed(1)+'%'}}},cutout:'60%'}});
+new Chart('ch-full',{type:'bar',data:{labels:M,datasets:[
+  {label:'Receita',data:rec,backgroundColor:'rgba(53,201,138,.65)',borderRadius:3,order:2},
+  {label:'Custos',data:cus.map(v=>-v),backgroundColor:'rgba(240,96,96,.5)',borderRadius:3,order:3},
+  {label:'Resultado',data:res,type:'line',borderColor:'rgba(255,255,255,.5)',pointBackgroundColor:'rgba(53,201,138,1)',borderWidth:1.5,pointRadius:4,tension:.3,order:1}
+]},options:{...C,plugins:{legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:11}}},tooltip:{mode:'index'}},scales:{x:{ticks:{color:'rgba(255,255,255,.38)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.38)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+const rpa=[21358,18798,18750,6419,10835,20959,30419,15862,12186,10339,36902,130649];
+const rpj=[9988,21512,20455,43034,7259,1859,21114,50319,12282,18166,27763,13092];
+const civ=[10613,1619,2119,3425,11493,311797,15442,19752,4433,9433,3432,10872];
+new Chart('ch-prev',{type:'line',data:{labels:M,datasets:[
+  {label:'Prev. Administrativo',data:rpa,borderColor:'rgba(53,201,138,.9)',backgroundColor:'rgba(53,201,138,.07)',fill:true,tension:.35,borderWidth:2,pointRadius:3},
+  {label:'Prev. Judicial',data:rpj,borderColor:'rgba(11,181,164,.9)',backgroundColor:'rgba(11,181,164,.07)',fill:true,tension:.35,borderWidth:2,pointRadius:3},
+  {label:'Civil',data:civ,borderColor:'rgba(232,160,48,.9)',backgroundColor:'rgba(232,160,48,.07)',fill:false,tension:.35,borderWidth:2,pointRadius:3}
+]},options:{...C,plugins:{legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:11}}},tooltip:{mode:'index'}},scales:{x:{ticks:{color:'rgba(255,255,255,.38)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.38)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+</script>
+</body>
+</html>
