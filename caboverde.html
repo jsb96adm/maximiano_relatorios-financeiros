@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano Cabo Verde — Relatório 1T2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;
+  --gd:#E8A030;--gd2:#F5C060;--gd-dim:rgba(232,160,48,.1);
+  --teal:#0EA89A;--teal2:#14C4B4;--teal-dim:rgba(14,168,154,.1);
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --muted:#6B84A8;--card:#0A1F38;--border:rgba(232,160,48,.16);--border2:rgba(255,255,255,.06);
+  --unit:#2E85D4;--r:12px;--sb:240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(9,26,46,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);line-height:1.2}
+.sb-brand-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-unit-badge{margin:.8rem 1.2rem;background:rgba(46,133,212,.1);border:1px solid rgba(46,133,212,.3);border-radius:6px;padding:.4rem .75rem;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:700;text-align:center}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.74rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--gd);background:rgba(232,160,48,.06);border-left-color:var(--gd)}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-unit{display:flex;align-items:center;gap:.55rem;padding:.42rem 1.2rem;font-size:.73rem;color:rgba(255,255,255,.45);text-decoration:none;transition:all .2s}
+.sb-unit:hover{color:#fff;background:rgba(255,255,255,.04)}
+.sb-unit.current{color:var(--blue);border-left:2px solid var(--blue)}
+.sb-unit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.6rem;color:var(--muted);text-align:center;line-height:1.5}
+#main{margin-left:var(--sb);flex:1;min-width:0}
+#hero{min-height:55vh;display:flex;align-items:center;padding:5rem 0 3.5rem;background:radial-gradient(ellipse 65% 50% at 55% -5%,rgba(46,133,212,.2) 0%,transparent 65%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,133,212,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(46,133,212,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 2.5rem;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(46,133,212,.1);border:1px solid rgba(46,133,212,.3);border-radius:20px;padding:.32rem .9rem;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:1.2rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-weight:900;font-size:clamp(2.4rem,5vw,4.2rem);line-height:.92;color:#fff;letter-spacing:-.02em;margin-bottom:.8rem}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(9,26,46,.75);padding:1rem 1.1rem;transition:background .2s}
+.hk:hover{background:rgba(21,45,80,.8)}
+.hk-val{font-weight:800;font-size:1.5rem;color:var(--gd);line-height:1}
+.hk-label{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hk-delta{font-size:.68rem;font-weight:700;margin-top:.12rem}
+section{position:relative;padding:4.5rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.7rem;color:rgba(255,255,255,.48);max-width:600px;font-size:.88rem;line-height:1.75}
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:2rem 0}
+.ks4{grid-template-columns:repeat(4,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:860px){.ks4{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:rgba(9,26,46,.85);padding:1.2rem .9rem;text-align:center;transition:background .2s}
+.kpi:hover{background:rgba(21,45,80,.8)}
+.kval{font-weight:800;font-size:1.5rem;color:var(--gd);line-height:1}
+.kdelta{display:inline-block;font-size:.66rem;font-weight:700;padding:.1rem .44rem;border-radius:20px;margin:.2rem 0}
+.d-up{background:rgba(62,201,142,.14);color:var(--green)}.d-dn{background:rgba(240,96,96,.1);color:var(--red)}
+.d-warn{background:rgba(245,160,48,.1);color:var(--amber)}.d-teal{background:rgba(14,168,154,.12);color:var(--teal2)}.d-blue{background:rgba(46,133,212,.12);color:var(--blue)}
+.klabel{font-size:.61rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.month-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:1.8rem}
+@media(max-width:900px){.month-cards{grid-template-columns:repeat(2,1fr)}}
+.mc{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.3rem;border-top:3px solid var(--border)}
+.mc.pos{border-top-color:var(--green)}.mc.great{border-top-color:var(--blue)}.mc.peak{border-top-color:var(--gd)}.mc.warn{border-top-color:var(--amber)}
+.mc-mes{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.mc-rec{font-weight:800;font-size:1.5rem;color:var(--gd);line-height:1}
+.mc-rows{margin-top:.7rem;display:flex;flex-direction:column;gap:.25rem}
+.mc-row{display:flex;justify-content:space-between;font-size:.75rem}
+.mc-row .lb{color:var(--muted)}
+.mc-note{margin-top:.6rem;font-size:.72rem;color:rgba(255,255,255,.45);border-top:1px solid var(--border2);padding-top:.6rem;line-height:1.5}
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.5rem}
+.chart-title{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.3rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.3rem}
+@media(max-width:680px){.g2{grid-template-columns:1fr}}
+.leg{display:flex;gap:14px;margin-top:10px;font-size:.7rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{background:rgba(9,26,46,.9);color:var(--gd);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;padding:.8rem .85rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ftable th:first-child{text-align:left}
+.ftable td{padding:.78rem .85rem;font-size:.83rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ftable td:first-child{text-align:left;font-weight:600;font-size:.81rem}
+.ftable tr:last-child td{font-weight:700;background:rgba(9,26,46,.5);border-top:1px solid var(--border)}
+.ftable tr:hover td{background:rgba(232,160,48,.022)}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}.tv-gd{color:var(--gd);font-weight:700}.tv-t{color:var(--teal2)}.tv-b{color:var(--blue)}
+.nb{background:rgba(14,168,154,.05);border:1px solid rgba(14,168,154,.18);border-radius:8px;padding:.85rem 1.2rem;margin-top:1.2rem;font-size:.82rem;color:rgba(255,255,255,.58);line-height:1.65}
+.nb strong{color:var(--teal2)}
+.nb-gd{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.16)}
+.nb-gd strong{color:var(--gd2)}
+.nb-blue{background:rgba(46,133,212,.05);border-color:rgba(46,133,212,.2)}
+.nb-blue strong{color:var(--blue)}
+.cfo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+@media(max-width:680px){.cfo-grid{grid-template-columns:1fr}}
+.cfo-c{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.4rem}
+.cfo-c.full{grid-column:1/-1}
+.cfo-head{font-weight:700;font-size:.98rem;color:var(--gd);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:1px solid var(--border2)}
+.cfo-text{font-size:.84rem;color:rgba(255,255,255,.58);line-height:1.75}
+.cfo-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.cfo-list li{font-size:.82rem;color:rgba(255,255,255,.6);padding-left:1.1rem;position:relative;line-height:1.5}
+.cfo-list li::before{content:'›';position:absolute;left:0;color:var(--gd)}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--dk)}::-webkit-scrollbar-thumb{background:rgba(232,160,48,.28);border-radius:2px}
+footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;text-align:center}
+footer p{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0}}
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border2)}
+.ftable tr.total-row td{font-weight:800;background:rgba(9,26,46,.6);border-top:2px solid var(--border)}
+.row-alert-g{background:rgba(232,160,48,.04)}
+.row-alert-r{background:rgba(240,96,96,.04)}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-name">Maximiano<br/>Advogados</div>
+    <div class="sb-brand-sub">Relatório por Unidade</div>
+  </div>
+  <div class="sb-unit-badge">🔵 Cabo Verde · 1T2026</div>
+  <nav class="sb-nav">
+    <div class="sb-section">Esta Unidade</div>
+    <a class="sb-link active" onclick="goTo('hero')">← Início Cabo Verde</a>
+    <a class="sb-link" onclick="goTo('s-mensal')">Desempenho Mensal</a>
+    <a class="sb-link" onclick="goTo('s-receita')">Composição da Receita</a>
+    <a class="sb-link" onclick="goTo('s-custos')">Estrutura de Custos</a>
+    <a class="sb-link" onclick="goTo('s-be')">Break-Even</a>
+    <a class="sb-link" onclick="goTo('s-dre25')">DRE Mensal 2025</a>
+    <a class="sb-link" onclick="goTo('s-cfo')">Análise CFO</a>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Navegação</div>
+    <a href="index.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--gd)"></span>Dashboard Consolidado</a>
+    <a href="botelhos.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--amber)"></span>Botelhos</a>
+    <a href="pocos.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--green)"></span>Poços de Caldas</a>
+    <a href="caboverde.html" class="sb-unit current"><span class="sb-unit-dot" style="background:var(--blue)"></span>Cabo Verde</a>
+    <a href="nova-resende.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--red)"></span>Nova Resende</a>
+  </nav>
+  <div class="sb-footer">Dados reais DRE · Confidencial</div>
+</nav>
+
+<div id="main">
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span>Maximiano Cabo Verde · Jan–Abr 2026</div>
+    <h1 class="hero-title">UNIDADE<br/><em>CABO VERDE</em><br/>1T2026</h1>
+    <p style="color:rgba(255,255,255,.45);font-size:.9rem;max-width:560px;margin-top:.5rem">A joia da coroa pós-reforma — melhor margem do grupo com 57,8% no quadrimestre. Obra concluída em fevereiro/2026 revelou o verdadeiro potencial da unidade. Abril encerrou com <strong style="color:var(--gd)">margem de 70,9%</strong>.</p>
+    <div class="hero-kpis">
+      <div class="hk"><div class="hk-val">R$ 217K</div><div class="hk-label">Receita 1T2026</div><div class="hk-delta" style="color:var(--green)">▲ +13,3% vs 1T2025</div></div>
+      <div class="hk"><div class="hk-val">R$ 91,6K</div><div class="hk-label">Custos Totais</div><div class="hk-delta" style="color:var(--green)">Só 42,2% da receita</div></div>
+      <div class="hk"><div class="hk-val">R$ 125K</div><div class="hk-label">Resultado Operacional</div><div class="hk-delta" style="color:var(--green)">Margem 57,8%</div></div>
+      <div class="hk"><div class="hk-val">R$ 22,9K</div><div class="hk-label">Break-Even Mensal</div><div class="hk-delta" style="color:var(--teal2)">Custo médio/mês</div></div>
+      <div class="hk"><div class="hk-val">70,9%</div><div class="hk-label">Melhor Margem</div><div class="hk-delta" style="color:var(--gd)">Abril/2026 — recorde</div></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-mensal" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Mês a Mês</div>
+    <h2 class="sec-title rv d1">Desempenho <em>Mensal</em></h2>
+    <p class="sec-body rv d2">Cabo Verde demonstrou consistência e crescimento ao longo do quadrimestre. Fevereiro foi o único mês de menor margem (31,5%), puxado por custas de clientes extraordinárias (R$ 6.185) e endomarketing (R$ 3.188). Abril bateu recorde de margem com 70,9%.</p>
+    <div class="month-cards rv d2">
+      <div class="mc great">
+        <div class="mc-mes">Janeiro</div>
+        <div class="mc-rec">R$ 49.682</div>
+        <div class="mc-rows">
+          <div class="mc-row"><span class="lb">Custos</span><span>R$ 20.008</span></div>
+          <div class="mc-row"><span class="lb">Resultado</span><span class="tv-g">R$ 29.674</span></div>
+          <div class="mc-row"><span class="lb">Margem</span><span class="tv-g">59,7%</span></div>
+        </div>
+        <div class="mc-note">Civil R$ 21.212 · Prev. Adm R$ 18.534</div>
+      </div>
+      <div class="mc warn">
+        <div class="mc-mes">Fevereiro</div>
+        <div class="mc-rec">R$ 44.270</div>
+        <div class="mc-rows">
+          <div class="mc-row"><span class="lb">Custos</span><span>R$ 30.340</span></div>
+          <div class="mc-row"><span class="lb">Resultado</span><span class="tv-a">R$ 13.930</span></div>
+          <div class="mc-row"><span class="lb">Margem</span><span class="tv-a">31,5%</span></div>
+        </div>
+        <div class="mc-note">Custas extras R$ 6.185 + Endomarketing R$ 3.188 elevaram custos</div>
+      </div>
+      <div class="mc great">
+        <div class="mc-mes">Março</div>
+        <div class="mc-rec">R$ 49.737</div>
+        <div class="mc-rows">
+          <div class="mc-row"><span class="lb">Custos</span><span>R$ 19.862</span></div>
+          <div class="mc-row"><span class="lb">Resultado</span><span class="tv-g">R$ 29.875</span></div>
+          <div class="mc-row"><span class="lb">Margem</span><span class="tv-g">60,1%</span></div>
+        </div>
+        <div class="mc-note">Prev. Adm R$ 36.168 — maior do quadrimestre</div>
+      </div>
+      <div class="mc peak">
+        <div class="mc-mes">🏆 Abril — Recorde</div>
+        <div class="mc-rec">R$ 73.406</div>
+        <div class="mc-rows">
+          <div class="mc-row"><span class="lb">Custos</span><span>R$ 21.387</span></div>
+          <div class="mc-row"><span class="lb">Resultado</span><span class="tv-g">R$ 52.019</span></div>
+          <div class="mc-row"><span class="lb">Margem</span><span class="tv-g">70,9%</span></div>
+        </div>
+        <div class="mc-note">Maior receita e melhor margem da unidade em 2026</div>
+      </div>
+    </div>
+
+    <div class="chart-box rv d3" style="margin-top:1.5rem">
+      <div class="chart-title">Receita vs. Resultado Mensal — Cabo Verde 1T2026</div>
+      <canvas id="ch-mensal" height="90"></canvas>
+      <div class="leg">
+        <span><span class="leg-dot" style="background:#2E85D4"></span>Receita</span>
+        <span><span class="leg-dot" style="background:#3EC98E"></span>Resultado</span>
+        <span><span class="leg-dot" style="background:rgba(14,168,154,.6)"></span>Margem % (eixo direito)</span>
+      </div>
+    </div>
+
+    <div class="chart-box rv" style="margin-top:1.3rem;overflow-x:auto">
+      <div class="chart-title">DRE Resumida — Cabo Verde · Jan–Abr 2026</div>
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Indicador</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Total 1T</th></tr></thead>
+        <tbody>
+          <tr><td>Receita Total</td><td class="tv-gd">R$ 49.682</td><td>R$ 44.270</td><td>R$ 49.737</td><td class="tv-gd">R$ 73.406</td><td class="tv-gd">R$ 217.095</td></tr>
+          <tr><td>Custos e Despesas</td><td>-R$ 20.008</td><td class="tv-r">-R$ 30.340</td><td>-R$ 19.862</td><td>-R$ 21.387</td><td>-R$ 91.597</td></tr>
+          <tr><td>Resultado Operacional</td><td class="tv-g">R$ 29.674</td><td class="tv-a">R$ 13.930</td><td class="tv-g">R$ 29.875</td><td class="tv-g">R$ 52.019</td><td class="tv-g">R$ 125.498</td></tr>
+          <tr><td>Margem Operacional</td><td class="tv-g">59,7%</td><td class="tv-a">31,5%</td><td class="tv-g">60,1%</td><td class="tv-g">70,9%</td><td class="tv-gd">57,8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nb nb-blue rv d3">
+      <strong>Destaque Pós-Obra:</strong> Cabo Verde encerrou as obras de infraestrutura em fevereiro/2026. A partir desse mês, os custos de estrutura física que pesavam sobre o resultado em 2025 (R$ 103K ao longo do ano) foram eliminados. A margem de 57,8% no quadrimestre reflete a unidade em plena maturidade operacional.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-receita">
+  <div class="container">
+    <div class="sec-label rv">Composição da Receita</div>
+    <h2 class="sec-title rv d1">De onde vem <em>o faturamento</em></h2>
+    <p class="sec-body rv d2">Cabo Verde tem a composição de receita mais diversificada do grupo — com um equilíbrio saudável entre Previdenciário Administrativo (47,4%), Civil (32,5%) e Judicial (12,3%).</p>
+    <div class="kpi-strip ks4 rv d2">
+      <div class="kpi"><div class="kval">R$ 103K</div><span class="kdelta d-teal">47,4%</span><div class="klabel">Prev. Adm (Recorrente)</div></div>
+      <div class="kpi"><div class="kval">R$ 26,7K</div><span class="kdelta d-up">12,3%</span><div class="klabel">Prev. Judicial</div></div>
+      <div class="kpi"><div class="kval">R$ 70,6K</div><span class="kdelta d-blue">32,5%</span><div class="klabel">Honorários Civis</div></div>
+      <div class="kpi"><div class="kval">R$ 16,8K</div><span class="kdelta d-warn">7,7%</span><div class="klabel">Outros (Serviços, Criminal…)</div></div>
+    </div>
+    <div class="g2 rv d3">
+      <div class="chart-box">
+        <div class="chart-title">Receita por Tipo — 1T2026</div>
+        <canvas id="ch-tipo" height="210"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Receita Mensal por Categoria</div>
+        <canvas id="ch-stack" height="210"></canvas>
+      </div>
+    </div>
+    <div class="nb rv d3">
+      <strong>Civil como alavanca de crescimento:</strong> os R$ 70.566 em honorários civis representam 32,5% da receita — uma proporção expressiva e com margens altas, já que o Civil tem custo variável baixo. Se Cabo Verde dobrar a carteira civil (meta plausível com a nova estrutura), a receita pode saltar de R$ 54K para R$ 80–90K por mês, com a margem se mantendo acima de 60%.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-custos" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Gestão de Custos</div>
+    <h2 class="sec-title rv d1">Estrutura de <em>Custos</em></h2>
+    <p class="sec-body rv d2">Total de apenas R$ 91.597 em 4 meses (R$ 22.899/mês) — a menor base de custos do grupo. O aluguel representa 16,6% e é o maior custo fixo. Não há Repasse Maylon nem grandes variáveis estruturais.</p>
+    <div class="chart-box rv d2" style="overflow-x:auto">
+      <div class="chart-title">Principais Custos — Cabo Verde 1T2026</div>
+      <canvas id="ch-custos" height="85"></canvas>
+    </div>
+    <div class="chart-box rv" style="margin-top:1.3rem;overflow-x:auto">
+      <div class="chart-title">Detalhamento de Custos</div>
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Item</th><th>Total 1T</th><th>% Custos</th><th>Obs.</th></tr></thead>
+        <tbody>
+          <tr><td>Salários (Despesa)</td><td>R$ 17.737</td><td>19,4%</td><td>Maior item de custo</td></tr>
+          <tr><td>Aluguel</td><td>R$ 15.200</td><td>16,6%</td><td>Fixo R$ 3.800/mês</td></tr>
+          <tr><td>Pró-labore</td><td>R$ 14.579</td><td>15,9%</td><td>R$ 4.863/mês (Fev–Abr)</td></tr>
+          <tr><td>Simples Nacional</td><td>R$ 14.075</td><td>15,4%</td><td>Imposto proporcional</td></tr>
+          <tr><td>Custas de Clientes</td><td>R$ 10.514</td><td>11,5%</td><td>Fev/26 concentrou R$ 6.185</td></tr>
+          <tr><td>Endomarketing</td><td>R$ 4.350</td><td>4,7%</td><td>Investimento em marca</td></tr>
+          <tr><td>FGTS + INSS</td><td>R$ 3.110</td><td>3,4%</td><td>Encargos trabalhistas</td></tr>
+          <tr><td>Software/App</td><td>R$ 2.951</td><td>3,2%</td><td>Ferramentas digitais</td></tr>
+          <tr><td>Máq. e Equip.</td><td>R$ 1.711</td><td>1,9%</td><td>Equipamentos de escritório</td></tr>
+          <tr><td>Demais (água, luz, etc.)</td><td>R$ 7.370</td><td>8,0%</td><td>Infraestrutura básica</td></tr>
+          <tr><td><strong>Total Geral</strong></td><td class="tv-gd">R$ 91.597</td><td class="tv-gd">100%</td><td>R$ 22.899/mês</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nb nb-gd rv d3">
+      <strong>Eficiência de Custos Exemplar:</strong> com apenas R$ 22.899/mês de custo médio, Cabo Verde é a unidade de menor custo estrutural do grupo. Para cada R$ 1 de custo, a unidade gera R$ 2,37 de receita e R$ 1,37 de lucro. Esse ratio é raro no setor jurídico e representa o modelo de eficiência operacional que o grupo deveria buscar replicar.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-be">
+  <div class="container">
+    <div class="sec-label rv">Ponto de Equilíbrio</div>
+    <h2 class="sec-title rv d1">Break-Even <em>Cabo Verde</em></h2>
+    <p class="sec-body rv d2">Com custo fixo mensal de apenas R$ 22.899, o break-even de Cabo Verde é o mais baixo do grupo — e a unidade o supera com folga expressiva em todos os meses de 2026.</p>
+    <div class="chart-box rv d2">
+      <div class="chart-title">Receita Real vs Break-Even — Mês a Mês 1T2026</div>
+      <canvas id="ch-be" height="90"></canvas>
+      <div class="leg">
+        <span><span class="leg-dot" style="background:#2E85D4"></span>Receita Real</span>
+        <span><span class="leg-dot" style="background:rgba(240,96,96,.6)"></span>Break-Even (R$ 22.899)</span>
+      </div>
+    </div>
+    <div class="kpi-strip ks3 rv d2" style="margin-top:1.3rem">
+      <div class="kpi"><div class="kval">R$ 22.899</div><span class="kdelta d-blue">Mensal</span><div class="klabel">Break-Even (custo médio)</div></div>
+      <div class="kpi"><div class="kval">R$ 54.274</div><span class="kdelta d-up">Mensal</span><div class="klabel">Receita Média Real</div></div>
+      <div class="kpi"><div class="kval">R$ 31.375</div><span class="kdelta d-up">+137%</span><div class="klabel">Folga acima do BE</div></div>
+    </div>
+    <div class="nb nb-blue rv d3">
+      <strong>Margem de segurança de 137%:</strong> Cabo Verde poderia ter sua receita reduzida à metade (para R$ 27K/mês) e ainda ficaria acima do break-even. Esse nível de resiliência financeira é raro e deve ser protegido à medida que a unidade cresce — evitando adicionar custos fixos que não sejam proporcionais ao crescimento de receita.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="s-cfo" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Análise Estratégica</div>
+    <h2 class="sec-title rv d1">Visão <em>CFO · Cabo Verde</em></h2>
+    <div class="cfo-grid rv d2">
+      <div class="cfo-c full">
+        <div class="cfo-head">📋 Diagnóstico Executivo — Cabo Verde 1T2026</div>
+        <div class="cfo-text">
+          Cabo Verde é, sem dúvida, a <strong style="color:var(--blue)">grande revelação do portfólio em 2026</strong>. Com a reforma de infraestrutura concluída em fevereiro, os custos estruturais extraordinários que pesavam sobre o resultado em 2025 foram eliminados — e o verdadeiro potencial da unidade emergiu com força.
+          <br/><br/>
+          A margem de 57,8% no quadrimestre (com abril atingindo 70,9%) coloca Cabo Verde como a unidade mais eficiente de todo o grupo — acima de Botelhos (43%), Poços (9,3%) e, evidentemente, Nova Resende. O modelo operacional enxuto — pró-labore fixo, equipe reduzida, aluguel acessível — combinado com uma carteira diversificada entre Previdenciário e Civil, produz o melhor resultado financeiro relativo da firma.
+          <br/><br/>
+          <strong style="color:var(--gd)">A pergunta estratégica central para 2026 é: como escalar Cabo Verde sem destruir a eficiência?</strong> A unidade tem capacidade de crescer 50–80% em receita com custos crescendo no máximo 20%, graças à estrutura já instalada e amortizada.
+        </div>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">🚀 Alavancas de Crescimento</div>
+        <ul class="cfo-list">
+          <li>Ampliar carteira Civil — área com alta margem e custo variável baixo</li>
+          <li>Carteira Prev. Adm crescendo (R$ 103K no 1T) — potencial de mais R$ 30–50K</li>
+          <li>Nova estrutura inaugurada — capacidade de atendimento ampliada sem custo extra</li>
+          <li>Civil em R$ 70,6K no 1T — meta de R$ 120K para o 2T é realista</li>
+          <li>Previd. Judicial baixo (12,3%) — espaço para crescer sem depender de volatilidade</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">⚠️ Pontos de Atenção</div>
+        <ul class="cfo-list">
+          <li>Fevereiro: Custas de Clientes R$ 6.185 — monitorar regularidade</li>
+          <li>Pró-labore só iniciou em fevereiro (R$ 4.863/mês) — confirmar estrutura</li>
+          <li>Inadimplência 2026: R$ 3.223 (vs R$ 17.096 em 2025) — tendência positiva</li>
+          <li>Receita de Prev. Judicial baixa (R$ 26,7K) — avaliar carteira de processos judiciais</li>
+          <li>Endomarketing R$ 4.350 — monitorar retorno sobre esse investimento</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">📊 vs 1T2025 — Evolução</div>
+        <ul class="cfo-list">
+          <li>Receita: R$ 191.683 (1T25) → R$ 217.095 (1T26) = +13,3%</li>
+          <li>Resultado 2025 anual: R$ 24K (com R$ 103K de obra) → 1T26 já R$ 125K</li>
+          <li>Custos operacionais caíram drasticamente pós-obra</li>
+          <li>Margem 2025 ajustada: 20,5% → Margem 2026: 57,8% (+37,3pp)</li>
+          <li>Ritmo anualizado 2026: R$ 651K de receita (vs R$ 623K em 2025 inteiro)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="s-dre25">
+  <div class="container">
+    <div class="sec-label rv">Histórico</div>
+    <h2 class="sec-title rv d1">DRE Mensal <em>2025 — Cabo Verde</em></h2>
+    <p class="sec-body rv d2">Receita total de R$ 622.788 em 2025. Agosto foi o melhor mês (R$ 92.703, margem 44,7%). Novembro e dezembro foram impactados pelos custos de obra — que comprimiram fortemente o resultado.</p>
+
+    <div class="table-wrap rv d2" style="margin-top:1.8rem">
+      <table class="ftable">
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Receita</th>
+            <th>Custos</th>
+            <th>Resultado</th>
+            <th>Margem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Janeiro</td><td>R$ 32.308</td><td>R$ 24.188</td><td class="tv-g">R$ 8.120</td><td class="tv-g">25,1%</td></tr>
+          <tr><td>Fevereiro</td><td>R$ 33.487</td><td>R$ 35.087</td><td class="tv-r">-R$ 1.600</td><td class="tv-r">-4,8%</td></tr>
+          <tr><td>Março</td><td>R$ 59.803</td><td>R$ 32.094</td><td class="tv-g">R$ 27.709</td><td class="tv-g">46,3%</td></tr>
+          <tr><td>Abril</td><td>R$ 66.085</td><td>R$ 67.722</td><td class="tv-r">-R$ 1.637</td><td class="tv-r">-2,5%</td></tr>
+          <tr><td>Maio</td><td>R$ 37.319</td><td>R$ 32.251</td><td class="tv-g">R$ 5.068</td><td class="tv-g">13,6%</td></tr>
+          <tr><td>Junho</td><td>R$ 39.032</td><td>R$ 29.333</td><td class="tv-g">R$ 9.699</td><td class="tv-g">24,8%</td></tr>
+          <tr><td>Julho</td><td>R$ 80.293</td><td>R$ 78.699</td><td class="tv-g">R$ 1.594</td><td class="tv-g">2,0%</td></tr>
+          <tr class="row-alert-g"><td>Agosto 🏆</td><td class="tv-gd">R$ 92.703</td><td>R$ 51.245</td><td class="tv-gd">R$ 41.458</td><td class="tv-gd">44,7%</td></tr>
+          <tr><td>Setembro</td><td>R$ 58.263</td><td>R$ 69.699</td><td class="tv-r">-R$ 11.436</td><td class="tv-r">-19,6%</td></tr>
+          <tr><td>Outubro</td><td>R$ 70.680</td><td>R$ 63.051</td><td class="tv-g">R$ 7.629</td><td class="tv-g">10,8%</td></tr>
+          <tr class="row-alert-r"><td>Novembro ⚠</td><td>R$ 40.511</td><td>R$ 62.117</td><td class="tv-r">-R$ 21.606</td><td class="tv-r">-53,3%</td></tr>
+          <tr class="row-alert-r"><td>Dezembro ⚠</td><td>R$ 12.305</td><td>R$ 53.032</td><td class="tv-r">-R$ 40.727</td><td class="tv-r">-331,0%</td></tr>
+          <tr class="total-row"><td>Total 2025</td><td>R$ 622.788</td><td>R$ 598.518</td><td class="tv-g">R$ 24.272</td><td class="tv-a">3,9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nb nb-red rv d3" style="margin-top:1rem">⚠ <strong>Nov–Dez</strong>: custos de obra concentrados no fim do ano comprimiram o resultado. Dezembro teve apenas R$ 12K de receita com R$ 53K de custos.</p>
+
+    <div class="chart-box rv d3" style="margin-top:1.8rem">
+      <div class="chart-title">Receita vs. Resultado Mensal — Cabo Verde 2025</div>
+      <canvas id="ch-dre25" height="90"></canvas>
+    </div>
+  </div>
+</section>
+
+<footer><p>Maximiano Cabo Verde · Relatório 1º Quadrimestre 2026 · Dados Reais DRE · Confidencial</p></footer>
+</div>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+
+const meses=['Janeiro','Fevereiro','Março','Abril'];
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.datalabels.display = false;
+const dlBar={display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:'rgba(255,255,255,.55)',font:{size:9,weight:'700'}};
+const dlBarNeg={display:true,anchor:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',align:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',formatter:v=>'R$'+Math.round(Math.abs(v)/1000)+'K',color:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'rgba(62,201,142,.8)':'rgba(240,96,96,.8)',font:{size:9,weight:'700'}};
+
+const rec=[49682.08,44269.76,49737.03,73405.86];
+const cus=[20008.13,30339.96,19861.94,21386.61];
+const res=[29673.95,13929.80,29875.09,52019.25];
+const mgm=[0.597,0.3147,0.6007,0.7087];
+const be=22899;
+
+const cfg={responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' R$ '+Number(c.raw).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0})}}}};
+const ax=()=>({x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}});
+
+// Mensal com margem
+new Chart('ch-mensal',{type:'bar',data:{labels:meses,datasets:[
+  {label:'Receita',data:rec,backgroundColor:'rgba(46,133,212,.7)',borderRadius:5,order:2,yAxisID:'y',datalabels:dlBar},
+  {label:'Resultado',data:res,backgroundColor:'rgba(62,201,142,.8)',borderRadius:5,order:1,yAxisID:'y',datalabels:dlBar},
+  {label:'Margem %',data:mgm,type:'line',borderColor:'rgba(14,168,154,.9)',backgroundColor:'rgba(14,168,154,.1)',fill:true,tension:.3,pointRadius:5,borderWidth:2,order:0,yAxisID:'y1'}
+]},options:{responsive:true,plugins:{legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:11}}},tooltip:{mode:'index',intersect:false}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}},y1:{position:'right',ticks:{color:'rgba(14,168,154,.7)',font:{size:11},callback:v=>Math.round(v*100)+'%'},grid:{display:false},min:0,max:1}}}});
+
+// Tipo donut
+new Chart('ch-tipo',{type:'doughnut',data:{labels:['Prev. Adm','Civil','Prev. Judicial','Outros'],datasets:[{data:[102976.85,70566.18,26746.80,16805.90],backgroundColor:['rgba(14,168,154,.85)','rgba(46,133,212,.85)','rgba(62,201,142,.85)','rgba(232,160,48,.85)'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:11},padding:10}},tooltip:{callbacks:{label:c=>' '+((c.raw/217095)*100).toFixed(1)+'% — R$ '+Math.round(c.raw/1000)+'K'}}},cutout:'62%'}});
+
+// Stack mensal
+const prevAdm=[18533.8,17288.19,36167.95,30986.91];
+const civil=[21212.37+500,20989.92+1000,6935.64+1000,21428.25+0];
+const judPrev=[6029.7,2286.4,0,18430.7];
+const outros=[1250+398.25+1757.96,1800+605.25+300,1850+550+2755.13+478.31,1200+354+1006];
+new Chart('ch-stack',{type:'bar',data:{labels:['Jan','Fev','Mar','Abr'],datasets:[
+  {label:'Prev. Adm',data:prevAdm,backgroundColor:'rgba(14,168,154,.8)',borderRadius:0},
+  {label:'Outros recorrente',data:outros,backgroundColor:'rgba(232,160,48,.6)',borderRadius:0},
+  {label:'Prev. Judicial',data:judPrev,backgroundColor:'rgba(62,201,142,.75)',borderRadius:0},
+  {label:'Civil + Criminal',data:civil,backgroundColor:'rgba(46,133,212,.8)',borderRadius:4}
+]},options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:10}}},tooltip:{mode:'index',intersect:false}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// Custos
+new Chart('ch-custos',{type:'bar',data:{labels:['Salários','Aluguel','Pró-labore','Simples','Custas','Endomkt','FGTS+INSS','Software','Máq./Equip.','Demais'],datasets:[{label:'R$ 1T2026',data:[17737,15200,14579,14075,10514,4350,3110,2951,1711,7370],backgroundColor:['rgba(46,133,212,.6)','rgba(46,133,212,.5)','rgba(232,160,48,.6)','rgba(107,132,168,.6)','rgba(240,96,96,.5)','rgba(62,201,142,.5)','rgba(107,132,168,.5)','rgba(107,132,168,.5)','rgba(107,132,168,.5)','rgba(107,132,168,.4)'],borderRadius:4}]},options:{...cfg,indexAxis:'y',plugins:{...cfg.plugins,tooltip:{callbacks:{label:c=>' R$ '+Number(c.raw).toLocaleString('pt-BR')}}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.5)',font:{size:11}},grid:{display:false}}}}});
+
+// Break-even chart
+new Chart('ch-be',{type:'bar',data:{labels:meses,datasets:[
+  {label:'Receita Real',data:rec,backgroundColor:'rgba(46,133,212,.75)',borderRadius:5,order:2,datalabels:dlBar},
+  {label:'Break-Even',data:[be,be,be,be],type:'line',borderColor:'rgba(240,96,96,.7)',borderWidth:2,borderDash:[5,5],pointRadius:0,fill:false,order:1}
+]},options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:11}}}},scales:ax()}});
+
+// DRE 2025 Cabo Verde
+const mCV25=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const recCV25=[32308,33487,59803,66085,37319,39032,80293,92703,58263,70680,40511,12305];
+const resCV25=[8120,-1600,27709,-1637,5068,9699,1594,41458,-11436,7629,-21606,-40727];
+new Chart('ch-dre25',{type:'bar',data:{labels:mCV25,datasets:[
+  {label:'Receita',data:recCV25,backgroundColor:'rgba(46,133,212,.55)',borderRadius:4,datalabels:dlBar},
+  {label:'Resultado',data:resCV25,backgroundColor:resCV25.map(v=>v>=0?'rgba(62,201,142,.7)':'rgba(240,96,96,.65)'),borderRadius:4,datalabels:{display:true,anchor:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',align:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',formatter:v=>'R$'+Math.round(Math.abs(v)/1000)+'K',color:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'rgba(62,201,142,.85)':'rgba(240,96,96,.85)',font:{size:8,weight:'700'}}}
+]},options:{responsive:true,plugins:{legend:{display:true,labels:{color:'rgba(255,255,255,.45)',font:{size:11}}},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>' R$ '+Number(c.raw).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0})}}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+</script>
+</body>
+</html>
