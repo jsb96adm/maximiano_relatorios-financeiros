@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Diagnóstico de Sistemas — Maximiano Advocacia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;
+  --gd:#E8A030;--gd2:#F5C060;--gd-dim:rgba(232,160,48,.1);
+  --teal:#0EA89A;--teal2:#14C4B4;--teal-dim:rgba(14,168,154,.1);
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --muted:#6B84A8;--card:#0A1F38;--border:rgba(232,160,48,.16);--border2:rgba(255,255,255,.06);
+  --r:12px;--sb:240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+
+/* SIDEBAR */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(9,26,46,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);line-height:1.2}
+.sb-brand-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-unit-badge{margin:.8rem 1.2rem;background:rgba(240,96,96,.1);border:1px solid rgba(240,96,96,.3);border-radius:6px;padding:.4rem .75rem;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700;text-align:center}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.74rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--gd);background:rgba(232,160,48,.06);border-left-color:var(--gd)}
+.sb-link svg{opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.6rem;color:var(--muted);text-align:center;line-height:1.5}
+.sb-footer strong{color:var(--gd2)}
+.sb-period{margin:.8rem 1.2rem;background:rgba(240,96,96,.06);border:1px solid rgba(240,96,96,.2);border-radius:6px;padding:.5rem .75rem;font-size:.62rem;color:var(--red);text-align:center;line-height:1.5}
+.sb-period span{display:block;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.6rem}
+
+/* MAIN */
+#main{margin-left:var(--sb);flex:1;min-width:0}
+
+/* HERO */
+#hero{min-height:52vh;display:flex;align-items:center;padding:4.5rem 0 3rem;background:radial-gradient(ellipse 65% 50% at 55% -5%,rgba(240,96,96,.12) 0%,transparent 65%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(232,160,48,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(232,160,48,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 2.5rem;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,96,96,.1);border:1px solid rgba(240,96,96,.3);border-radius:20px;padding:.3rem .9rem;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:1.1rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-weight:900;font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:.92;color:#fff;letter-spacing:-.02em;margin-bottom:.7rem}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-sub{font-size:.9rem;color:rgba(255,255,255,.45);max-width:580px}
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(9,26,46,.75);padding:1rem 1.1rem;transition:background .2s}
+.hk:hover{background:rgba(21,45,80,.8)}
+.hk-val{font-weight:800;font-size:1.42rem;color:var(--gd);line-height:1}
+.hk-label{font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.22rem}
+.hk-delta{font-size:.67rem;font-weight:700;margin-top:.1rem}
+
+/* SECTIONS */
+section{position:relative;padding:4rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.65rem;color:rgba(255,255,255,.45);max-width:650px;font-size:.87rem;line-height:1.75}
+
+/* KPI STRIPS */
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:2rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}.ks4{grid-template-columns:repeat(4,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}.ks2{grid-template-columns:repeat(2,1fr)}
+.kpi{background:rgba(9,26,46,.85);padding:1.2rem .9rem;text-align:center;transition:background .2s}
+.kpi:hover{background:rgba(21,45,80,.8)}
+.kval{font-weight:800;font-size:1.42rem;color:var(--gd);line-height:1}
+.kdelta{display:inline-block;font-size:.66rem;font-weight:700;padding:.1rem .44rem;border-radius:20px;margin:.2rem 0}
+.d-up{background:rgba(62,201,142,.14);color:var(--green)}.d-dn{background:rgba(240,96,96,.1);color:var(--red)}
+.d-warn{background:rgba(245,160,48,.1);color:var(--amber)}.d-teal{background:rgba(14,168,154,.12);color:var(--teal2)}.d-blue{background:rgba(46,133,212,.12);color:var(--blue)}
+.klabel{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border2)}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{background:rgba(9,26,46,.9);color:var(--gd);font-size:.59rem;letter-spacing:.13em;text-transform:uppercase;padding:.8rem .85rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ftable th:first-child{text-align:left}
+.ftable th.th-left{text-align:left}
+.ftable td{padding:.75rem .85rem;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ftable td:first-child{text-align:left;font-weight:600;font-size:.8rem}
+.ftable tr.total-row td{font-weight:800;background:rgba(9,26,46,.6);border-top:2px solid var(--border);font-size:.85rem}
+.ftable tr:hover td{background:rgba(232,160,48,.022)}
+.ftable tr.section-row td{background:rgba(9,26,46,.5);color:var(--gd);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:.5rem .85rem}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}.tv-gd{color:var(--gd);font-weight:700}.tv-t{color:var(--teal2)}.tv-b{color:var(--blue)}.tv-m{color:var(--muted)}
+
+/* STATUS BADGES */
+.st{display:inline-block;font-size:.6rem;font-weight:700;padding:.18rem .55rem;border-radius:20px;letter-spacing:.07em;text-transform:uppercase}
+.st-ok{background:rgba(62,201,142,.14);color:var(--green)}
+.st-warn{background:rgba(245,160,48,.12);color:var(--amber);border:1px solid rgba(245,160,48,.3)}
+.st-off{background:rgba(240,96,96,.1);color:var(--red)}
+.st-test{background:rgba(46,133,212,.12);color:var(--blue)}
+
+/* CAT BADGES */
+.cat{display:inline-block;font-size:.58rem;font-weight:700;padding:.14rem .48rem;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+.cat-jur{background:rgba(232,160,48,.12);color:var(--gd)}
+.cat-rh{background:rgba(62,201,142,.1);color:var(--green)}
+.cat-fin{background:rgba(14,168,154,.1);color:var(--teal2)}
+.cat-com{background:rgba(46,133,212,.12);color:var(--blue)}
+.cat-ia{background:rgba(150,100,240,.12);color:#C084FC}
+.cat-mkt{background:rgba(245,160,48,.1);color:var(--amber)}
+.cat-inf{background:rgba(107,132,168,.12);color:var(--muted)}
+.cat-crm{background:rgba(240,96,96,.1);color:var(--red)}
+
+/* NOTAS */
+.nb{background:rgba(14,168,154,.05);border:1px solid rgba(14,168,154,.18);border-radius:8px;padding:.85rem 1.2rem;margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.7}
+.nb strong{color:var(--teal2)}
+.nb-gd{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.16)}
+.nb-gd strong{color:var(--gd2)}
+.nb-blue{background:rgba(46,133,212,.05);border-color:rgba(46,133,212,.2)}
+.nb-blue strong{color:var(--blue)}
+.nb-red{background:rgba(240,96,96,.05);border-color:rgba(240,96,96,.18)}
+.nb-red strong{color:var(--red)}
+.nb-amber{background:rgba(245,160,48,.06);border-color:rgba(245,160,48,.22)}
+.nb-amber strong{color:var(--amber)}
+.nb-title{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem}
+.nb-title::before{content:'';width:10px;height:2px;border-radius:1px;background:currentColor;display:inline-block}
+
+/* CFO CARDS */
+.cfo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+.cfo-c{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.4rem}
+.cfo-c.full{grid-column:1/-1}
+.cfo-head{font-weight:700;font-size:.96rem;color:var(--gd);margin-bottom:.7rem;padding-bottom:.55rem;border-bottom:1px solid var(--border2)}
+.cfo-text{font-size:.83rem;color:rgba(255,255,255,.55);line-height:1.75}
+.cfo-list{list-style:none;display:flex;flex-direction:column;gap:.45rem;margin-top:.5rem}
+.cfo-list li{font-size:.81rem;color:rgba(255,255,255,.58);padding-left:1.1rem;position:relative;line-height:1.5}
+.cfo-list li::before{content:'›';position:absolute;left:0;color:var(--gd)}
+.cfo-list li strong{color:rgba(255,255,255,.85)}
+.cfo-list li.warn::before{color:var(--amber)}
+.cfo-list li.danger::before{color:var(--red)}
+.cfo-list li.ok::before{color:var(--green)}
+
+/* VERDICT */
+.verdict{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,rgba(232,160,48,.08),rgba(46,133,212,.06));border:1px solid rgba(232,160,48,.3);border-radius:12px;padding:1.3rem 1.6rem;margin-top:1.5rem}
+.verdict-icon{font-size:2rem;flex-shrink:0}
+.verdict-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);font-weight:700}
+.verdict-text{font-weight:800;font-size:1.1rem;color:#fff;margin-top:.15rem}
+.verdict-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-top:.2rem;line-height:1.5}
+
+/* RANKING BARS */
+.rank-row{display:flex;align-items:center;gap:.8rem;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.rank-row:last-child{border-bottom:none}
+.rank-num{font-size:.68rem;font-weight:700;color:var(--muted);width:20px;text-align:right;flex-shrink:0}
+.rank-label{font-size:.78rem;color:rgba(255,255,255,.75);width:190px;flex-shrink:0;font-weight:600}
+.rank-bar-wrap{flex:1;background:rgba(255,255,255,.04);border-radius:2px;height:6px;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.rank-val{font-size:.76rem;font-weight:700;color:var(--gd);width:90px;text-align:right;flex-shrink:0}
+.rank-pct{font-size:.68rem;color:var(--muted);width:42px;text-align:right;flex-shrink:0}
+
+/* COMPARATIVO CENÁRIOS */
+.comp-block{background:var(--card);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-top:1.5rem}
+.comp-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:rgba(9,26,46,.9);border-bottom:1px solid var(--border)}
+.comp-header div{padding:.75rem .9rem;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gd);font-weight:700;text-align:right}
+.comp-header div:first-child{text-align:left}
+.comp-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,.035)}
+.comp-row:last-child{border-bottom:none}
+.comp-row:hover div{background:rgba(232,160,48,.018)}
+.comp-row div{padding:.7rem .9rem;font-size:.82rem;text-align:right}
+.comp-row div:first-child{text-align:left;font-weight:600}
+.comp-row.section-r div{background:rgba(9,26,46,.45);color:var(--gd);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:.45rem .9rem}
+.comp-row.total-r div{font-weight:800;background:rgba(9,26,46,.5);border-top:2px solid var(--border);font-size:.87rem}
+
+/* CHART BOX */
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.5rem}
+.chart-title{font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem}
+.leg{display:flex;gap:14px;margin-top:10px;font-size:.68rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+
+/* ALERTA CARDS */
+.alert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.8rem}
+.alert-c{background:var(--card);border-radius:12px;padding:1.3rem;border-top:3px solid}
+.alert-c.danger{border-top-color:var(--red);border:1px solid rgba(240,96,96,.15);background:rgba(240,96,96,.03)}
+.alert-c.warn{border-top-color:var(--amber);border:1px solid rgba(245,160,48,.15);background:rgba(245,160,48,.02)}
+.alert-c.ok{border-top-color:var(--green);border:1px solid rgba(62,201,142,.12);background:rgba(62,201,142,.02)}
+.alert-icon{font-size:1.5rem;margin-bottom:.5rem}
+.alert-title{font-weight:700;font-size:.88rem;margin-bottom:.3rem}
+.alert-body{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* EVOLUÇÃO MESES */
+.evo-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.8rem}
+.evo-c{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.1rem}
+.evo-mes{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.evo-val{font-weight:800;font-size:1.35rem;color:var(--gd);line-height:1}
+.evo-rows{margin-top:.6rem;display:flex;flex-direction:column;gap:.2rem}
+.evo-row{display:flex;justify-content:space-between;font-size:.72rem}
+.evo-row .lb{color:var(--muted)}
+.evo-note{margin-top:.5rem;font-size:.69rem;color:rgba(255,255,255,.35);border-top:1px solid var(--border2);padding-top:.4rem;line-height:1.4}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;text-align:center}
+footer p{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--dk)}::-webkit-scrollbar-thumb{background:rgba(232,160,48,.28);border-radius:2px}
+
+/* RESPONSIVE */
+@media(max-width:980px){
+  .hero-kpis{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:1fr}
+  .cfo-grid{grid-template-columns:1fr}
+  .ks5,.ks4{grid-template-columns:repeat(2,1fr)}
+  .alert-grid{grid-template-columns:1fr}
+  .evo-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0}}
+@media(max-width:640px){
+  .hero-kpis{grid-template-columns:repeat(2,1fr)}
+  .comp-header,.comp-row{grid-template-columns:1.5fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-name">Maximiano</div>
+    <div class="sb-brand-sub">Advocacia</div>
+  </div>
+  <div class="sb-unit-badge">Diagnóstico de Sistemas</div>
+  <div class="sb-period">
+    <span>Período de Análise</span>
+    Mai/2025 – Mai/2026
+    <span style="font-size:.55rem;opacity:.7;margin-top:.15rem">Base: planilha Orçado vs Realizado</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Relatório</div>
+    <a class="sb-link active" onclick="nav('hero')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Painel Geral
+    </a>
+    <a class="sb-link" onclick="nav('s-inventario')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Inventário Completo
+    </a>
+    <a class="sb-link" onclick="nav('s-ranking')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Ranking de Custos
+    </a>
+    <a class="sb-link" onclick="nav('s-categorias')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Por Categoria
+    </a>
+    <div class="sb-section">Análise</div>
+    <a class="sb-link" onclick="nav('s-comparativo')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      Legal One vs Bitrix
+    </a>
+    <a class="sb-link" onclick="nav('s-evolucao')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+      Evolução Mensal
+    </a>
+    <a class="sb-link" onclick="nav('s-alertas')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Alertas e Riscos
+    </a>
+    <div class="sb-section">Diagnóstico</div>
+    <a class="sb-link" onclick="nav('s-oportunidades')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      Oportunidades
+    </a>
+    <a class="sb-link" onclick="nav('s-parecer')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Parecer Final
+    </a>
+    <div class="sb-divider"></div>
+    <a class="sb-link" onclick="nav('s-notas')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Notas Explicativas
+    </a>
+  </nav>
+  <div class="sb-footer">
+    <strong>Jean</strong> — CEO Maximiano<br>
+    Maio de 2026<br>
+    <span style="color:rgba(255,255,255,.25)">Confidencial · Uso interno</span>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span>Diagnóstico Executivo de Tecnologia</div>
+    <h1 class="hero-title">Ecossistema<br><em>de Sistemas</em></h1>
+    <p class="hero-sub">Inventário completo, análise de custos, comparativo Legal One vs Bitrix, diagnóstico estratégico e parecer para os sócios · Mai/2025 – Mai/2026</p>
+    <div class="hero-kpis">
+      <div class="hk">
+        <div class="hk-val">22</div>
+        <div class="hk-label">Sistemas Mapeados</div>
+        <div class="hk-delta" style="color:var(--amber)">14 ativos · 8 encerrados</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 6.094</div>
+        <div class="hk-label">Custo Mensal Atual</div>
+        <div class="hk-delta" style="color:var(--amber)">sem legados jul/26</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 7.026</div>
+        <div class="hk-label">Custo Mai/26 Real</div>
+        <div class="hk-delta" style="color:var(--red)">incl. Legal One + ZapSign</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">+57,8%</div>
+        <div class="hk-label">Aumento vs Legado</div>
+        <div class="hk-delta" style="color:var(--red)">R$ 4.453 → R$ 7.026</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">Jul/26</div>
+        <div class="hk-label">Marco de Redução</div>
+        <div class="hk-delta" style="color:var(--green)">enc. Legal One + ZapSign</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INVENTÁRIO COMPLETO -->
+<section id="s-inventario" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Mapeamento Completo</div>
+      <h2 class="sec-title">Inventário <em>de Sistemas</em></h2>
+      <p class="sec-body">Todos os sistemas, softwares e serviços contratados pela Maximiano Advocacia — ativos, em transição e encerrados. Base: mai/2025 a mai/2026.</p>
+    </div>
+
+    <!-- ATIVOS -->
+    <div style="margin-top:2rem">
+      <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green)"></span>Sistemas Ativos
+      </div>
+      <div class="table-wrap rv d1">
+        <table class="ftable">
+          <thead>
+            <tr>
+              <th class="th-left">Sistema</th>
+              <th class="th-left">Fornecedor</th>
+              <th class="th-left">Categoria</th>
+              <th class="th-left">Finalidade</th>
+              <th>Mensal (R$)</th>
+              <th>Anual (R$)</th>
+              <th class="th-left">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bitrix 24</td>
+              <td class="tv-m">TLJ Tech</td>
+              <td><span class="cat cat-crm">CRM</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">CRM, funis, gestão operacional</td>
+              <td class="tv-gd">1.119,20</td>
+              <td>13.430,40</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Conector Bitrix</td>
+              <td class="tv-m">Demerge Brasil</td>
+              <td><span class="cat cat-inf">Infraestrutura</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Conector técnico do Bitrix</td>
+              <td class="tv-gd">279,00</td>
+              <td>3.348,00</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>BR24 / PowerZap</td>
+              <td class="tv-m">Meta / Raphaela CPF</td>
+              <td><span class="cat cat-com">Comunicação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">API Oficial WhatsApp ↔ Bitrix (tel. 0123)</td>
+              <td class="tv-gd">~135,84</td>
+              <td>~1.630,08</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>WhatCRM</td>
+              <td class="tv-m">TLJ Tech</td>
+              <td><span class="cat cat-com">Comunicação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Conector WhatsApp envio de áudio</td>
+              <td class="tv-gd">~190,00</td>
+              <td>2.279,97 ¹</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Telefonia Volo Brasil</td>
+              <td class="tv-m">Volo Brasil Telecom</td>
+              <td><span class="cat cat-com">Comunicação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Telefonia fixa / VoIP</td>
+              <td class="tv-gd">~499,00</td>
+              <td>~5.988,00</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>API WhatsApp (mensagens)</td>
+              <td class="tv-m">Meta</td>
+              <td><span class="cat cat-com">Comunicação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Custo variável de templates (utility, marketing)</td>
+              <td class="tv-a">~135,00</td>
+              <td>~1.620,00</td>
+              <td><span class="st st-warn">Em análise</span></td>
+            </tr>
+            <tr>
+              <td>Feedz</td>
+              <td class="tv-m">Feedz</td>
+              <td><span class="cat cat-rh">RH</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Gestão de pessoas, clima e metas</td>
+              <td class="tv-gd">919,14</td>
+              <td>11.029,68</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Tangerino</td>
+              <td class="tv-m">Tangerino</td>
+              <td><span class="cat cat-rh">RH</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Controle de ponto eletrônico</td>
+              <td class="tv-gd">220,70</td>
+              <td>2.648,40</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Omie ERP</td>
+              <td class="tv-m">Oka Soluções</td>
+              <td><span class="cat cat-fin">Financeiro</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">ERP financeiro, faturamento, DRE</td>
+              <td class="tv-gd">500,00</td>
+              <td>6.000,00</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>CREDLOCALIZA</td>
+              <td class="tv-m">CredLocaliza</td>
+              <td><span class="cat cat-fin">Financeiro</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Localização e cobrança de devedores</td>
+              <td class="tv-gd">~31,10</td>
+              <td>~373,20</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>JusBrasil (3 licenças)</td>
+              <td class="tv-m">JusBrasil</td>
+              <td><span class="cat cat-jur">Jurídico</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Pesquisa de jurisprudência — 1 por unidade</td>
+              <td class="tv-gd">176,70</td>
+              <td>2.120,40</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Previus</td>
+              <td class="tv-m">Previus</td>
+              <td><span class="cat cat-jur">Jurídico</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Cálculos previdenciários</td>
+              <td class="tv-gd">107,91</td>
+              <td>1.294,92</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Inner AI</td>
+              <td class="tv-m">Inner AI Tecnologia</td>
+              <td><span class="cat cat-ia">IA</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Assistente IA produtividade interna</td>
+              <td class="tv-gd">99,90</td>
+              <td>1.198,80</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>ChatGPT / OpenAI</td>
+              <td class="tv-m">OpenAI</td>
+              <td><span class="cat cat-ia">IA</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">IA generativa — uso interno da equipe</td>
+              <td class="tv-gd">114,12</td>
+              <td>1.369,44</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>SkillHub</td>
+              <td class="tv-m">Skill-Hub App LTDA</td>
+              <td><span class="cat cat-ia">IA</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Assistente IA jurídico (tokens contratados)</td>
+              <td class="tv-m">—</td>
+              <td>16.000,00 ²</td>
+              <td><span class="st st-test">Em teste</span></td>
+            </tr>
+            <tr>
+              <td>New Arts</td>
+              <td class="tv-m">New Arts</td>
+              <td><span class="cat cat-mkt">Marketing</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Gestão de tráfego pago</td>
+              <td class="tv-gd">1.200,00</td>
+              <td>14.400,00</td>
+              <td><span class="st st-ok">Ativo (mai/26)</span></td>
+            </tr>
+            <tr>
+              <td>Canva</td>
+              <td class="tv-m">Canva</td>
+              <td><span class="cat cat-mkt">Marketing</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Design gráfico e criação de conteúdo</td>
+              <td class="tv-gd">24,24</td>
+              <td>290,88</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>CapCut</td>
+              <td class="tv-m">ByteDance Brasil</td>
+              <td><span class="cat cat-mkt">Marketing</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Edição de vídeo para conteúdo</td>
+              <td class="tv-m">—</td>
+              <td>374,90 ³</td>
+              <td><span class="st st-ok">Ativo (anual)</span></td>
+            </tr>
+            <tr>
+              <td>Turbo Cloud / E-mail</td>
+              <td class="tv-m">Núcleo Brasil Servidores</td>
+              <td><span class="cat cat-inf">Infraestrutura</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Hospedagem e-mail corporativo</td>
+              <td class="tv-gd">64,90</td>
+              <td>778,80</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>VPS HostGator</td>
+              <td class="tv-m">HostGator Brasil</td>
+              <td><span class="cat cat-inf">Infraestrutura</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Hospedagem do site institucional</td>
+              <td class="tv-gd">~78,00</td>
+              <td>935,76</td>
+              <td><span class="st st-ok">Ativo</span></td>
+            </tr>
+            <tr>
+              <td>Domínio</td>
+              <td class="tv-m">NIC.br</td>
+              <td><span class="cat cat-inf">Infraestrutura</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Registro de domínio do site</td>
+              <td class="tv-m">—</td>
+              <td>76,00</td>
+              <td><span class="st st-ok">Ativo (anual)</span></td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4" class="tv-gd">TOTAL ATIVOS RECORRENTES (sem legados)</td>
+              <td class="tv-gd">~6.094</td>
+              <td class="tv-gd">~73.128</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEGADOS -->
+    <div style="margin-top:2.5rem">
+      <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber)"></span>Sistemas Legados — Em Descontinuação (encerram jul/26)
+      </div>
+      <div class="table-wrap rv d2">
+        <table class="ftable">
+          <thead>
+            <tr>
+              <th class="th-left">Sistema</th>
+              <th class="th-left">Fornecedor</th>
+              <th class="th-left">Categoria</th>
+              <th class="th-left">Finalidade / Situação</th>
+              <th>Mensal (R$)</th>
+              <th>Custo até jul/26</th>
+              <th class="th-left">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Legal One</td>
+              <td class="tv-m">Thomson Reuters</td>
+              <td><span class="cat cat-jur">Jurídico</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">4 acessos: 2 jurídicos + 2 financeiros. Enc. jul/26 → migra para Omie</td>
+              <td class="tv-a">902,24</td>
+              <td class="tv-r">~1.804,48</td>
+              <td><span class="st st-warn">Enc. Jul/26</span></td>
+            </tr>
+            <tr>
+              <td>ZapSign</td>
+              <td class="tv-m">ZAPSING</td>
+              <td><span class="cat cat-jur">Jurídico</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Assinatura digital. Revisão jul/26 — possível migração ou upgrade</td>
+              <td class="tv-a">129,90</td>
+              <td class="tv-a">~259,80</td>
+              <td><span class="st st-warn">Revisão Jul/26</span></td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4" class="tv-a">TOTAL LEGADOS</td>
+              <td class="tv-a">1.032,14</td>
+              <td class="tv-r">~2.064,28</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ENCERRADOS -->
+    <div style="margin-top:2.5rem">
+      <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted)"></span>Sistemas Encerrados
+      </div>
+      <div class="table-wrap rv d3">
+        <table class="ftable">
+          <thead>
+            <tr>
+              <th class="th-left">Sistema</th>
+              <th class="th-left">Categoria</th>
+              <th class="th-left">Motivo do Encerramento</th>
+              <th>Custo Histórico</th>
+              <th class="th-left">Encerramento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tv-m">Chat Guru</td>
+              <td><span class="cat cat-com">Comunicação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Substituído pelo Bitrix + API Oficial WhatsApp</td>
+              <td class="tv-m">R$ 1.394/mês</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Nov/25</span></td>
+            </tr>
+            <tr>
+              <td class="tv-m">VK Digital</td>
+              <td><span class="cat cat-mkt">Marketing</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Substituída pela New Arts — redução de R$ 500/mês</td>
+              <td class="tv-m">R$ 1.700/mês</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Fev/26</span></td>
+            </tr>
+            <tr>
+              <td class="tv-m">Lovable</td>
+              <td><span class="cat cat-ia">IA</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Uso descontinuado — cancelado pelos sócios</td>
+              <td class="tv-m">R$ 149,41/mês</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Mai/26</span></td>
+            </tr>
+            <tr>
+              <td class="tv-m">Consultoria Willian</td>
+              <td><span class="cat cat-inf">Implantação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Fim do projeto Bitrix — substituído por CLT fixo</td>
+              <td class="tv-m">variável</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Mai/26</span></td>
+            </tr>
+            <tr>
+              <td class="tv-m">Consultoria Danilo</td>
+              <td><span class="cat cat-inf">Implantação</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Implantação Bitrix concluída</td>
+              <td class="tv-m">R$ 25.000 (único)</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Encerrado</span></td>
+            </tr>
+            <tr>
+              <td class="tv-m">Consultoria Lucro+</td>
+              <td><span class="cat cat-inf">Gestão</span></td>
+              <td class="tv-m" style="font-size:.76rem;text-align:left">Ciclo de consultoria concluído</td>
+              <td class="tv-m">variável</td>
+              <td class="tv-m" style="text-align:left"><span class="st st-off">Encerrado</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="nb nb-amber rv d4" style="margin-top:1.5rem">
+      <div class="nb-title" style="color:var(--amber)">Nota de Governança</div>
+      <strong>¹ WhatCRM:</strong> contrato anual pago antecipado — não gera débito mensal recorrente.<br>
+      <strong>² SkillHub:</strong> R$ 16.000 quitados integralmente. Sem novas parcelas. Crédito de tokens em uso e teste.<br>
+      <strong>³ CapCut:</strong> R$ 374,90 pagos anualmente em abril. Sem parcela mensal.<br>
+      <strong>BR24 / Lovable:</strong> eram pagos via cartão de crédito da sócia Raphaela. Custos são da empresa — recomenda-se regularização pelo CNPJ.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RANKING DE CUSTOS -->
+<section id="s-ranking">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Concentração de Gastos</div>
+      <h2 class="sec-title">Ranking <em>de Custos</em></h2>
+      <p class="sec-body">Os 10 maiores custos mensais recorrentes do ecossistema tecnológico atual. Apenas sistemas ativos com custo mensal mensurável.</p>
+    </div>
+
+    <div class="kpi-strip ks4 rv d1">
+      <div class="kpi">
+        <div class="kval">R$ 6.094</div>
+        <div class="kdelta d-warn">mensal recorrente</div>
+        <div class="klabel">Total Atual (sem legados)</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">R$ 7.026</div>
+        <div class="kdelta d-dn">incl. Legal One + ZapSign</div>
+        <div class="klabel">Custo Mai/26 Total</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">R$ 5.964</div>
+        <div class="kdelta d-up">a partir de ago/26</div>
+        <div class="klabel">Custo Pós Legados</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">3 sistemas</div>
+        <div class="kdelta d-dn">representam 53%</div>
+        <div class="klabel">Concentração de Custo</div>
+      </div>
+    </div>
+
+    <div class="chart-box rv d2" style="margin-top:1.2rem">
+      <div class="chart-title">Top 10 Maiores Custos Mensais — Sistemas Ativos (R$)</div>
+      <div style="padding:.5rem 0">
+        <div class="rank-row">
+          <div class="rank-num">1</div>
+          <div class="rank-label">Bitrix 24</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--gd),var(--gd2))"></div></div>
+          <div class="rank-val">R$ 1.119</div>
+          <div class="rank-pct">18,4%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">2</div>
+          <div class="rank-label">New Arts (tráfego)</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:95%;background:linear-gradient(90deg,var(--amber),#f5c060)"></div></div>
+          <div class="rank-val">R$ 1.200</div>
+          <div class="rank-pct">19,7%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">3</div>
+          <div class="rank-label">Feedz (RH)</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:76%;background:linear-gradient(90deg,var(--green),#5edba8)"></div></div>
+          <div class="rank-val">R$ 919</div>
+          <div class="rank-pct">15,1%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">4</div>
+          <div class="rank-label">Telefonia Volo Brasil</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:42%;background:linear-gradient(90deg,var(--blue),#5ba8e8)"></div></div>
+          <div class="rank-val">R$ 499</div>
+          <div class="rank-pct">8,2%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">5</div>
+          <div class="rank-label">Omie ERP</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:38%;background:linear-gradient(90deg,var(--teal),var(--teal2))"></div></div>
+          <div class="rank-val">R$ 500</div>
+          <div class="rank-pct">8,2%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">6</div>
+          <div class="rank-label">Tangerino (ponto)</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:18%;background:linear-gradient(90deg,#a78bfa,#c4b5fd)"></div></div>
+          <div class="rank-val">R$ 221</div>
+          <div class="rank-pct">3,6%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">7</div>
+          <div class="rank-label">JusBrasil (3 licenças)</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:15%;background:linear-gradient(90deg,var(--gd),var(--gd2))"></div></div>
+          <div class="rank-val">R$ 177</div>
+          <div class="rank-pct">2,9%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">8</div>
+          <div class="rank-label">WhatCRM (áudio)</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:16%;background:linear-gradient(90deg,var(--blue),#5ba8e8)"></div></div>
+          <div class="rank-val">R$ 190</div>
+          <div class="rank-pct">3,1%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">9</div>
+          <div class="rank-label">Conector Bitrix</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--muted),#8ba4c8)"></div></div>
+          <div class="rank-val">R$ 279</div>
+          <div class="rank-pct">4,6%</div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-num">10</div>
+          <div class="rank-label">ChatGPT / OpenAI</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:9%;background:linear-gradient(90deg,#a78bfa,#c4b5fd)"></div></div>
+          <div class="rank-val">R$ 114</div>
+          <div class="rank-pct">1,9%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nb nb-blue rv d3" style="margin-top:1rem">
+      <div class="nb-title" style="color:var(--blue)">Concentração de Custo</div>
+      <strong>3 sistemas consomem 53% do orçamento tecnológico:</strong> New Arts (19,7%), Bitrix 24 (18,4%) e Feedz (15,1%). Qualquer revisão estratégica deve começar por esses três — não porque são desnecessários, mas porque seu retorno sobre investimento precisa ser monitorado ativamente.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DISTRIBUIÇÃO POR CATEGORIA -->
+<section id="s-categorias" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Composição do Ecossistema</div>
+      <h2 class="sec-title">Distribuição <em>por Categoria</em></h2>
+      <p class="sec-body">Custo mensal consolidado por categoria de sistema. Apenas sistemas ativos recorrentes — sem legados e sem custos únicos/anuais.</p>
+    </div>
+
+    <div class="g2 rv d1">
+      <div>
+        <div class="table-wrap" style="margin-top:1.5rem">
+          <table class="ftable">
+            <thead>
+              <tr>
+                <th class="th-left">Categoria</th>
+                <th class="th-left">Sistemas</th>
+                <th>Mensal (R$)</th>
+                <th>% do Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cat cat-mkt">Marketing</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">New Arts, Canva</td>
+                <td class="tv-gd">1.224,24</td>
+                <td class="tv-gd">20,1%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-crm">CRM</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Bitrix 24, Conector Bitrix</td>
+                <td class="tv-gd">1.398,20</td>
+                <td class="tv-gd">22,9%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-rh">RH</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Feedz, Tangerino</td>
+                <td class="tv-gd">1.139,84</td>
+                <td class="tv-gd">18,7%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-com">Comunicação</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">BR24, WhatCRM, Telefonia, API msgs</td>
+                <td class="tv-gd">959,84</td>
+                <td class="tv-gd">15,7%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-fin">Financeiro</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Omie, CREDLOCALIZA</td>
+                <td class="tv-gd">531,10</td>
+                <td class="tv-gd">8,7%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-ia">IA</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Inner AI, ChatGPT</td>
+                <td class="tv-gd">214,02</td>
+                <td class="tv-gd">3,5%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-jur">Jurídico</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">JusBrasil (3x), Previus</td>
+                <td class="tv-gd">284,61</td>
+                <td class="tv-gd">4,7%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-inf">Infraestrutura</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Turbo Cloud, VPS HostGator</td>
+                <td class="tv-gd">142,90</td>
+                <td class="tv-gd">2,3%</td>
+              </tr>
+              <tr>
+                <td><span class="cat cat-jur">Jurídico Legado</span></td>
+                <td class="tv-m" style="font-size:.76rem;text-align:left">Legal One, ZapSign</td>
+                <td class="tv-a">1.032,14</td>
+                <td class="tv-a">14,5% ⚠</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="2" class="tv-gd">TOTAL GERAL (mai/26)</td>
+                <td class="tv-gd">7.026,89</td>
+                <td class="tv-gd">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="chart-box" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="chart-title">Participação por Categoria (% mensal)</div>
+        <canvas id="chartPizza" height="260"></canvas>
+        <div class="leg" style="margin-top:12px">
+          <span><span class="leg-dot" style="background:#E8A030"></span>CRM 22,9%</span>
+          <span><span class="leg-dot" style="background:#F5A030"></span>Mkt 20,1%</span>
+          <span><span class="leg-dot" style="background:#3EC98E"></span>RH 18,7%</span>
+          <span><span class="leg-dot" style="background:#F06060"></span>Legado 14,5%</span>
+          <span><span class="leg-dot" style="background:#2E85D4"></span>Com. 15,7%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPARATIVO LEGAL ONE VS BITRIX -->
+<section id="s-comparativo">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Análise de Migração</div>
+      <h2 class="sec-title">Legal One <em>vs</em> Bitrix</h2>
+      <p class="sec-body">Comparativo direto entre o ecossistema anterior (Legal One + Chat Guru + ZapSign) e o novo modelo Bitrix. A migração aumentou a capacidade operacional — mas também os custos. A economia virá pós jul/26.</p>
+    </div>
+
+    <div class="kpi-strip ks4 rv d1">
+      <div class="kpi">
+        <div class="kval">R$ 4.453</div>
+        <div class="kdelta d-blue">cenário anterior</div>
+        <div class="klabel">Custo Mensal Legado</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">R$ 6.094</div>
+        <div class="kdelta d-warn">atual sem legados</div>
+        <div class="klabel">Custo Bitrix Puro</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">+R$ 1.641</div>
+        <div class="kdelta d-dn">aumento</div>
+        <div class="klabel">Diferença Bruta Mensal</div>
+      </div>
+      <div class="kpi">
+        <div class="kval">R$ 5.964</div>
+        <div class="kdelta d-up">a partir de ago/26</div>
+        <div class="klabel">Custo Pós Legados</div>
+      </div>
+    </div>
+
+    <div class="comp-block rv d2">
+      <div class="comp-header">
+        <div style="text-align:left">Sistema / Item</div>
+        <div>Legado (R$/mês)</div>
+        <div>Novo (R$/mês)</div>
+        <div>Δ Variação</div>
+      </div>
+      <div class="comp-row section-r">
+        <div>MODELO ANTERIOR — Legal One Era</div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="comp-row">
+        <div>Legal One (gestão processual)</div>
+        <div class="tv-r">2.929,19</div>
+        <div class="tv-m">902,24 ⚠</div>
+        <div class="tv-g">▼ Reduzindo</div>
+      </div>
+      <div class="comp-row">
+        <div>Chat Guru (atendimento WhatsApp)</div>
+        <div class="tv-r">1.394,00</div>
+        <div class="tv-m">— (enc.)</div>
+        <div class="tv-g">▼ Eliminado</div>
+      </div>
+      <div class="comp-row">
+        <div>ZapSign (assinatura digital)</div>
+        <div class="tv-r">129,90</div>
+        <div class="tv-a">129,90 ⚠</div>
+        <div class="tv-m">= Mantido</div>
+      </div>
+      <div class="comp-row total-r">
+        <div>TOTAL LEGADO</div>
+        <div class="tv-r">4.453,09</div>
+        <div class="tv-a">1.032,14</div>
+        <div class="tv-g">▼ -76,8%</div>
+      </div>
+      <div class="comp-row section-r">
+        <div>NOVO MODELO — Bitrix Era</div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="comp-row">
+        <div>Bitrix 24 + Conector</div>
+        <div class="tv-m">—</div>
+        <div>1.398,20</div>
+        <div class="tv-r">▲ Novo custo</div>
+      </div>
+      <div class="comp-row">
+        <div>API WhatsApp (BR24 + WhatCRM + msgs)</div>
+        <div class="tv-m">—</div>
+        <div>460,84</div>
+        <div class="tv-r">▲ Novo custo</div>
+      </div>
+      <div class="comp-row">
+        <div>New Arts (tráfego pago)</div>
+        <div class="tv-m">VK Digital: 1.700</div>
+        <div>1.200,00</div>
+        <div class="tv-g">▼ -R$ 500</div>
+      </div>
+      <div class="comp-row">
+        <div>Omie ERP (financeiro)</div>
+        <div class="tv-m">—</div>
+        <div>500,00</div>
+        <div class="tv-r">▲ Novo custo</div>
+      </div>
+      <div class="comp-row">
+        <div>Feedz + Tangerino (RH)</div>
+        <div class="tv-m">~710 + ~134</div>
+        <div>1.139,84</div>
+        <div class="tv-r">▲ Cresceu</div>
+      </div>
+      <div class="comp-row">
+        <div>IA (Inner AI + ChatGPT)</div>
+        <div class="tv-m">—</div>
+        <div>214,02</div>
+        <div class="tv-r">▲ Novo custo</div>
+      </div>
+      <div class="comp-row">
+        <div>Infraestrutura + Jurídico + Outros</div>
+        <div class="tv-m">~64,90</div>
+        <div>603,71</div>
+        <div class="tv-r">▲ Cresceu</div>
+      </div>
+      <div class="comp-row total-r">
+        <div>TOTAL NOVO MODELO</div>
+        <div class="tv-m">—</div>
+        <div class="tv-a">6.094,61</div>
+        <div class="tv-r">▲ +R$ 1.641</div>
+      </div>
+    </div>
+
+    <div class="nb nb-red rv d3" style="margin-top:1rem">
+      <div class="nb-title" style="color:var(--red)">A migração gerou economia?</div>
+      <strong>A resposta direta: não ainda.</strong> O custo mensal passou de R$ 4.453 para R$ 6.094 — um aumento de R$ 1.641/mês (+36,9%). Isso era esperado: a migração trouxe ferramentas que o modelo anterior não tinha (CRM, ERP, IA, tráfego pago). A <strong>economia real virá a partir de agosto/26</strong>, quando Legal One e ZapSign forem encerrados, reduzindo o custo para ~R$ 5.964/mês — ainda acima do legado, mas com uma plataforma operacional drasticamente superior.
+    </div>
+
+    <div class="g2 rv d4" style="margin-top:1.2rem">
+      <div class="chart-box">
+        <div class="chart-title">Comparativo Mensal — Legado vs Novo Modelo (R$)</div>
+        <canvas id="chartComp" height="220"></canvas>
+        <div class="leg">
+          <span><span class="leg-dot" style="background:var(--red)"></span>Legado</span>
+          <span><span class="leg-dot" style="background:var(--gd)"></span>Novo Modelo</span>
+          <span><span class="leg-dot" style="background:var(--green)"></span>Pós Jul/26</span>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Evolução do Custo Total Realizado (mai/25 – mai/26)</div>
+        <canvas id="chartEvo" height="220"></canvas>
+        <div class="leg">
+          <span><span class="leg-dot" style="background:var(--teal2)"></span>Custo Realizado Mensal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EVOLUÇÃO MENSAL -->
+<section id="s-evolucao" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Histórico de Gastos</div>
+      <h2 class="sec-title">Evolução <em>Mensal</em></h2>
+      <p class="sec-body">Comportamento do custo tecnológico mês a mês ao longo do período analisado. Destaque para os picos de implantação e a estabilização pós-migração.</p>
+    </div>
+
+    <div class="evo-cards rv d1">
+      <div class="evo-c" style="border-top:3px solid var(--muted)">
+        <div class="evo-mes">Mai – Out / 2025</div>
+        <div class="evo-val" style="color:var(--muted)">~R$ 6.800</div>
+        <div class="evo-rows">
+          <div class="evo-row"><span class="lb">Legal One</span><span class="tv-r">R$ 2.929</span></div>
+          <div class="evo-row"><span class="lb">Chat Guru</span><span class="tv-r">R$ 1.394</span></div>
+          <div class="evo-row"><span class="lb">Feedz + Tangerino</span><span>~R$ 885</span></div>
+          <div class="evo-row"><span class="lb">Bitrix (já ativo)</span><span>R$ 1.119</span></div>
+        </div>
+        <div class="evo-note">Período de sobreposição — pagando o antigo e o novo ao mesmo tempo.</div>
+      </div>
+      <div class="evo-c" style="border-top:3px solid var(--red)">
+        <div class="evo-mes">Nov / 2025</div>
+        <div class="evo-val" style="color:var(--red)">Pico implantação</div>
+        <div class="evo-rows">
+          <div class="evo-row"><span class="lb">WhatCRM anual</span><span class="tv-r">R$ 2.280</span></div>
+          <div class="evo-row"><span class="lb">Legal One</span><span class="tv-r">R$ 2.970</span></div>
+          <div class="evo-row"><span class="lb">Último Chat Guru</span><span class="tv-r">R$ 1.424</span></div>
+          <div class="evo-row"><span class="lb">Consultorias</span><span class="tv-r">alto</span></div>
+        </div>
+        <div class="evo-note">Mês de maior custo: múltiplos contratos simultâneos + pagamento anual WhatCRM.</div>
+      </div>
+      <div class="evo-c" style="border-top:3px solid var(--amber)">
+        <div class="evo-mes">Dez/25 – Jan/26</div>
+        <div class="evo-val" style="color:var(--amber)">Transição</div>
+        <div class="evo-rows">
+          <div class="evo-row"><span class="lb">Chat Guru</span><span class="tv-g">Encerrado ✓</span></div>
+          <div class="evo-row"><span class="lb">Legal One residual</span><span class="tv-a">R$ 886</span></div>
+          <div class="evo-row"><span class="lb">SkillHub parcela</span><span class="tv-r">R$ 8.000</span></div>
+          <div class="evo-row"><span class="lb">VPS HostGator</span><span>R$ 936 (anual)</span></div>
+        </div>
+        <div class="evo-note">Pico de fev/26 por Omie iniciando + Legal One ainda ativo + SkillHub.</div>
+      </div>
+      <div class="evo-c" style="border-top:3px solid var(--green)">
+        <div class="evo-mes">Abr – Mai / 2026</div>
+        <div class="evo-val" style="color:var(--green)">Estabilizando</div>
+        <div class="evo-rows">
+          <div class="evo-row"><span class="lb">Legal One</span><span class="tv-a">R$ 902 ⚠</span></div>
+          <div class="evo-row"><span class="lb">New Arts (mai)</span><span class="tv-g">R$ 1.200 ✓</span></div>
+          <div class="evo-row"><span class="lb">Lovable</span><span class="tv-g">Cancelado ✓</span></div>
+          <div class="evo-row"><span class="lb">VK Digital</span><span class="tv-g">Encerrada ✓</span></div>
+        </div>
+        <div class="evo-note">Custo tendendo à estabilidade. Encerramento de legados em jul/26 finaliza o ciclo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ALERTAS E RISCOS -->
+<section id="s-alertas">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Pontos de Atenção</div>
+      <h2 class="sec-title">Alertas <em>e Riscos</em></h2>
+      <p class="sec-body">Situações que requerem decisão ou acompanhamento ativo pela liderança. Classificados por urgência.</p>
+    </div>
+
+    <div class="alert-grid rv d1">
+      <div class="alert-c danger">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-title" style="color:var(--red)">Legal One — Prazo jul/26</div>
+        <div class="alert-body">Encerramento em julho/26. Custo residual de R$ 902,24/mês. <strong>Ação necessária:</strong> confirmar migração total dos lançamentos financeiros para o Omie e dos registros processuais antes do cancelamento. Risco de perda de acesso a histórico.</div>
+      </div>
+      <div class="alert-c danger">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-title" style="color:var(--red)">Pagamentos via CPF da Sócia</div>
+        <div class="alert-body">BR24 / PowerZap pago no cartão da Raphaela. Isso gera risco fiscal e tributário: despesas corporativas não contabilizadas no CNPJ podem impactar o Simples Nacional. <strong>Ação:</strong> migrar cobrança para cartão/conta da empresa.</div>
+      </div>
+      <div class="alert-c warn">
+        <div class="alert-icon">🟡</div>
+        <div class="alert-title" style="color:var(--amber)">ZapSign — Decisão jul/26</div>
+        <div class="alert-body">Contrato ativo até julho/26. Necessidade de decidir entre: manter ZapSign com upgrade de API, migrar para DocuSign, ClickSign ou solução embutida no Bitrix. R$ 129,90/mês em risco se a decisão atrasar.</div>
+      </div>
+      <div class="alert-c warn">
+        <div class="alert-icon">🟡</div>
+        <div class="alert-title" style="color:var(--amber)">SkillHub — Tokens sem prazo</div>
+        <div class="alert-body">R$ 16.000 investidos, sistema em teste. Sem prazo definido de implantação real. Risco de tokens expirarem antes da operacionalização. <strong>Ação:</strong> definir responsável, cronograma e KPI de adoção.</div>
+      </div>
+      <div class="alert-c warn">
+        <div class="alert-icon">🟡</div>
+        <div class="alert-title" style="color:var(--amber)">API WhatsApp — Custo não monitorado</div>
+        <div class="alert-body">Custo variável de mensagens (templates utility e marketing) projetado em ~R$ 395/mês mas não aparece nos lançamentos realizados. Pode estar sendo pago via cartão não mapeado ou subestimado. Requer conciliação.</div>
+      </div>
+      <div class="alert-c ok">
+        <div class="alert-icon">🟢</div>
+        <div class="alert-title" style="color:var(--green)">IA — Potencial subutilizado</div>
+        <div class="alert-body">3 ferramentas de IA ativas (Inner AI, ChatGPT, SkillHub) com R$ 16.214 investidos. Sem política formal de uso definida. Oportunidade de consolidar em 1–2 ferramentas e criar protocolo de uso pelos advogados.</div>
+      </div>
+    </div>
+
+    <div class="nb nb-amber rv d2" style="margin-top:1rem">
+      <div class="nb-title" style="color:var(--amber)">Duplicidade Potencial</div>
+      <strong>WhatCRM + BR24/PowerZap:</strong> ambos funcionam como conectores WhatsApp ↔ Bitrix, com funções ligeiramente diferentes (áudio vs API oficial). Vale validar com o desenvolvedor CLT se é possível consolidar as funções em uma única solução após o encerramento do contrato anual do WhatCRM — economia potencial de ~R$ 190/mês.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OPORTUNIDADES DE REDUÇÃO -->
+<section id="s-oportunidades" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Gestão de Custos</div>
+      <h2 class="sec-title">Oportunidades de <em>Redução</em></h2>
+      <p class="sec-body">Ações concretas que podem reduzir o custo tecnológico sem comprometer a operação. Organizadas por horizonte de tempo e potencial de economia.</p>
+    </div>
+
+    <div class="table-wrap rv d1" style="margin-top:1.5rem">
+      <table class="ftable">
+        <thead>
+          <tr>
+            <th class="th-left">Oportunidade</th>
+            <th class="th-left">Ação Recomendada</th>
+            <th>Economia Est./mês</th>
+            <th class="th-left">Prazo</th>
+            <th class="th-left">Prioridade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row">
+            <td colspan="5">CURTO PRAZO (até jul/26)</td>
+          </tr>
+          <tr>
+            <td>Encerramento Legal One</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Migrar lançamentos financeiros para Omie e confirmar cancelamento</td>
+            <td class="tv-g">R$ 902,24</td>
+            <td class="tv-a" style="text-align:left">Jul/26</td>
+            <td style="text-align:left"><span class="st st-warn">Alta</span></td>
+          </tr>
+          <tr>
+            <td>Migrar BR24 para CNPJ</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Transferir cobrança do CPF da Raphaela para conta da empresa</td>
+            <td class="tv-m">R$ 0 (risco fiscal)</td>
+            <td class="tv-a" style="text-align:left">Imediato</td>
+            <td style="text-align:left"><span class="st st-warn">Alta</span></td>
+          </tr>
+          <tr>
+            <td>Decisão ZapSign / alternativa</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Avaliar assinatura nativa do Bitrix ou ClickSign antes do vencimento</td>
+            <td class="tv-g">R$ 0–129,90</td>
+            <td class="tv-a" style="text-align:left">Jun/26</td>
+            <td style="text-align:left"><span class="st st-warn">Média</span></td>
+          </tr>
+          <tr class="section-row">
+            <td colspan="5">MÉDIO PRAZO (ago–dez/26)</td>
+          </tr>
+          <tr>
+            <td>Consolidar conectores WhatsApp</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Ao vencer WhatCRM anual, avaliar consolidação com BR24/PowerZap</td>
+            <td class="tv-g">~R$ 190,00</td>
+            <td class="tv-m" style="text-align:left">Nov/26</td>
+            <td style="text-align:left"><span class="st st-ok">Baixa</span></td>
+          </tr>
+          <tr>
+            <td>Política de uso de IA</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Criar protocolo de uso para SkillHub, Inner AI e ChatGPT — evitar sobreposição</td>
+            <td class="tv-g">~R$ 100–214</td>
+            <td class="tv-m" style="text-align:left">Set/26</td>
+            <td style="text-align:left"><span class="st st-warn">Média</span></td>
+          </tr>
+          <tr>
+            <td>Revisão Feedz vs alternativas</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Verificar se funcionalidades usadas justificam R$ 919/mês — avaliar plano menor</td>
+            <td class="tv-g">~R$ 150–300</td>
+            <td class="tv-m" style="text-align:left">Ago/26</td>
+            <td style="text-align:left"><span class="st st-ok">Baixa</span></td>
+          </tr>
+          <tr>
+            <td>Monitorar API WhatsApp mensagens</td>
+            <td class="tv-m" style="font-size:.76rem;text-align:left">Conciliar custo real de templates vs projeção e revisar volume de marketing msgs</td>
+            <td class="tv-g">variável</td>
+            <td class="tv-m" style="text-align:left">Imediato</td>
+            <td style="text-align:left"><span class="st st-warn">Média</span></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="2" class="tv-gd">POTENCIAL DE REDUÇÃO TOTAL (curto + médio prazo)</td>
+            <td class="tv-g">R$ 1.342–1.736/mês</td>
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nb nb-gd rv d2" style="margin-top:1rem">
+      <div class="nb-title" style="color:var(--gd2)">Projeção Pós-Otimização</div>
+      Se as oportunidades de curto prazo forem executadas, <strong>o custo tecnológico mensal cai de R$ 7.026 para aproximadamente R$ 5.964</strong> a partir de agosto/26 — representando uma redução de <strong>R$ 1.062/mês (R$ 12.744/ano)</strong> em relação ao cenário atual. Se as oportunidades de médio prazo forem aproveitadas, o custo pode chegar a ~<strong>R$ 5.200–5.500/mês</strong>.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DIAGNÓSTICO ESTRATÉGICO / PARECER FINAL -->
+<section id="s-parecer">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Diagnóstico Executivo</div>
+      <h2 class="sec-title">Parecer <em>Final</em></h2>
+      <p class="sec-body">Análise estratégica consolidada para os sócios. Avaliação do ecossistema tecnológico atual, riscos e recomendações de governança.</p>
+    </div>
+
+    <div class="cfo-grid rv d1">
+      <div class="cfo-c">
+        <div class="cfo-head">📊 Sobre a Migração</div>
+        <div class="cfo-text">A migração do Legal One para o Bitrix foi tecnicamente bem executada, mas financeiramente incompleta. O custo mensal cresceu de R$ 4.453 para R$ 7.026 (+57,8%) porque novos sistemas foram acrescidos (Omie, IA, tráfego pago) sem que os legados fossem encerrados. O custo adicional foi uma escolha estratégica consciente — e correta — mas o ecossistema ainda carrega duplicidade de despesas até julho/26.</div>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">⚖️ Retorno sobre o Investimento</div>
+        <div class="cfo-text">O ecossistema Bitrix entregou capacidade operacional que o Legal One não oferecia: CRM multicanal, automação de atendimento, funis de venda, integração WhatsApp e ERP financeiro. Avaliar apenas pelo custo é insuficiente. A pergunta relevante é: <strong>o volume de clientes e receita gerado justifica o investimento?</strong> Os dados do DRE das unidades sugerem que sim — mas o monitoramento de ROI por ferramenta ainda não existe formalmente.</div>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">⚠️ Riscos Prioritários</div>
+        <ul class="cfo-list">
+          <li class="danger"><strong>Legal One:</strong> encerrar até jul/26 com plano de migração de dados documentado</li>
+          <li class="danger"><strong>BR24 no CPF:</strong> regularizar cobrança para CNPJ — risco fiscal real</li>
+          <li class="warn"><strong>SkillHub:</strong> R$ 16.000 investidos sem KPI de adoção definido</li>
+          <li class="warn"><strong>API WhatsApp:</strong> custo variável sem conciliação mensal confirmada</li>
+          <li class="warn"><strong>ZapSign:</strong> decisão necessária antes de julho/26</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">🎯 Dependência Excessiva</div>
+        <div class="cfo-text">Existe dependência estrutural do ecossistema <strong>Bitrix + TLJ Tech</strong>. O CRM, o conector principal e o WhatCRM são todos fornecidos ou gerenciados por um único fornecedor (TLJ Tech). Isso reduz custos de integração, mas cria risco de lock-in. Recomenda-se documentar todos os fluxos e garantir que o desenvolvedor CLT interno possua acesso administrativo completo às configurações.</div>
+      </div>
+      <div class="cfo-c full">
+        <div class="cfo-head">🔬 Sistemas sem Utilização Clara ou Sobrepostos</div>
+        <ul class="cfo-list">
+          <li class="warn"><strong>WhatCRM + BR24/PowerZap:</strong> dois conectores WhatsApp com funções parcialmente sobrepostas — avaliar consolidação após vencimento anual</li>
+          <li class="warn"><strong>Inner AI + ChatGPT + SkillHub:</strong> três ferramentas de IA sem política de uso diferenciada — risco de sobreposição e custo sem resultado</li>
+          <li class="ok"><strong>CREDLOCALIZA:</strong> uso variável e pontual — aparentemente adequado para o volume atual de cobrança</li>
+          <li class="ok"><strong>Previus:</strong> ferramenta específica para cálculos previdenciários — sem sobreposição identificada</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="verdict rv d2">
+      <div class="verdict-icon">⚡</div>
+      <div>
+        <div class="verdict-label">Parecer CFO — Maximiano Advocacia · Mai/2026</div>
+        <div class="verdict-text">Ecossistema em transição — estrutura sólida, governança a consolidar</div>
+        <div class="verdict-sub">O investimento tecnológico foi necessário e estrategicamente correto. A Maximiano saltou de uma operação baseada em planilhas e sistemas isolados para um ecossistema integrado de CRM, financeiro e atendimento. O custo cresceu, mas a capacidade operacional cresceu mais. A prioridade imediata é encerrar os legados em jul/26, regularizar as cobranças via CNPJ, ativar efetivamente o SkillHub e criar uma política de uso de IA. O ecossistema pós-jul/26, com custo de ~R$ 5.964/mês, é adequado para o porte e a estratégia de crescimento da firma.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NOTAS EXPLICATIVAS -->
+<section id="s-notas" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Metodologia e Fontes</div>
+      <h2 class="sec-title">Notas <em>Explicativas</em></h2>
+    </div>
+
+    <div class="cfo-grid rv d1">
+      <div class="cfo-c">
+        <div class="cfo-head">Fonte dos Dados</div>
+        <div class="cfo-text">Base principal: planilha <em>Orçado vs Realizado Bitrix</em> — 5 abas (Cenário 1, Cenário 2, Cenário Final, Revisão nov25 e Custo API Oficial). Período coberto: mai/2025 a mai/2026. Dados complementados e validados em sessão com o CEO Jean Barbosa em mai/2026.</div>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">Critérios de Cálculo</div>
+        <div class="cfo-text">Valores mensais recorrentes extraídos da aba "Sistemas e APPs". Custos anuais únicos (CapCut, WhatCRM, Domínio, VPS) não entram no custo mensal recorrente. Valores com "~" são estimativas baseadas na média dos últimos 3 meses disponíveis. Dólar de referência: R$ 5,70 (base da planilha).</div>
+      </div>
+      <div class="cfo-c full">
+        <div class="cfo-head">Limitações e Ressalvas</div>
+        <ul class="cfo-list">
+          <li><strong>API WhatsApp mensagens:</strong> custo variável não confirmado nos lançamentos realizados — projeção baseada no planejamento original (R$ ~395/mês + R$ 513 fixo)</li>
+          <li><strong>BR24/PowerZap:</strong> valor estimado com base nos lançamentos de abr-mai/26 via cartão da sócia. Requer confirmação do valor contratual exato</li>
+          <li><strong>Consultoria Willian:</strong> horas residuais pendentes de liquidação em mai/26 — valor não quantificado com precisão</li>
+          <li><strong>Feedz:</strong> valor mensal com variação — utilizada a média dos últimos meses disponíveis (R$ 919,14)</li>
+          <li><strong>New Arts:</strong> contrato iniciado mai/26 — custo anual projetado com base no valor mensal contratado (R$ 1.200)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Maximiano Advocacia · Diagnóstico de Sistemas e Ecossistema Tecnológico · Maio de 2026 · Confidencial — uso interno</p>
+</footer>
+
+</div><!-- /main -->
+
+<script>
+// Nav
+function nav(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Chart defaults
+Chart.defaults.color='rgba(255,255,255,.45)';
+Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+Chart.defaults.font.size=11;
+
+// Pizza por categoria
+const ctxPizza = document.getElementById('chartPizza').getContext('2d');
+new Chart(ctxPizza,{
+  type:'doughnut',
+  data:{
+    labels:['CRM (22,9%)','Marketing (20,1%)','RH (18,7%)','Comunicação (15,7%)','Legado (14,5%)','Financeiro (8,7%)','Jurídico (4,7%)','IA (3,5%)','Infraestrutura (2,3%)'],
+    datasets:[{
+      data:[22.9,20.1,18.7,15.7,14.5,8.7,4.7,3.5,2.3],
+      backgroundColor:['#E8A030','#F5A030','#3EC98E','#2E85D4','#F06060','#0EA89A','#8B5CF6','#A78BFA','#6B84A8'],
+      borderWidth:0,
+      hoverOffset:6
+    }]
+  },
+  options:{
+    cutout:'65%',
+    plugins:{legend:{display:false},datalabels:{display:false}},
+    animation:{duration:1200}
+  }
+});
+
+// Comparativo cenários
+const ctxComp = document.getElementById('chartComp').getContext('2d');
+new Chart(ctxComp,{
+  type:'bar',
+  data:{
+    labels:['Legado\n(até out/25)','Atual\n(mai/26)','Pós Legados\n(ago/26)','Otimizado\n(dez/26)'],
+    datasets:[{
+      data:[4453,7026,5964,5200],
+      backgroundColor:['rgba(240,96,96,.7)','rgba(245,160,48,.7)','rgba(62,201,142,.7)','rgba(62,201,142,.9)'],
+      borderRadius:6,
+      borderSkipped:false
+    }]
+  },
+  options:{
+    plugins:{legend:{display:false},datalabels:{display:false}},
+    scales:{
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>'R$'+v.toLocaleString('pt-BR')}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// Evolução mensal realizada
+const ctxEvo = document.getElementById('chartEvo').getContext('2d');
+new Chart(ctxEvo,{
+  type:'line',
+  data:{
+    labels:['Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26'],
+    datasets:[{
+      label:'Custo Realizado',
+      data:[4902,5028,13400,4868,7124,5419,12600,5880,7500,4519,4592,6452,7026],
+      borderColor:'#14C4B4',
+      backgroundColor:'rgba(14,168,154,.1)',
+      fill:true,
+      tension:.4,
+      pointBackgroundColor:'#14C4B4',
+      pointRadius:4,
+      pointHoverRadius:6
+    }]
+  },
+  options:{
+    plugins:{legend:{display:false},datalabels:{display:false}},
+    scales:{
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>'R$'+v.toLocaleString('pt-BR')}},
+      x:{grid:{display:false},ticks:{maxRotation:45}}
+    }
+  }
+});
+
+// Sidebar active on scroll
+window.addEventListener('scroll',()=>{
+  const sections=['hero','s-inventario','s-ranking','s-categorias','s-comparativo','s-evolucao','s-alertas','s-oportunidades','s-parecer','s-notas'];
+  const links=document.querySelectorAll('.sb-link');
+  let current='hero';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-120)current=id;
+  });
+  links.forEach(l=>{
+    l.classList.remove('active');
+    if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes(current))l.classList.add('active');
+  });
+},{passive:true});
+</script>
+</body>
+</html>
+HTMLEOF
