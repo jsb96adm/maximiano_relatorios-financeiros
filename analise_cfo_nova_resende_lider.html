@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Nova Resende — Análise CFO · Líder de Unidade · 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;
+  --gd:#E8A030;--gd2:#F5C060;
+  --teal:#0EA89A;--teal2:#14C4B4;
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --violet:#8B5CF6;--vdim:rgba(139,92,246,.12);
+  --muted:#6B84A8;--card:#0A1F38;
+  --border:rgba(232,160,48,.16);--border2:rgba(255,255,255,.06);
+  --r:12px;--sb:244px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+
+/* SIDEBAR */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(9,26,46,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd)}
+.sb-brand-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-unit-badge{margin:.8rem 1.2rem;background:var(--vdim);border:1px solid rgba(139,92,246,.3);border-radius:6px;padding:.4rem .75rem;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:700;text-align:center}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.74rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--gd);background:rgba(232,160,48,.06);border-left-color:var(--gd)}
+.sb-link svg{opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.6rem;color:var(--muted);text-align:center;line-height:1.5}
+.sb-footer strong{color:var(--gd2)}
+.sb-alert{margin:.7rem 1.2rem;background:rgba(245,160,48,.06);border:1px solid rgba(245,160,48,.22);border-radius:6px;padding:.55rem .75rem;font-size:.61rem;color:rgba(255,255,255,.6);text-align:center;line-height:1.6}
+.sb-alert strong{color:var(--amber)}
+
+/* MAIN */
+#main{margin-left:var(--sb);flex:1;min-width:0}
+
+/* HERO */
+#hero{min-height:56vh;display:flex;align-items:center;padding:4.5rem 0 3rem;background:radial-gradient(ellipse 70% 55% at 55% -5%,rgba(139,92,246,.2) 0%,transparent 65%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.028) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;padding:0 2.5rem;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:.3rem .9rem;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:1.1rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-weight:900;font-size:clamp(2.1rem,4.2vw,3.6rem);line-height:.92;color:#fff;letter-spacing:-.02em;margin-bottom:.7rem}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-sub{font-size:.88rem;color:rgba(255,255,255,.42);max-width:580px;line-height:1.7}
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(9,26,46,.75);padding:1rem 1.1rem;transition:background .2s}
+.hk:hover{background:rgba(21,45,80,.8)}
+.hk-val{font-weight:800;font-size:1.38rem;color:var(--gd);line-height:1}
+.hk-label{font-size:.57rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.22rem}
+.hk-delta{font-size:.66rem;font-weight:700;margin-top:.1rem}
+
+/* SECTIONS */
+section{position:relative;padding:4rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1120px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.65rem;color:rgba(255,255,255,.42);max-width:640px;font-size:.87rem;line-height:1.75}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:2rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}.ks4{grid-template-columns:repeat(4,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}.ks2{grid-template-columns:repeat(2,1fr)}
+.kpi{background:rgba(9,26,46,.85);padding:1.2rem .9rem;text-align:center;transition:background .2s}
+.kpi:hover{background:rgba(21,45,80,.8)}
+.kval{font-weight:800;font-size:1.38rem;color:var(--gd);line-height:1}
+.kdelta{display:inline-block;font-size:.65rem;font-weight:700;padding:.1rem .44rem;border-radius:20px;margin:.2rem 0}
+.d-up{background:rgba(62,201,142,.14);color:var(--green)}.d-dn{background:rgba(240,96,96,.1);color:var(--red)}
+.d-warn{background:rgba(245,160,48,.1);color:var(--amber)}.d-teal{background:rgba(14,168,154,.12);color:var(--teal2)}
+.d-blue{background:rgba(46,133,212,.12);color:var(--blue)}.d-viol{background:var(--vdim);color:var(--violet)}
+.klabel{font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+/* CHART BOX */
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.5rem}
+.chart-title{font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem}
+.leg{display:flex;gap:14px;margin-top:10px;font-size:.68rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border2)}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{background:rgba(9,26,46,.9);color:var(--gd);font-size:.59rem;letter-spacing:.13em;text-transform:uppercase;padding:.8rem .85rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ftable th:first-child{text-align:left}
+.ftable td{padding:.72rem .85rem;font-size:.81rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ftable td:first-child{text-align:left;font-weight:600;font-size:.79rem}
+.ftable tr.total-row td{font-weight:800;background:rgba(9,26,46,.6);border-top:2px solid var(--border);font-size:.84rem}
+.ftable tr:hover td{background:rgba(232,160,48,.022)}
+.ftable tr.sub-row td{font-size:.76rem;color:rgba(255,255,255,.55)}
+.ftable tr.section-row td{background:rgba(9,26,46,.5);color:var(--gd);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:.5rem .85rem}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}
+.tv-gd{color:var(--gd);font-weight:700}.tv-t{color:var(--teal2)}.tv-b{color:var(--blue)}.tv-v{color:var(--violet)}
+
+/* NOTES */
+.nb{border-radius:8px;padding:.85rem 1.2rem;margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.75}
+.nb-teal{background:rgba(14,168,154,.05);border:1px solid rgba(14,168,154,.18)}
+.nb-teal strong{color:var(--teal2)}
+.nb-gd{background:rgba(232,160,48,.05);border:1px solid rgba(232,160,48,.16)}
+.nb-gd strong{color:var(--gd2)}
+.nb-blue{background:rgba(46,133,212,.05);border:1px solid rgba(46,133,212,.2)}
+.nb-blue strong{color:var(--blue)}
+.nb-red{background:rgba(240,96,96,.05);border:1px solid rgba(240,96,96,.18)}
+.nb-red strong{color:var(--red)}
+.nb-amber{background:rgba(245,160,48,.06);border:1px solid rgba(245,160,48,.22)}
+.nb-amber strong{color:var(--amber)}
+.nb-viol{background:var(--vdim);border:1px solid rgba(139,92,246,.2)}
+.nb-viol strong{color:var(--violet)}
+.nb-green{background:rgba(62,201,142,.05);border:1px solid rgba(62,201,142,.18)}
+.nb-green strong{color:var(--green)}
+.nb-title{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin-bottom:.45rem;display:flex;align-items:center;gap:.5rem}
+.nb-title::before{content:'';width:10px;height:2px;border-radius:1px;background:currentColor;display:inline-block}
+
+/* SCENARIO CARDS */
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.8rem}
+.sc-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1.6rem;border-top:3px solid var(--border2)}
+.sc-card.cons{border-top-color:var(--amber)}.sc-card.real{border-top-color:var(--blue)}.sc-card.otim{border-top-color:var(--green)}
+.sc-tag{font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;font-weight:800;margin-bottom:.7rem;display:block}
+.sc-val{font-weight:900;font-size:1.6rem;line-height:1;margin-bottom:.2rem}
+.sc-sub{font-size:.72rem;color:var(--muted);margin-bottom:.9rem}
+.sc-rows{display:flex;flex-direction:column;gap:.26rem}
+.sc-row{display:flex;justify-content:space-between;font-size:.77rem;padding:.2rem 0;border-bottom:1px solid var(--border2)}
+.sc-row:last-child{border-bottom:none}
+.sc-row .sc-lb{color:var(--muted)}
+.sc-be{margin-top:.9rem;padding:.6rem .9rem;border-radius:7px;font-size:.72rem;font-weight:700;text-align:center}
+.sc-be-no{background:rgba(240,96,96,.1);color:var(--red);border:1px solid rgba(240,96,96,.2)}
+.sc-be-ok{background:rgba(62,201,142,.1);color:var(--green);border:1px solid rgba(62,201,142,.2)}
+.sc-be-near{background:rgba(46,133,212,.1);color:var(--blue);border:1px solid rgba(46,133,212,.2)}
+
+/* PIPELINE BAR */
+.pipe-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;margin:1rem 0}
+.pb-seg{display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700}
+
+/* CFO GRID */
+.cfo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+.cfo-c{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.4rem}
+.cfo-c.full{grid-column:1/-1}
+.cfo-head{font-weight:700;font-size:.96rem;color:var(--gd);margin-bottom:.7rem;padding-bottom:.55rem;border-bottom:1px solid var(--border2)}
+.cfo-text{font-size:.83rem;color:rgba(255,255,255,.53);line-height:1.75}
+.cfo-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.6rem}
+.cfo-list li{font-size:.81rem;color:rgba(255,255,255,.56);padding-left:1.1rem;position:relative;line-height:1.55}
+.cfo-list li::before{content:'›';position:absolute;left:0;color:var(--gd)}
+.cfo-list li strong{color:rgba(255,255,255,.86)}
+
+/* VERDICT */
+.verdict{display:flex;align-items:flex-start;gap:1.1rem;background:linear-gradient(135deg,rgba(62,201,142,.07),rgba(232,160,48,.05));border:1px solid rgba(62,201,142,.22);border-radius:13px;padding:1.4rem 1.7rem;margin-top:1.6rem}
+.verdict-icon{font-size:2.1rem;flex-shrink:0;padding-top:.1rem}
+.verdict-label{font-size:.59rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+.verdict-text{font-weight:800;font-size:1.08rem;color:#fff;margin-top:.15rem;line-height:1.35}
+.verdict-sub{font-size:.8rem;color:rgba(255,255,255,.48);margin-top:.3rem;line-height:1.6}
+
+/* REM CARDS */
+.rem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.4rem}
+.rem-c{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.3rem}
+.rem-tag{display:inline-block;font-size:.6rem;padding:.2rem .55rem;border-radius:20px;margin-bottom:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.rem-atual{background:rgba(245,160,48,.1);color:var(--amber);border:1px solid rgba(245,160,48,.25)}
+.rem-proposta{background:rgba(46,133,212,.1);color:var(--blue);border:1px solid rgba(46,133,212,.25)}
+.rem-ideal{background:rgba(62,201,142,.1);color:var(--green);border:1px solid rgba(62,201,142,.25)}
+.rem-row{display:flex;justify-content:space-between;font-size:.78rem;padding:.23rem 0;border-bottom:1px solid var(--border2)}
+.rem-row:last-child{border-bottom:none}
+.rem-row .lb{color:var(--muted)}
+
+/* PROGRESS */
+.prog-wrap{background:rgba(255,255,255,.05);border-radius:4px;height:8px;overflow:hidden;margin:.35rem 0}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gd),var(--gd2))}
+.prog-fill.blue{background:linear-gradient(90deg,var(--blue),#64B5F6)}
+.prog-fill.green{background:linear-gradient(90deg,var(--green),#6EE7B7)}
+.prog-fill.viol{background:linear-gradient(90deg,var(--violet),#C4B5FD)}
+.prog-fill.red{background:linear-gradient(90deg,var(--red),#F9A8A8)}
+
+/* METAS */
+.metas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.4rem}
+.meta-c{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:1.1rem}
+.meta-icon{font-size:1.4rem;margin-bottom:.4rem}
+.meta-titulo{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem;font-weight:700}
+.meta-val{font-weight:800;font-size:1.15rem;color:var(--gd);line-height:1}
+.meta-sub{font-size:.68rem;color:rgba(255,255,255,.35);margin-top:.2rem}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:1.2rem;position:relative;padding-left:1.5rem}
+.timeline::before{content:'';position:absolute;left:.35rem;top:.6rem;bottom:.6rem;width:2px;background:linear-gradient(var(--border),var(--border2))}
+.tl-item{position:relative;padding:.65rem 0 .65rem 1rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{position:absolute;left:-1.15rem;top:.9rem;width:10px;height:10px;border-radius:50%;border:2px solid}
+.tl-mes{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:.18rem}
+.tl-desc{font-size:.79rem;color:rgba(255,255,255,.58);line-height:1.5}
+.tl-num{font-size:.76rem;font-weight:700;margin-top:.12rem}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;text-align:center}
+footer p{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--dk)}::-webkit-scrollbar-thumb{background:rgba(232,160,48,.28);border-radius:2px}
+
+@media(max-width:980px){
+  .hero-kpis,.sc-grid,.cfo-grid,.g2,.rem-grid{grid-template-columns:1fr}
+  .ks5,.ks4,.ks3{grid-template-columns:repeat(2,1fr)}
+  .metas-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-name">Maximiano</div>
+    <div class="sb-brand-sub">Advocacia · CFO Report</div>
+  </div>
+  <div class="sb-unit-badge">Nova Resende · 2026</div>
+  <div class="sb-alert">
+    <strong>Decisão Estratégica</strong><br>
+    Contratar Advogado Líder?<br>
+    <span style="font-size:.55rem;opacity:.7">Análise financeira completa</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Diagnóstico</div>
+    <a class="sb-link active" onclick="nav('hero')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Painel Executivo
+    </a>
+    <a class="sb-link" onclick="nav('s-meta')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Meta Comercial
+    </a>
+    <a class="sb-link" onclick="nav('s-pipeline')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      Venda vs Receita
+    </a>
+    <a class="sb-link" onclick="nav('s-custos')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Estrutura de Custos
+    </a>
+    <div class="sb-section">Decisão</div>
+    <a class="sb-link" onclick="nav('s-remuneracao')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Modelos de Remuneração
+    </a>
+    <a class="sb-link" onclick="nav('s-breakeven')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+      Break-even
+    </a>
+    <a class="sb-link" onclick="nav('s-cenarios')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      Cenários Financeiros
+    </a>
+    <a class="sb-link" onclick="nav('s-projecao')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><polyline points="7,16 11,11 15,13 19,7"/></svg>
+      Projeção Jun–Dez 2026
+    </a>
+    <div class="sb-section">Estratégia</div>
+    <a class="sb-link" onclick="nav('s-roi')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      ROI · Retorno
+    </a>
+    <a class="sb-link" onclick="nav('s-metas')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+      Metas e KPIs
+    </a>
+    <a class="sb-link" onclick="nav('s-cfo')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Recomendação CFO
+    </a>
+  </nav>
+  <div class="sb-footer">
+    <strong>Jean</strong> — CEO Maximiano<br>
+    29 de maio de 2026<br>
+    <span style="color:rgba(255,255,255,.22)">Confidencial · Sócios</span>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span>Análise CFO · Liderança Técnica · Nova Resende</div>
+    <h1 class="hero-title">Viabilidade do<br><em>Advogado Líder</em></h1>
+    <p class="hero-sub">Análise financeira completa para decisão de contratação · Dados corrigidos (Simples Nacional, associado sem encargos) · Cenários conservador, realista e otimista · Projeção Jun–Dez 2026</p>
+    <div class="hero-kpis">
+      <div class="hk">
+        <div class="hk-val">R$ 106k</div>
+        <div class="hk-label">Vendido até Mai</div>
+        <div class="hk-delta" style="color:var(--amber)">29,1% da meta anual</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 4,9k</div>
+        <div class="hk-label">Receita em Caixa</div>
+        <div class="hk-delta" style="color:var(--red)">4,6% do vendido</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 7.618</div>
+        <div class="hk-label">CF Atual / Mês</div>
+        <div class="hk-delta" style="color:var(--amber)">Sem advogado</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 11.618</div>
+        <div class="hk-label">CF c/ Líder (Cen. A)</div>
+        <div class="hk-delta" style="color:var(--violet)">Break-even R$11.977</div>
+      </div>
+      <div class="hk">
+        <div class="hk-val">R$ 19.364</div>
+        <div class="hk-label">Para Margem 40%</div>
+        <div class="hk-delta" style="color:var(--blue)">Benchmark do grupo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- META COMERCIAL -->
+<section id="s-meta" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Meta Comercial 2026</div>
+      <h2 class="sec-title">R$ 106k vendidos · <em>Meta: R$ 364k</em></h2>
+      <p class="sec-body">A unidade realizou R$ 106.000 em contratos nos primeiros 5 meses — 29,1% da meta anual. Para fechar o ano na meta, precisa de R$ 36.857/mês nos próximos 7 meses. Ritmo atual: R$ 21.200/mês. Gap de 74%.</p>
+    </div>
+    <div class="kpi-strip ks4 rv d1">
+      <div class="kpi"><div class="kval">R$ 364.000</div><span class="kdelta d-blue">Meta Anual</span><div class="klabel">2026</div></div>
+      <div class="kpi"><div class="kval">R$ 106.000</div><span class="kdelta d-warn">Realizado Jan–Mai</span><div class="klabel">29,1% atingido</div></div>
+      <div class="kpi"><div class="kval">R$ 258.000</div><span class="kdelta d-dn">Restante</span><div class="klabel">Jun–Dez 2026</div></div>
+      <div class="kpi"><div class="kval">R$ 36.857</div><span class="kdelta d-viol">Ritmo Necessário</span><div class="klabel">por mês</div></div>
+    </div>
+    <div class="g2 rv d2">
+      <div class="chart-box">
+        <div class="chart-title">Execução da Meta — Vendas Mensais Estimadas vs Necessário</div>
+        <canvas id="chartMeta" height="200"></canvas>
+        <div class="leg">
+          <span><span class="leg-dot" style="background:var(--gd)"></span>Realizado (média)</span>
+          <span><span class="leg-dot" style="background:var(--violet);opacity:.5"></span>Necessário p/ meta</span>
+          <span><span class="leg-dot" style="background:rgba(255,255,255,.12)"></span>Meta mensal média</span>
+        </div>
+      </div>
+      <div class="chart-box" style="display:flex;flex-direction:column;justify-content:center;gap:1.1rem">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;font-size:.76rem">
+            <span style="color:var(--muted)">Progresso meta anual</span>
+            <span style="font-weight:700;color:var(--gd)">29,1%</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill" style="width:29.1%"></div></div>
+          <div style="font-size:.67rem;color:var(--muted);margin-top:.2rem">R$ 106k realizado · R$ 258k restante</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;font-size:.76rem">
+            <span style="color:var(--muted)">Ritmo atual vs necessário</span>
+            <span style="font-weight:700;color:var(--amber)">57,5%</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill" style="width:57.5%;background:linear-gradient(90deg,var(--amber),var(--gd))"></div></div>
+          <div style="font-size:.67rem;color:var(--muted);margin-top:.2rem">R$ 21,2k/mês atual · precisa de R$ 36,9k/mês</div>
+        </div>
+        <div class="nb nb-amber">
+          <div class="nb-title" style="color:var(--amber)">Diagnóstico comercial</div>
+          Sem advogado, o ritmo atual é o <strong>teto</strong> da captação — Silvio não consegue fechar contratos previdenciários complexos sem respaldo jurídico. <strong>O líder técnico é o único vetor capaz de dobrar esse ritmo.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VENDA VS RECEITA -->
+<section id="s-pipeline">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Pipeline Financeiro · Conceito-Chave</div>
+      <h2 class="sec-title">Venda ≠ <em>Receita</em></h2>
+      <p class="sec-body">Este é o ponto mais crítico da análise. Em previdenciário, assinar um contrato e receber o honorário podem estar separados por 2 a 4 anos. Os R$ 106.000 em contratos vendidos representam potencial futuro de caixa — não caixa imediato.</p>
+    </div>
+    <div class="kpi-strip ks4 rv d1">
+      <div class="kpi"><div class="kval" style="color:var(--blue)">R$ 106.000</div><span class="kdelta d-blue">Contratos Vendidos</span><div class="klabel">Produção comercial</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--gd)">R$ 4.889</div><span class="kdelta d-warn">Receita Recebida</span><div class="klabel">Caixa efetivo Jan–Mai</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--violet)">R$ 101.111</div><span class="kdelta d-viol">Em Processamento</span><div class="klabel">Não recebido ainda</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--green)">R$ 24.380</div><span class="kdelta d-up">Honorários Futuros</span><div class="klabel">~20-30% da carteira</div></div>
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.2rem">
+      <div class="chart-title">Composição da Carteira — R$ 106.000 em Contratos Vendidos</div>
+      <div class="pipe-bar">
+        <div class="pb-seg" style="width:70%;background:linear-gradient(90deg,rgba(46,133,212,.75),rgba(46,133,212,.5));color:#fff">Previdenciário (70%) · R$ 74.200 · ciclo 24–48 meses</div>
+        <div class="pb-seg" style="width:30%;background:linear-gradient(90deg,rgba(232,160,48,.75),rgba(232,160,48,.5));color:#fff">Cível (30%) · R$ 31.800 · ciclo 6–18 meses</div>
+      </div>
+    </div>
+    <div class="g2 rv d3">
+      <div class="chart-box">
+        <div class="chart-title">Estimativa de Honorários Futuros por Área</div>
+        <canvas id="chartPipeline" height="200"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Maturação Estimada da Carteira (Recebimentos)</div>
+        <canvas id="chartMaturacao" height="200"></canvas>
+        <div class="leg">
+          <span><span class="leg-dot" style="background:var(--green)"></span>Recebível (caixa)</span>
+          <span><span class="leg-dot" style="background:var(--blue);opacity:.5"></span>Em instrução</span>
+          <span><span class="leg-dot" style="background:var(--amber);opacity:.4"></span>Aguardando/novo</span>
+        </div>
+      </div>
+    </div>
+    <div class="nb nb-red rv d4">
+      <div class="nb-title" style="color:var(--red)">Alerta estrutural: defasagem temporal do previdenciário</div>
+      A unidade pode vender R$ 50k/mês em contratos e ainda assim receber menos de R$ 5k/mês em honorários nesse mesmo período. <strong>O desempenho comercial de hoje só vira caixa em 2027–2028.</strong> A análise financeira separa rigorosamente: (1) saúde comercial — velocidade de captação; (2) saúde financeira — caixa e margem atual; (3) saúde da carteira — honorários futuros acumulados.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CUSTOS -->
+<section id="s-custos" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Estrutura de Custos · Dados Corrigidos</div>
+      <h2 class="sec-title">Custos Fixos <em>Reais</em></h2>
+      <p class="sec-body">Regime Simples Nacional — sem INSS patronal, sem RAT, sem contribuição de terceiros. Encargos sobre a folha CLT: FGTS (8%) + provisão 13º (8,33%) + provisão férias + 1/3 (11,1%) = <strong>27,4%</strong>. Advogado líder como associado: sem encargos trabalhistas.</p>
+    </div>
+    <div class="g2 rv d1">
+      <div class="chart-box">
+        <div class="chart-title">Custo Fixo Mensal — Sem vs Com Líder</div>
+        <canvas id="chartCF" height="220"></canvas>
+      </div>
+      <div class="table-wrap rv d2">
+        <table class="ftable">
+          <thead>
+            <tr><th>Item</th><th>Sem Líder</th><th>Com Líder (Cen. A)</th><th>Tipo</th></tr>
+          </thead>
+          <tbody>
+            <tr class="section-row"><td colspan="4">Pessoal CLT (Simples · encargos 27,4%)</td></tr>
+            <tr class="sub-row">
+              <td>Silvio — salário R$2.500</td><td>R$ 2.500</td><td>R$ 2.500</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Silvio — ticket alimentação</td><td>R$ 200</td><td>R$ 200</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Silvio — encargos (FGTS+13º+férias)</td><td class="tv-a">R$ 672</td><td class="tv-a">R$ 672</td><td style="color:var(--amber)">Provisionado</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Maisa — salário R$1.857,66</td><td>R$ 1.858</td><td>R$ 1.858</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Maisa — ticket alimentação</td><td>R$ 200</td><td>R$ 200</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Maisa — encargos (FGTS+13º+férias)</td><td class="tv-a">R$ 499</td><td class="tv-a">R$ 499</td><td style="color:var(--amber)">Provisionado</td>
+            </tr>
+            <tr class="section-row"><td colspan="4">Advogado Líder (Associado · sem encargos)</td></tr>
+            <tr class="sub-row">
+              <td>Remuneração — Cenário A</td><td style="color:var(--muted)">—</td><td class="tv-v">R$ 3.600</td><td style="color:var(--violet)">Fixo (assoc.)</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Ticket alimentação</td><td style="color:var(--muted)">—</td><td class="tv-v">R$ 400</td><td style="color:var(--violet)">Fixo (assoc.)</td>
+            </tr>
+            <tr class="section-row"><td colspan="4">Estrutura</td></tr>
+            <tr class="sub-row">
+              <td>Aluguel</td><td>R$ 1.100</td><td>R$ 1.100</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Internet</td><td>R$ 90</td><td>R$ 90</td><td style="color:var(--red)">Fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Energia + Água</td><td>R$ 300</td><td>R$ 300</td><td style="color:var(--amber)">Semi-fixo</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Outros (material, café, deslocam.)</td><td>R$ 200</td><td>R$ 250</td><td style="color:var(--amber)">Semi-fixo</td>
+            </tr>
+            <tr class="total-row">
+              <td>Total Custo Fixo Mensal</td>
+              <td class="tv-a"><strong>R$ 7.618</strong></td>
+              <td class="tv-r"><strong>R$ 11.618</strong></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="nb nb-teal rv d3">
+      <div class="nb-title" style="color:var(--teal2)">Impacto da correção dos dados</div>
+      Com os dados corretos (Simples Nacional sem patronal, salários corretos de Silvio R$2.500 e Maisa R$1.857,66 com ticket R$200, e advogado como associado sem encargos), o custo fixo sem líder é <strong>R$ 7.618/mês</strong> — acima dos R$ 5.703 estimados anteriormente. Com o líder, chega a <strong>R$ 11.618/mês</strong>, significativamente abaixo dos R$ 11.733 da versão anterior que aplicava encargos CLT indevidos sobre o associado.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REMUNERAÇÃO -->
+<section id="s-remuneracao">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Modelos de Remuneração</div>
+      <h2 class="sec-title">Como remunerar o <em>Advogado Líder</em></h2>
+      <p class="sec-body">Três modelos possíveis para remunerar o líder, considerando que ele é associado (sem vínculo CLT). O modelo ideal deve equilibrar previsibilidade para a unidade e incentivo para o advogado produzir.</p>
+    </div>
+    <div class="rem-grid rv d1">
+      <!-- Modelo Atual (se vier de Poços) -->
+      <div class="rem-c">
+        <span class="rem-tag rem-atual">Modelo Atual (Poços)</span>
+        <div style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:.8rem">Remuneração Base Atual</div>
+        <div class="rem-row"><span class="lb">Fixo base</span><span>R$ 3.000</span></div>
+        <div class="rem-row"><span class="lb">Ticket alimentação</span><span style="color:var(--muted)">Não possui</span></div>
+        <div class="rem-row"><span class="lb">Comissão honorários jud.</span><span class="tv-g">10% variável</span></div>
+        <div class="rem-row"><span class="lb">50% das consultas</span><span class="tv-g">Variável</span></div>
+        <div class="rem-row"><span class="lb">Custo empresa (fixo)</span><span class="tv-a">R$ 3.000</span></div>
+        <div class="rem-row"><span class="lb">Custo variável</span><span class="tv-g">↑ Cresce com receita</span></div>
+        <div class="nb nb-amber" style="margin-top:.8rem;font-size:.76rem">
+          <strong>Risco:</strong> Incentivo individual pode conflitar com missão de liderança — precisa gerenciar equipe, não só produzir.
+        </div>
+      </div>
+      <!-- Cenário A -->
+      <div class="rem-c">
+        <span class="rem-tag rem-proposta">Cenário A · Proposta</span>
+        <div style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:.8rem">Promoção a Líder de Unidade</div>
+        <div class="rem-row"><span class="lb">Fixo base</span><span class="tv-g">R$ 3.600 (+20%)</span></div>
+        <div class="rem-row"><span class="lb">Ticket alimentação</span><span class="tv-g">R$ 400</span></div>
+        <div class="rem-row"><span class="lb">Comissão honorários jud.</span><span style="color:var(--muted)">Não prevista</span></div>
+        <div class="rem-row"><span class="lb">Consultas</span><span style="color:var(--muted)">Não prevista</span></div>
+        <div class="rem-row"><span class="lb">Custo empresa</span><span class="tv-r">R$ 4.000</span></div>
+        <div class="rem-row"><span class="lb">Custo variável</span><span style="color:var(--muted)">Zero</span></div>
+        <div class="nb nb-blue" style="margin-top:.8rem;font-size:.76rem">
+          <strong>Análise:</strong> Custo totalmente previsível. Porém perde o incentivo de produção — perigoso quando a unidade mais precisa de captação ativa.
+        </div>
+      </div>
+      <!-- Modelo Híbrido -->
+      <div class="rem-c" style="border:1px solid rgba(62,201,142,.2)">
+        <span class="rem-tag rem-ideal">💡 Modelo Híbrido Recomendado</span>
+        <div style="font-size:.82rem;font-weight:700;color:var(--green);margin-bottom:.8rem">Alinhamento total de incentivos</div>
+        <div class="rem-row"><span class="lb">Fixo base</span><span class="tv-g">R$ 3.000</span></div>
+        <div class="rem-row"><span class="lb">Ticket alimentação</span><span class="tv-g">R$ 400</span></div>
+        <div class="rem-row"><span class="lb">Comissão honorários jud.</span><span class="tv-g">10% (mantida)</span></div>
+        <div class="rem-row"><span class="lb">PLR resultado positivo</span><span class="tv-g">15–20% (fase 2)</span></div>
+        <div class="rem-row"><span class="lb">Custo mínimo empresa</span><span class="tv-g">R$ 3.400</span></div>
+        <div class="rem-row"><span class="lb">Custo variável</span><span class="tv-g">↑ Só se houver lucro</span></div>
+        <div class="nb nb-green" style="margin-top:.8rem;font-size:.76rem">
+          <strong>Vantagem:</strong> Rafael só ganha mais quando a unidade ganha mais. Custo base menor, incentivo preservado, caminho natural para participação societária.
+        </div>
+      </div>
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.2rem">
+      <div class="chart-title">Ganho Total do Advogado Líder por Receita da Unidade — Comparativo de Modelos</div>
+      <canvas id="chartRemuneracao" height="180"></canvas>
+      <div class="leg">
+        <span><span class="leg-dot" style="background:var(--amber)"></span>Modelo atual (R$3k + 10% var.)</span>
+        <span><span class="leg-dot" style="background:var(--blue)"></span>Cenário A (R$3,6k + ticket, sem variável)</span>
+        <span><span class="leg-dot" style="background:var(--green)"></span>Modelo híbrido (R$3k + ticket + 10% + PLR)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BREAK-EVEN -->
+<section id="s-breakeven" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Ponto de Equilíbrio · Dados Corrigidos</div>
+      <h2 class="sec-title">Break-even <em>Real</em></h2>
+      <p class="sec-body">Com os dados corretos — Simples Nacional, salários reais, associado sem encargos — os marcos financeiros são ligeiramente diferentes da estimativa anterior.</p>
+    </div>
+    <div class="kpi-strip ks3 rv d1">
+      <div class="kpi"><div class="kval" style="color:var(--amber)">R$ 7.854</div><span class="kdelta d-warn">BE Atual (sem líder)</span><div class="klabel">Custo fixo R$7.618</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--red)">R$ 11.977</div><span class="kdelta d-dn">BE c/ Líder Cen. A</span><div class="klabel">Custo fixo R$11.618</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--green)">R$ 19.364</div><span class="kdelta d-up">Para Margem 40%</span><div class="klabel">Benchmark do grupo</div></div>
+    </div>
+    <div class="g2 rv d2">
+      <div class="chart-box">
+        <div class="chart-title">Curva de Break-even — Receita vs Custo (c/ Líder)</div>
+        <canvas id="chartBE" height="220"></canvas>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.9rem;justify-content:center">
+        <div style="font-size:.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:.2rem">Marcos de rentabilidade</div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.3rem">
+            <span>Cobre custo operacional (BE)</span><span class="tv-a" style="font-weight:700">R$ 11.977/mês</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill red" style="width:100%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.3rem">
+            <span>Margem 20% (crescimento inicial)</span><span class="tv-b" style="font-weight:700">R$ 14.523/mês</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill blue" style="width:82%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.3rem">
+            <span>Margem 30%</span><span class="tv-g" style="font-weight:700">R$ 16.597/mês</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill green" style="width:71%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.3rem">
+            <span>Margem 40% — paridade c/ grupo</span><span class="tv-v" style="font-weight:700">R$ 19.364/mês</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill viol" style="width:62%"></div></div>
+        </div>
+        <div class="nb nb-gd">
+          <div class="nb-title" style="color:var(--gd2)">Quanto falta?</div>
+          A unidade recebe ~R$ 500/mês em caixa. Para o break-even com líder, precisa <strong>crescer 24×</strong>. Para 40% de margem, <strong>39×</strong>. Isso não é improvável — é o ciclo natural do previdenciário somado à aceleração com liderança técnica ativa.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CENÁRIOS -->
+<section id="s-cenarios">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Cenários Financeiros</div>
+      <h2 class="sec-title">Conservador · Realista · <em>Otimista</em></h2>
+      <p class="sec-body">Projeção Jun–Dez 2026 com advogado líder no Cenário A (R$3.600 + R$400 ticket). Receita = honorários efetivamente recebidos em caixa — não contratos assinados.</p>
+    </div>
+    <div class="sc-grid rv d1">
+      <div class="sc-card cons">
+        <span class="sc-tag sc-tag-c" style="color:var(--amber)">🟡 Conservador</span>
+        <div class="sc-val" style="color:var(--amber)">R$ 17.500</div>
+        <div class="sc-sub">Receita total Jun–Dez · avg R$2.500/mês</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span class="sc-lb">Custos totais (7m)</span><span class="tv-r">R$ -81.327</span></div>
+          <div class="sc-row"><span class="sc-lb">Resultado acumulado</span><span class="tv-r">R$ -63.827</span></div>
+          <div class="sc-row"><span class="sc-lb">Melhor mês (Dez)</span><span>R$ 4.000</span></div>
+          <div class="sc-row"><span class="sc-lb">Margem operacional</span><span class="tv-r">-365%</span></div>
+          <div class="sc-row"><span class="sc-lb">BE mensal atingido?</span><span class="tv-r">Não</span></div>
+        </div>
+        <div class="sc-be sc-be-no">❌ Líder não resolve o déficit</div>
+        <div style="margin-top:.8rem;font-size:.72rem;color:rgba(255,255,255,.38);line-height:1.5">Ramp-up muito lento. O previdenciário não produz caixa imediato e o cível não é suficiente. Cada mês aprofunda o buraco.</div>
+      </div>
+      <div class="sc-card real">
+        <span class="sc-tag sc-tag-r" style="color:var(--blue)">🔵 Realista</span>
+        <div class="sc-val" style="color:var(--blue)">R$ 44.000</div>
+        <div class="sc-sub">Receita total Jun–Dez · avg R$6.286/mês</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span class="sc-lb">Custos totais (7m)</span><span class="tv-r">R$ -81.327</span></div>
+          <div class="sc-row"><span class="sc-lb">Resultado acumulado</span><span class="tv-r">R$ -37.327</span></div>
+          <div class="sc-row"><span class="sc-lb">Melhor mês (Dez)</span><span class="tv-b">R$ 10.000</span></div>
+          <div class="sc-row"><span class="sc-lb">Margem operacional</span><span class="tv-r">-85,8%</span></div>
+          <div class="sc-row"><span class="sc-lb">BE mensal atingido?</span><span class="tv-b">Quase em Dez/26</span></div>
+        </div>
+        <div class="sc-be sc-be-near">⚠ Break-even pleno em Q1 2027</div>
+        <div style="margin-top:.8rem;font-size:.72rem;color:rgba(255,255,255,.38);line-height:1.5">Líder aquece captação, contratos cíveis de ciclo curto começam a retornar. Horizonte positivo sustentável em 2027.</div>
+      </div>
+      <div class="sc-card otim">
+        <span class="sc-tag sc-tag-o" style="color:var(--green)">🟢 Otimista</span>
+        <div class="sc-val" style="color:var(--green)">R$ 86.000</div>
+        <div class="sc-sub">Receita total Jun–Dez · avg R$12.286/mês</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span class="sc-lb">Custos totais (7m)</span><span class="tv-r">R$ -81.327</span></div>
+          <div class="sc-row"><span class="sc-lb">Resultado acumulado</span><span class="tv-g">R$ +4.673</span></div>
+          <div class="sc-row"><span class="sc-lb">Melhor mês (Dez)</span><span class="tv-g">R$ 20.000</span></div>
+          <div class="sc-row"><span class="sc-lb">Margem operacional</span><span class="tv-g">+5,4%</span></div>
+          <div class="sc-row"><span class="sc-lb">BE mensal atingido?</span><span class="tv-g">Setembro 2026</span></div>
+        </div>
+        <div class="sc-be sc-be-ok">✅ Break-even em Setembro/26</div>
+        <div style="margin-top:.8rem;font-size:.72rem;color:rgba(255,255,255,.38);line-height:1.5">Líder decolando. Mix prev+cível equilibrado. Grandes honorários maduros chegam. Caminho para 40% de margem em 2027.</div>
+      </div>
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.4rem">
+      <div class="chart-title">Receita Mensal Projetada por Cenário — Jun–Dez 2026 · com Break-even (R$11.977)</div>
+      <canvas id="chartCenarios" height="200"></canvas>
+      <div class="leg">
+        <span><span class="leg-dot" style="background:var(--amber)"></span>Conservador</span>
+        <span><span class="leg-dot" style="background:var(--blue)"></span>Realista</span>
+        <span><span class="leg-dot" style="background:var(--green)"></span>Otimista</span>
+        <span><span class="leg-dot" style="background:var(--red);opacity:.6"></span>Break-even R$11.977</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJEÇÃO -->
+<section id="s-projecao" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Projeção Mensal Detalhada</div>
+      <h2 class="sec-title">Jun–Dez 2026 · <em>Resultado Operacional</em></h2>
+    </div>
+    <div class="rv d1">
+      <div class="table-wrap">
+        <table class="ftable">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th>Cons. Rec.</th><th>Cons. Res.</th>
+              <th>Real. Rec.</th><th>Real. Res.</th>
+              <th>Otim. Rec.</th><th>Otim. Res.</th>
+              <th>CF/mês</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Junho</td><td class="tv-a">R$ 1.000</td><td class="tv-r">R$-10.618</td><td class="tv-b">R$ 2.000</td><td class="tv-r">R$-9.618</td><td class="tv-g">R$ 4.000</td><td class="tv-r">R$-7.618</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr><td>Julho</td><td class="tv-a">R$ 1.500</td><td class="tv-r">R$-10.118</td><td class="tv-b">R$ 3.500</td><td class="tv-r">R$-8.118</td><td class="tv-g">R$ 7.000</td><td class="tv-r">R$-4.618</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr><td>Agosto</td><td class="tv-a">R$ 2.000</td><td class="tv-r">R$-9.618</td><td class="tv-b">R$ 5.000</td><td class="tv-r">R$-6.618</td><td class="tv-g">R$ 10.000</td><td class="tv-r">R$-1.618</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr style="background:rgba(139,92,246,.04)"><td>Setembro</td><td class="tv-a">R$ 2.500</td><td class="tv-r">R$-9.118</td><td class="tv-b">R$ 6.500</td><td class="tv-r">R$-5.118</td><td class="tv-g"><strong>R$13.000</strong></td><td class="tv-g"><strong>R$+1.382 ✅</strong></td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr><td>Outubro</td><td class="tv-a">R$ 3.000</td><td class="tv-r">R$-8.618</td><td class="tv-b">R$ 8.000</td><td class="tv-r">R$-3.618</td><td class="tv-g">R$ 15.000</td><td class="tv-g">R$+3.382</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr><td>Novembro</td><td class="tv-a">R$ 3.500</td><td class="tv-r">R$-8.118</td><td class="tv-b">R$ 9.000</td><td class="tv-r">R$-2.618</td><td class="tv-g">R$ 17.000</td><td class="tv-g">R$+5.382</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr><td>Dezembro</td><td class="tv-a">R$ 4.000</td><td class="tv-r">R$-7.618</td><td class="tv-b">R$ 10.000</td><td class="tv-r">R$-1.618</td><td class="tv-g">R$ 20.000</td><td class="tv-g">R$+8.382</td><td style="color:var(--muted)">R$11.618</td></tr>
+            <tr class="total-row">
+              <td>Total Jun–Dez</td>
+              <td class="tv-a">R$17.500</td><td class="tv-r">R$-63.827</td>
+              <td class="tv-b">R$44.000</td><td class="tv-r">R$-37.327</td>
+              <td class="tv-g">R$86.000</td><td class="tv-g">R$+4.673</td>
+              <td style="color:var(--muted)">R$81.327</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.2rem">
+      <div class="chart-title">Resultado Operacional Mensal por Cenário — Jun–Dez 2026</div>
+      <canvas id="chartProjecao" height="200"></canvas>
+    </div>
+    <div class="nb nb-teal rv d3">
+      <div class="nb-title" style="color:var(--teal2)">Perspectiva 2027 — O horizonte real do previdenciário</div>
+      Com o líder captando ~R$ 30–40k/mês em contratos a partir de jun/26, o escritório terá em 2027 uma carteira potencial de R$ 300–450k acumulada — gerando honorários estimados de R$ 60–90k anuais. <strong>2026 é o ano de semear. 2027 é o ano de colher.</strong> A sociedade precisa estar capitalizada para sustentar o intervalo.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROI -->
+<section id="s-roi">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Retorno sobre Investimento</div>
+      <h2 class="sec-title">ROI do <em>Projeto Nova Resende</em></h2>
+    </div>
+    <div class="kpi-strip ks4 rv d1">
+      <div class="kpi"><div class="kval" style="color:var(--violet)">R$ 26.988</div><span class="kdelta d-viol">CapEx Estrutural</span><div class="klabel">Escritório permanente</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--red)">R$ 23.775</div><span class="kdelta d-dn">Déficit Operacional</span><div class="klabel">Jan–Mai 2026</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--red)">R$ 50.763</div><span class="kdelta d-dn">Total Investido</span><div class="klabel">CapEx + Déficit Op.</div></div>
+      <div class="kpi"><div class="kval" style="color:var(--green)">~2028</div><span class="kdelta d-up">Payback Estimado</span><div class="klabel">Cenário realista</div></div>
+    </div>
+    <div class="g2 rv d2">
+      <div class="chart-box">
+        <div class="chart-title">Curva de Recuperação do Investimento — Saldo Acumulado (Cenário Realista)</div>
+        <canvas id="chartROI" height="220"></canvas>
+      </div>
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--red);border-color:var(--red)"></div>
+            <div class="tl-mes" style="color:var(--red)">Jan–Mai 2026 · Implantação</div>
+            <div class="tl-desc">CapEx R$26.988 + Déficit operacional R$23.775 = R$50.763 investidos. Estrutura física pronta e operacional.</div>
+            <div class="tl-num" style="color:var(--red)">Saldo: -R$ 50.763</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--amber);border-color:var(--amber)"></div>
+            <div class="tl-mes" style="color:var(--amber)">Jun–Dez 2026 · Ramp-up com Líder</div>
+            <div class="tl-desc">Cenário realista: mais ~R$37k de déficit. Otimista: quase zero. Carteira sendo construída para 2027.</div>
+            <div class="tl-num" style="color:var(--amber)">Saldo projetado: -R$ 88.000 (realista)</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--blue);border-color:var(--blue)"></div>
+            <div class="tl-mes" style="color:var(--blue)">1S 2027 · Maturação</div>
+            <div class="tl-desc">Carteira previdenciária de 2026 começa a produzir honorários com regularidade. Receita estimada R$15–20k/mês.</div>
+            <div class="tl-num" style="color:var(--blue)">Break-even sustentável atingido</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--green);border-color:var(--green)"></div>
+            <div class="tl-mes" style="color:var(--green)">2S 2027 / 2028 · Retorno</div>
+            <div class="tl-desc">Margem positiva consistente. Geração de caixa. Início da recuperação do investimento total.</div>
+            <div class="tl-num" style="color:var(--green)">Payback completo: 2028</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- METAS -->
+<section id="s-metas" class="sec-alt">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Governança de Desempenho</div>
+      <h2 class="sec-title">Metas e <em>KPIs Mensais</em></h2>
+      <p class="sec-body">Se o advogado líder for contratado, quais metas devem ser formalizadas? Quais indicadores monitorar mensalmente para garantir que a unidade está no rumo certo?</p>
+    </div>
+    <div class="metas-grid rv d1">
+      <div class="meta-c"><div class="meta-icon">📋</div><div class="meta-titulo">Vendas/mês</div><div class="meta-val">R$ 30.000</div><div class="meta-sub">Mínimo contratual para liderança</div></div>
+      <div class="meta-c"><div class="meta-icon">💰</div><div class="meta-titulo">Receita (Caixa)</div><div class="meta-val">R$ 8.000</div><div class="meta-sub">Crescimento progressivo até R$12k</div></div>
+      <div class="meta-c"><div class="meta-icon">📂</div><div class="meta-titulo">Contratos Novos</div><div class="meta-val">8–12/mês</div><div class="meta-sub">Volume para carteira saudável</div></div>
+      <div class="meta-c"><div class="meta-icon">📊</div><div class="meta-titulo">Margem Alvo</div><div class="meta-val">40%</div><div class="meta-sub">Prazo: 18–24 meses de operação plena</div></div>
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.2rem">
+      <div class="chart-title">Painel de KPIs — Acompanhamento Mensal Obrigatório</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem">
+        <div style="padding:.9rem;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border2)">
+          <div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.6rem">Comercial</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.35rem">
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--gd)">›</span>Contratos novos assinados</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--gd)">›</span>Ticket médio dos contratos</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--gd)">›</span>Volume total vendido (R$)</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--gd)">›</span>Taxa de conversão consultas</li>
+          </ul>
+        </div>
+        <div style="padding:.9rem;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border2)">
+          <div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:.6rem">Financeiro</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.35rem">
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--blue)">›</span>Receita efetivamente recebida</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--blue)">›</span>Resultado operacional mensal</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--blue)">›</span>Inadimplência da carteira</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--blue)">›</span>Custo por contrato fechado</li>
+          </ul>
+        </div>
+        <div style="padding:.9rem;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border2)">
+          <div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:.6rem">Carteira / Pipeline</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.35rem">
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--green)">›</span>Processos em instrução</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--green)">›</span>Honorários futuros estimados</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--green)">›</span>Processos com êxito/mês</li>
+            <li style="font-size:.77rem;color:rgba(255,255,255,.58);padding-left:.9rem;position:relative"><span style="position:absolute;left:0;color:var(--green)">›</span>Prazo médio de maturação</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CFO -->
+<section id="s-cfo">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">Recomendação Executiva</div>
+      <h2 class="sec-title">Parecer <em>CFO</em></h2>
+    </div>
+    <div class="cfo-grid rv d1">
+      <div class="cfo-c">
+        <div class="cfo-head">✅ O que sustenta a contratação agora</div>
+        <ul class="cfo-list">
+          <li><strong>Estrutura física 100% pronta</strong> — R$26.988 em CapEx já investido. O custo marginal do líder é apenas sua remuneração, sem infraestrutura adicional.</li>
+          <li><strong>Sangria sem perspectiva</strong> — R$7.618/mês de custo fixo sem gerar receita relevante. Cada mês sem advogado = ~R$7.100 de déficit sem saída.</li>
+          <li><strong>Pipeline de R$106k sem aproveitamento</strong> — contratos captados pelo Silvio que precisam de instrução jurídica ativa para evoluir e gerar honorários.</li>
+          <li><strong>Silvio no teto sem suporte técnico</strong> — captação comercial está limitada pela ausência de autoridade jurídica para fechar casos complexos.</li>
+          <li><strong>Associado sem encargos</strong> — R$4.000/mês total para o líder, sem INSS, FGTS, 13º ou férias. Custo muito mais controlável do que CLT.</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">⚠ Riscos e condicionantes</div>
+        <ul class="cfo-list">
+          <li><strong>Break-even sobe para R$11.977/mês</strong> — 57% acima do custo atual. Se o líder não performar, o déficit cresce mais rapidamente do que sem ele.</li>
+          <li><strong>Cenário conservador é crítico</strong> — sociedade pode queimar mais R$63k em 7 meses sem perspectiva de retorno.</li>
+          <li><strong>Modelo puro fixo desincentiva</strong> — líder sem variável pode acomodar. Deve haver componente de resultado na remuneração.</li>
+          <li><strong>Ciclo longo do previdenciário</strong> — mesmo com captação intensa em jun/26, o caixa de dez/26 não muda drasticamente. A sociedade precisa estar preparada para sustentar 2026 inteiro.</li>
+          <li><strong>Gestão é diferente de advocacia</strong> — o líder precisa ser cobrado por equipe, resultado financeiro e captação coletiva — não só por processos individuais.</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">💡 Remuneração Recomendada (modelo híbrido)</div>
+        <ul class="cfo-list">
+          <li><strong>Fase 1 — Jun a Dez/26:</strong> R$3.000 fixo + R$400 ticket + 10% sobre honorários judiciais recebidos (mantém incentivo de produção no período crítico)</li>
+          <li><strong>Fase 2 — Jan/27 em diante:</strong> R$3.600 + R$400 ticket + PLR de 15% do resultado positivo mensal da unidade</li>
+          <li><strong>Meta contratual:</strong> R$30.000/mês em vendas + R$8.000 em receita recebida nos primeiros 90 dias</li>
+          <li><strong>Revisão formal:</strong> 90 dias após início. Se não atingir metas mínimas, reavaliar modelo e remuneração</li>
+          <li><strong>Gatilho para societário:</strong> unidade com margem ≥ 30% por 3 meses consecutivos</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">📅 Quando a unidade atinge 40% de margem?</div>
+        <ul class="cfo-list">
+          <li><strong>Conservador:</strong> Não atingirá em 2027. Possível a partir de 2028 com maturação da carteira formada em 2026.</li>
+          <li><strong>Realista:</strong> Margem de 40% possível no <strong>2º semestre de 2027</strong>, quando honorários previdenciários de 2026 começam a chegar com regularidade. Receita necessária: R$19.364/mês.</li>
+          <li><strong>Otimista:</strong> Margem de 40% já no <strong>1º trimestre de 2027</strong> se o líder romper R$20k/mês de receita recebida.</li>
+          <li><strong>Referência Cabo Verde:</strong> opera com margem >40% e deve ser o benchmarking de gestão, processo e captação para Nova Resende.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="verdict rv d2">
+      <div class="verdict-icon">⚖️</div>
+      <div>
+        <div class="verdict-label">Recomendação Executiva · CFO</div>
+        <div class="verdict-text">Contratar o advogado líder — com modelo híbrido, metas contratuais e revisão em 90 dias.</div>
+        <div class="verdict-sub">
+          A análise com dados corretos (Simples Nacional, salários reais, associado sem encargos) confirma: a unidade <strong>não tem viabilidade sem liderança técnica</strong>. O custo de não decidir é R$7.618/mês de déficit crescente sem perspectiva de reversão. Com o líder, o break-even sobe para R$11.977/mês — desafiador, mas atingível no cenário realista em Q1/2027 e no otimista em setembro/26. O modelo híbrido de remuneração (fixo + variável sobre resultado) é superior ao Cenário A puro porque preserva o incentivo de produção no período mais crítico da unidade. O investimento total de R$50.763 tem payback projetado em 2028 no cenário realista — prazo aceitável para abertura de praça em advocacia previdenciária.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Maximiano Advocacia · Análise CFO · Advogado Líder Nova Resende · 29 de maio de 2026 · Jean (CEO) · Confidencial · Uso restrito aos sócios</p>
+</footer>
+</div>
+
+<script>
+function nav(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));event?.currentTarget?.classList.add('active')}
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+Chart.defaults.color='rgba(255,255,255,.42)';
+Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+Chart.defaults.font.size=11;
+Chart.register(ChartDataLabels);
+const meses=['Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// META
+new Chart(document.getElementById('chartMeta'),{type:'bar',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun*','Jul*','Ago*','Set*','Out*','Nov*','Dez*'],datasets:[
+  {label:'Realizado',data:[21200,21200,21200,21200,21200,0,0,0,0,0,0,0],backgroundColor:'rgba(232,160,48,.7)',borderRadius:4},
+  {label:'Necessário',data:[0,0,0,0,0,36857,36857,36857,36857,36857,36857,36857],backgroundColor:'rgba(139,92,246,.35)',borderRadius:4},
+  {label:'Meta ref.',data:[30333,30333,30333,30333,30333,30333,30333,30333,30333,30333,30333,30333],type:'line',borderColor:'rgba(255,255,255,.15)',borderDash:[4,3],borderWidth:1.5,pointRadius:0,fill:false}
+]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// PIPELINE PIE
+new Chart(document.getElementById('chartPipeline'),{type:'doughnut',data:{labels:['Hon. Previdenciário (~R$14,8k)','Hon. Cível (~R$9,5k)'],datasets:[{data:[14840,9540],backgroundColor:['rgba(46,133,212,.7)','rgba(232,160,48,.7)'],borderColor:['#2E85D4','#E8A030'],borderWidth:2}]},options:{responsive:true,cutout:'62%',plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.5)',font:{size:10}}},datalabels:{display:true,formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return(v/t*100).toFixed(0)+'%'},color:'#fff',font:{size:11,weight:'700'}}}}});
+
+// MATURAÇÃO
+new Chart(document.getElementById('chartMaturacao'),{type:'bar',data:{labels:['2026 H2','2027 H1','2027 H2','2028 H1','2028+'],datasets:[
+  {label:'Recebível',data:[7314,12000,18000,22000,25000],backgroundColor:'rgba(62,201,142,.65)',borderRadius:3},
+  {label:'Em instrução',data:[15000,20000,15000,10000,8000],backgroundColor:'rgba(46,133,212,.4)',borderRadius:3},
+  {label:'Aguardando',data:[2066,5000,8000,5000,3000],backgroundColor:'rgba(245,160,48,.35)',borderRadius:3}
+]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{stacked:true,grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{stacked:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// CF comparativo
+new Chart(document.getElementById('chartCF'),{type:'bar',data:{labels:['Silvio\n(sal+ticket+enc)','Maisa\n(sal+ticket+enc)','Advogado\nLíder','Aluguel','Utilidades\n+Internet','Outros'],datasets:[
+  {label:'Sem Líder',data:[3372,2557,0,1100,390,200],backgroundColor:'rgba(245,160,48,.6)',borderRadius:4},
+  {label:'Com Líder A',data:[3372,2557,4000,1100,390,250],backgroundColor:'rgba(240,96,96,.55)',borderRadius:4}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.45)',font:{size:10}}},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
+
+// REMUNERAÇÃO
+const recLev=[5000,8000,10000,12000,15000,18000,20000,25000];
+const rem_atual=recLev.map(r=>3000+r*0.10);
+const rem_A=recLev.map(()=>4000);
+const rem_hibrido=recLev.map(r=>{const lucro=r-11618;const plr=Math.max(0,lucro*0.15);return 3400+plr;});
+new Chart(document.getElementById('chartRemuneracao'),{type:'line',data:{labels:recLev.map(v=>'R$'+(v/1000).toFixed(0)+'k'),datasets:[
+  {label:'Modelo atual (R$3k+10%)',data:rem_atual,borderColor:'#F5A030',backgroundColor:'rgba(245,160,48,.06)',borderWidth:2,pointRadius:3,fill:true,tension:.4},
+  {label:'Cenário A (R$3,6k+tick fixo)',data:rem_A,borderColor:'#2E85D4',backgroundColor:'rgba(46,133,212,.05)',borderWidth:2,pointRadius:3,fill:true,tension:.4,borderDash:[5,3]},
+  {label:'Modelo híbrido recomendado',data:rem_hibrido,borderColor:'#3EC98E',backgroundColor:'rgba(62,201,142,.05)',borderWidth:2,pointRadius:3,fill:true,tension:.4}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.45)',font:{size:10}}},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+v.toLocaleString('pt-BR')},min:2500}}}});
+
+// BREAK-EVEN
+const recBE=[0,3000,6000,9000,12000,15000,18000,21000];
+new Chart(document.getElementById('chartBE'),{type:'line',data:{labels:recBE.map(v=>'R$'+(v/1000).toFixed(0)+'k'),datasets:[
+  {label:'Custo fixo',data:recBE.map(()=>11618),borderColor:'#F06060',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false},
+  {label:'Receita',data:recBE,borderColor:'#E8A030',borderWidth:2,pointRadius:3,backgroundColor:'rgba(232,160,48,.06)',fill:true,tension:.1},
+  {label:'Break-even R$11.977',data:recBE.map(()=>11977),borderColor:'rgba(139,92,246,.5)',borderDash:[3,3],borderWidth:1.5,pointRadius:0,fill:false}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.45)',font:{size:10}}},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// CENÁRIOS
+const cons=[1000,1500,2000,2500,3000,3500,4000];
+const real=[2000,3500,5000,6500,8000,9000,10000];
+const otim=[4000,7000,10000,13000,15000,17000,20000];
+new Chart(document.getElementById('chartCenarios'),{type:'line',data:{labels:meses,datasets:[
+  {label:'Conservador',data:cons,borderColor:'#F5A030',backgroundColor:'rgba(245,160,48,.07)',borderWidth:2,pointRadius:4,fill:true,tension:.4},
+  {label:'Realista',data:real,borderColor:'#2E85D4',backgroundColor:'rgba(46,133,212,.06)',borderWidth:2,pointRadius:4,fill:true,tension:.4},
+  {label:'Otimista',data:otim,borderColor:'#3EC98E',backgroundColor:'rgba(62,201,142,.06)',borderWidth:2,pointRadius:4,fill:true,tension:.4},
+  {label:'Break-even',data:meses.map(()=>11977),borderColor:'rgba(240,96,96,.55)',borderDash:[5,3],borderWidth:1.5,pointRadius:0,fill:false}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.45)',font:{size:10}}},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'},min:0}}}});
+
+// PROJEÇÃO RESULTADO
+const resC=cons.map(r=>r-11618);
+const resR=real.map(r=>r-11618);
+const resO=otim.map(r=>r-11618);
+new Chart(document.getElementById('chartProjecao'),{type:'bar',data:{labels:meses,datasets:[
+  {label:'Conservador',data:resC,backgroundColor:resC.map(v=>v>=0?'rgba(245,160,48,.6)':'rgba(245,160,48,.3)'),borderRadius:3},
+  {label:'Realista',data:resR,backgroundColor:resR.map(v=>v>=0?'rgba(46,133,212,.6)':'rgba(46,133,212,.3)'),borderRadius:3},
+  {label:'Otimista',data:resO,backgroundColor:resO.map(v=>v>=0?'rgba(62,201,142,.65)':'rgba(62,201,142,.3)'),borderRadius:3}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',color:'rgba(255,255,255,.45)',font:{size:10}}},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// ROI
+const roi_labels=['Mai/26','Jun','Jul','Ago','Set','Out','Nov','Dez/26','Jun/27','Dez/27','Jun/28'];
+const def_m=[9618,8118,6618,5118,3618,2618,1618];
+const roi_vals=[-50763];
+for(const d of def_m)roi_vals.push(roi_vals[roi_vals.length-1]-d);
+const rec27=[4000,5000,6000,7000,8000,9000];
+for(const l of rec27)roi_vals.push(roi_vals[roi_vals.length-1]+l);
+// só 11 pontos: 1 inicial + 7 meses + 3 de 2027
+while(roi_vals.length>roi_labels.length)roi_vals.pop();
+while(roi_vals.length<roi_labels.length)roi_vals.push(roi_vals[roi_vals.length-1]+8000);
+new Chart(document.getElementById('chartROI'),{type:'line',data:{labels:roi_labels,datasets:[
+  {label:'Saldo acumulado',data:roi_vals,borderColor:'#2E85D4',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(46,133,212,.18)');g.addColorStop(1,'rgba(46,133,212,.01)');return g},borderWidth:2,pointRadius:3,fill:true,tension:.4},
+  {label:'Zero (payback)',data:roi_labels.map(()=>0),borderColor:'rgba(232,160,48,.4)',borderDash:[4,3],borderWidth:1.5,pointRadius:0,fill:false}
+]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)',callback:v=>'R$'+(v/1000).toFixed(0)+'k'}}}}});
+</script>
+</body>
+</html>
