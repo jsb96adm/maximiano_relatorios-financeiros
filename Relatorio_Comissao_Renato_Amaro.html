@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Comissão — Renato Amaro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --navy: #0F2440;
+    --navy-2: #16335E;
+    --gold: #C9A227;
+    --gold-light: #F1E2AE;
+    --paper: #FAF8F3;
+    --paper-2: #F2EEE3;
+    --text: #1F2A37;
+    --muted: #6B7280;
+    --border: #E4DFD2;
+    --green: #2F7D4F;
+    --green-bg: #E9F4ED;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--text);
+    line-height:1.5;
+  }
+  .header{
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color:#fff;
+    padding: 38px 48px 30px;
+    border-bottom: 4px solid var(--gold);
+    position:relative;
+  }
+  .header .eyebrow{
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color: var(--gold-light); font-weight:600; margin-bottom:8px;
+  }
+  .header h1{
+    font-family:'Playfair Display',serif;
+    font-size: 34px; margin:0 0 6px 0; font-weight:700;
+  }
+  .header p{
+    margin:0; color:#C9D3E4; font-size:14px; max-width:760px;
+  }
+  .container{
+    max-width: 1180px; margin: 0 auto; padding: 32px 48px 64px;
+  }
+  .cards{
+    display:grid; grid-template-columns: 1.3fr 1fr 1fr; gap:18px; margin-bottom: 34px;
+  }
+  .card{
+    background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px 24px;
+    box-shadow: 0 1px 3px rgba(15,36,64,0.04);
+  }
+  .card.highlight{
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color:#fff; border:none;
+    position:relative; overflow:hidden;
+  }
+  .card.highlight::after{
+    content:""; position:absolute; right:-40px; top:-40px; width:140px; height:140px;
+    border-radius:50%; background: rgba(201,162,39,0.16);
+  }
+  .card .label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.14em; font-weight:600;
+    color: var(--muted); margin-bottom:10px;
+  }
+  .card.highlight .label{ color: var(--gold-light); }
+  .card .value{
+    font-family:'Playfair Display',serif; font-size:34px; font-weight:700; color: var(--navy);
+  }
+  .card.highlight .value{ color:#fff; font-size:38px; }
+  .card .sub{ font-size:12.5px; color: var(--muted); margin-top:10px; line-height:1.55; }
+  .card.highlight .sub{ color:#C9D3E4; }
+  .card.muted{ background: var(--paper-2); }
+
+  .section-title{
+    font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color: var(--navy);
+    margin: 44px 0 6px 0; display:flex; align-items:center; gap:12px;
+  }
+  .section-title .tag{
+    font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    background: var(--gold-light); color:#8A6D11; padding:4px 10px; border-radius:20px; font-weight:700;
+  }
+  .section-sub{ color: var(--muted); font-size:13.5px; margin-bottom:18px; max-width:820px;}
+
+  .chart-wrap{
+    background:#fff; border:1px solid var(--border); border-radius:10px; padding:24px;
+    display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:center;
+  }
+  .chart-wrap canvas{ max-height:220px; }
+  .janela-list{ display:flex; flex-direction:column; gap:12px; }
+  .janela-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px; background:var(--paper-2); border-radius:8px; border-left:4px solid var(--gold);
+  }
+  .janela-item .jn{ font-weight:600; font-size:13.5px; }
+  .janela-item .jn small{ display:block; color:var(--muted); font-weight:400; font-size:11.5px; margin-top:2px;}
+  .janela-item .jv{ font-weight:700; color:var(--navy); font-size:15px; font-family:'Playfair Display',serif;}
+
+  .notes{
+    background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 24px;
+  }
+  .notes ol{ margin:0; padding-left: 22px; }
+  .notes li{ margin-bottom:10px; font-size:13.5px; }
+  .notes li.exclusion{ color:#8A4B1E; }
+  .notes b{ color: var(--navy); }
+
+  .controls{
+    display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center;
+  }
+  .controls input[type=text]{
+    flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--border); border-radius:8px;
+    font-size:13.5px; font-family:'Inter',sans-serif; background:#fff;
+  }
+  .pill-btn{
+    padding:8px 16px; border-radius:20px; border:1px solid var(--border); background:#fff;
+    font-size:12.5px; font-weight:600; cursor:pointer; color:var(--navy); transition: all .15s;
+  }
+  .pill-btn.active{ background:var(--navy); color:#fff; border-color:var(--navy); }
+  .pill-btn:hover{ border-color:var(--navy); }
+
+  table{ width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; }
+  thead th{
+    background: var(--navy); color:#fff; text-align:left; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.06em; padding:12px 14px; font-weight:600;
+    position:sticky; top:0; cursor:pointer; user-select:none;
+  }
+  thead th:hover{ background: var(--navy-2); }
+  thead th .arrow{ opacity:.5; font-size:10px; margin-left:4px; }
+  tbody td{
+    padding:10px 14px; font-size:13px; border-bottom:1px solid var(--border); vertical-align:top;
+  }
+  tbody tr:nth-child(even){ background: var(--paper-2); }
+  tbody tr:hover{ background: var(--gold-light); }
+  td.num, th.num{ text-align:right; font-variant-numeric: tabular-nums; }
+  td.center, th.center{ text-align:center; }
+  .table-scroll{ max-height: 560px; overflow-y:auto; border:1px solid var(--border); border-radius:10px; }
+  .table-scroll table{ border-radius:0; }
+  .table-scroll thead th{ position:sticky; top:0; z-index:2; }
+
+  tfoot td{
+    padding:12px 14px; font-weight:700; background: var(--gold-light); color:#5C480C;
+    font-size:13.5px; border-top:2px solid var(--gold);
+  }
+
+  .badge{
+    display:inline-block; padding:2px 9px; border-radius:12px; font-size:11px; font-weight:600;
+  }
+  .badge.j1{ background:#E3EEFB; color:#1B4E8C; }
+  .badge.j2{ background:#EAE4F7; color:#5A3E9C; }
+  .badge.j3{ background:var(--green-bg); color:var(--green); }
+
+  .footer{
+    margin-top: 50px; padding-top:20px; border-top:1px solid var(--border);
+    font-size:12px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width: 900px){
+    .cards{ grid-template-columns:1fr; }
+    .chart-wrap{ grid-template-columns:1fr; }
+    .header, .container{ padding-left:20px; padding-right:20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Grupo Pilar · Maximiano Advogados</div>
+  <h1>Relatório de Apuração — Comissão Renato Amaro</h1>
+  <p>Apuração da comissão de 5% sobre contratos/processos distribuídos entre <b>17/03/2025 e 30/06/2025</b>,
+  calculada sobre os valores efetivamente quitados (recebidos pelo escritório) até a saída do Renato, em abril/2026.
+  Este relatório detalha, contrato a contrato, a base que compõe o valor a pagar — para validação da sócia Raphaela.</p>
+</div>
+
+<div class="container">
+
+  <!-- CARDS -->
+  <div class="cards">
+    <div class="card highlight">
+      <div class="label">Comissão a repassar (apurada)</div>
+      <div class="value" id="card-total">—</div>
+      <div class="sub">5% sobre <span id="card-base">—</span> em honorários, consultas e serviços
+      efetivamente quitados entre jul/2025 e abr/2026, referentes a 89 lançamentos de 29 clientes/contratos.</div>
+    </div>
+    <div class="card">
+      <div class="label">Base de cálculo (valores quitados)</div>
+      <div class="value" id="card-basevalue">—</div>
+      <div class="sub">Soma de todos os honorários, consultas e serviços quitados no período, vinculados a
+      processos distribuídos entre mar/2025 e jun/2025.</div>
+    </div>
+    <div class="card muted">
+      <div class="label">Já repassado anteriormente (referência)</div>
+      <div class="value">R$ 5.396,01</div>
+      <div class="sub">Valor pago ao Renato em ciclos anteriores, sobre o valor total verificado dos mesmos
+      contratos (mar-jun/2025) — independente de já ter sido recebido pelo escritório. Mantido aqui apenas como
+      referência histórica do cálculo original.</div>
+    </div>
+  </div>
+
+  <!-- COMPOSIÇÃO -->
+  <div class="section-title">Composição por janela de quitação <span class="tag">3 janelas</span></div>
+  <div class="section-sub">Cada lançamento entra na janela correspondente ao mês em que o pagamento foi efetivamente
+  recebido (quitado) pelo escritório — não ao mês do contrato original.</div>
+
+  <div class="chart-wrap">
+    <div><canvas id="janelaChart"></canvas></div>
+    <div class="janela-list" id="janela-list"></div>
+  </div>
+
+  <!-- CRITÉRIOS -->
+  <div class="section-title">Critérios adotados nesta apuração</div>
+  <div class="notes">
+    <ol>
+      <li>Considerados apenas honorários, consultas e serviços de contratos/processos <b>distribuídos entre
+      17/03/2025 e 30/06/2025</b> (período de carteira do Renato).</li>
+      <li>Comissão de <b>5%</b> aplicada sobre o valor verificado de cada lançamento, na data em que foi
+      <b>efetivamente quitado</b> (recebido pelo escritório).</li>
+      <li>Quitações organizadas em 3 janelas: <b>Jul-Dez/2025</b>, <b>Jan-Mar/2026</b> e <b>Abr/2026</b>
+      (mês de saída do Renato).</li>
+      <li class="exclusion"><b>Não incluído</b> — R$ 1.000,00 (5% = R$ 50,00): cliente com processo ainda não
+      protocolado, pendente de documentação (observação de João Vitor).</li>
+      <li class="exclusion"><b>Não incluído</b> — R$ 63.009,72 (5% = R$ 3.150,49): lançamentos sem mês de carteira
+      definido na planilha original, com destaque para o RPV/Alvará do cliente Osvaldo Da Silva Neto
+      (R$ 54.259,10). Constavam soltos na planilha original, fora do total final.</li>
+      <li>Detalhamento completo de 89 lançamentos e 29 clientes nas tabelas abaixo.</li>
+    </ol>
+  </div>
+
+  <!-- RESUMO POR CLIENTE -->
+  <div class="section-title">Resumo por cliente / contrato <span class="tag">29 clientes</span></div>
+  <div class="section-sub">Esta é a visão central para conferência: quais contratos geram comissão para o Renato,
+  quanto cada um totaliza e em qual(is) mês(es) o contrato foi distribuído.</div>
+
+  <div class="controls">
+    <input type="text" id="search-cliente" placeholder="Buscar cliente...">
+  </div>
+  <div class="table-scroll">
+    <table id="table-cliente">
+      <thead>
+        <tr>
+          <th data-key="devedor">Cliente <span class="arrow">▾</span></th>
+          <th data-key="meses">Mês(es) do contrato <span class="arrow"></span></th>
+          <th class="center" data-key="count">Lançamentos <span class="arrow"></span></th>
+          <th class="num" data-key="valor">Valor quitado (R$) <span class="arrow"></span></th>
+          <th class="num" data-key="comissao">Comissão 5% (R$) <span class="arrow">▾</span></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">TOTAL</td>
+          <td class="num" id="foot-cliente-valor"></td>
+          <td class="num" id="foot-cliente-comissao"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- DETALHAMENTO -->
+  <div class="section-title">Detalhamento completo <span class="tag">89 lançamentos</span></div>
+  <div class="section-sub">Lista linha a linha de tudo que compõe o valor de comissão. Filtre por janela de
+  quitação ou busque por cliente / descrição para auditar um caso específico.</div>
+
+  <div class="controls">
+    <button class="pill-btn active" data-janela="todas">Todas</button>
+    <button class="pill-btn" data-janela="Quitação Jul-Dez/2025">Jul-Dez/2025</button>
+    <button class="pill-btn" data-janela="Quitação Jan-Mar/2026">Jan-Mar/2026</button>
+    <button class="pill-btn" data-janela="Quitação Abr/2026">Abr/2026</button>
+    <input type="text" id="search-detalhe" placeholder="Buscar cliente ou descrição...">
+  </div>
+  <div class="table-scroll">
+    <table id="table-detalhe">
+      <thead>
+        <tr>
+          <th class="center" data-key="num">Nº</th>
+          <th data-key="janela">Janela</th>
+          <th data-key="mes_contrato">Mês contrato</th>
+          <th data-key="devedor">Cliente</th>
+          <th data-key="descricao">Descrição</th>
+          <th data-key="tipo">Tipo</th>
+          <th class="center" data-key="data_quitacao">Quitação</th>
+          <th class="num" data-key="valor">Valor (R$)</th>
+          <th class="num" data-key="comissao">Comissão 5% (R$)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="7">TOTAL GERAL</td>
+          <td class="num" id="foot-det-valor"></td>
+          <td class="num" id="foot-det-comissao"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="footer">
+    <span>Relatório gerado a partir da planilha de comissão preparada por Michele · Fonte: Bitrix24 /
+    Sistema financeiro Maximiano Advogados</span>
+    <span>Período de referência do contrato: 17/03/2025 a 30/06/2025</span>
+  </div>
+
+</div>
+
+<script>
+const DATA = [{"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-09-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 1}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-09-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 2}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-10-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 3}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-10-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 4}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-11-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 5}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-11-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 6}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-12-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 7}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2025-12-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 8}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Nedi Helena Ferreira dos Santos", "descricao": "Auxilio por Incapacidade Temporária - ADM", "data_quitacao": "2025-09-30", "tipo": "Honorário", "valor": 648.7, "comissao": 32.44, "num": 9}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "AUXILIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIA", "data_quitacao": "2025-12-05", "tipo": "Honorário", "valor": 911.0, "comissao": 45.55, "num": 10}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "Consulta ( dela e do esposo)", "data_quitacao": "2025-09-17", "tipo": "Consulta/Serviço", "valor": 200.0, "comissao": 10.0, "num": 11}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2025-10-05", "tipo": "Honorário", "valor": 828.89, "comissao": 41.44, "num": 12}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2025-11-05", "tipo": "Honorário", "valor": 858.89, "comissao": 42.94, "num": 13}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2025-12-05", "tipo": "Honorário", "valor": 828.89, "comissao": 41.44, "num": 14}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Abril/2025", "devedor": "Nilva Rosa Anunciação", "descricao": "Aposentadoria por idade rural - Administrativo", "data_quitacao": "2025-11-11", "tipo": "Honorário", "valor": 6072.0, "comissao": 303.6, "num": 15}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Ilma De Souza", "descricao": "Aposentadoria por idade", "data_quitacao": "2025-10-06", "tipo": "Honorário", "valor": 778.07, "comissao": 38.9, "num": 16}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Ilma De Souza", "descricao": "Aposentadoria por idade", "data_quitacao": "2025-11-06", "tipo": "Honorário", "valor": 778.0, "comissao": 38.9, "num": 17}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Jose Augusto De Souza", "descricao": "RENEGOCIAÇÃO Auxílio Doença", "data_quitacao": "2025-12-19", "tipo": "Honorário", "valor": 182.0, "comissao": 9.1, "num": 18}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Jose Elias Da Silva", "descricao": "Aposentadoria por tempo de contribuição", "data_quitacao": "2025-09-05", "tipo": "Honorário", "valor": 780.0, "comissao": 39.0, "num": 19}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "José Vitor Faria", "descricao": "Regularização de Obra", "data_quitacao": "2025-07-09", "tipo": "Consulta/Serviço", "valor": 1000.0, "comissao": 50.0, "num": 20}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Marcio Miguel Cardillo", "descricao": "Taxa de manutenção de processo", "data_quitacao": "2025-09-14", "tipo": "Honorário", "valor": 379.5, "comissao": 18.98, "num": 21}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Marcio Miguel Cardillo", "descricao": "Taxa de manutenção de processo", "data_quitacao": "2025-10-14", "tipo": "Honorário", "valor": 379.5, "comissao": 18.98, "num": 22}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Maria Aparecida De Souza Correa", "descricao": "Benefício por Incapacidade Temporária (Aux Doença)", "data_quitacao": "2025-12-05", "tipo": "Honorário", "valor": 996.01, "comissao": 49.8, "num": 23}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Maria José de Freitas", "descricao": "Orientação de Aposentadoria", "data_quitacao": "2025-07-07", "tipo": "Consulta/Serviço", "valor": 350.0, "comissao": 17.5, "num": 24}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Mario Cezar Braz", "descricao": "Ação Criminal - Alvará de soltura", "data_quitacao": "2025-10-04", "tipo": "Honorário", "valor": 750.0, "comissao": 37.5, "num": 25}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Mario Cezar Braz", "descricao": "Ação Criminal - Alvará de soltura", "data_quitacao": "2025-11-04", "tipo": "Honorário", "valor": 750.0, "comissao": 37.5, "num": 26}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Mayara Consalvo Silva", "descricao": "Ação cívil - Pacto antenupcial", "data_quitacao": "2025-07-07", "tipo": "Consulta/Serviço", "valor": 1000.0, "comissao": 50.0, "num": 27}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Mayara Consalvo Silva", "descricao": "Ação cívil - Pacto antenupcial", "data_quitacao": "2025-09-01", "tipo": "Consulta/Serviço", "valor": 1000.0, "comissao": 50.0, "num": 28}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Mayara Consalvo Silva", "descricao": "Ação cívil - Pacto antenupcial", "data_quitacao": "2025-09-30", "tipo": "Consulta/Serviço", "valor": 1000.0, "comissao": 50.0, "num": 29}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Miguel Luiz Do Prado", "descricao": "consulta", "data_quitacao": "2025-11-18", "tipo": "Honorário", "valor": 300.0, "comissao": 15.0, "num": 30}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Omelio Caetani", "descricao": "Ação Cível", "data_quitacao": "2025-10-17", "tipo": "Honorário", "valor": 4000.0, "comissao": 200.0, "num": 31}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Rosalia Lima Da Silva", "descricao": "Auxílio doença", "data_quitacao": "2025-10-05", "tipo": "Honorário", "valor": 303.6, "comissao": 15.18, "num": 32}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Rosely Conceição da Silva", "descricao": "Inventário", "data_quitacao": "2025-10-10", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 33}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Sebastião Do Patrocinio Ferreira", "descricao": "Aposentadoria por tempo de contribuição -", "data_quitacao": "2025-09-23", "tipo": "Honorário", "valor": 5596.0, "comissao": 279.8, "num": 34}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Suzimara Aparecida De Lima Souza", "descricao": "Pedido de Isenção de Imposto de Renda", "data_quitacao": "2025-07-01", "tipo": "Consulta/Serviço", "valor": 759.0, "comissao": 37.95, "num": 35}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Maio/2025", "devedor": "Suzimara Aparecida De Lima Souza", "descricao": "Pedido de Isenção de Imposto de Renda", "data_quitacao": "2025-07-31", "tipo": "Consulta/Serviço", "valor": 759.0, "comissao": 37.95, "num": 36}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Aparecida Donizeti de Souza", "descricao": "Auxílio Doença", "data_quitacao": "2025-09-08", "tipo": "Honorário", "valor": 303.6, "comissao": 15.18, "num": 37}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Aparecida Donizeti de Souza", "descricao": "Auxílio Doença", "data_quitacao": "2025-10-08", "tipo": "Honorário", "valor": 121.44, "comissao": 6.07, "num": 38}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Cil Farnei Luiz Gonçalves", "descricao": "Loas", "data_quitacao": "2025-10-10", "tipo": "Honorário", "valor": 864.18, "comissao": 43.21, "num": 39}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Cil Farnei Luiz Gonçalves", "descricao": "Loas", "data_quitacao": "2025-11-10", "tipo": "Honorário", "valor": 864.18, "comissao": 43.21, "num": 40}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Cil Farnei Luiz Gonçalves", "descricao": "Loas", "data_quitacao": "2025-12-10", "tipo": "Honorário", "valor": 850.0, "comissao": 42.5, "num": 41}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Claudia dos Santos Rodrigues", "descricao": "Aposentadoria Tempo de Contribuição - Administrativo", "data_quitacao": "2025-11-05", "tipo": "Honorário", "valor": 12000.0, "comissao": 600.0, "num": 42}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Fernanda de Sousa Domingos", "descricao": "Loas", "data_quitacao": "2025-10-06", "tipo": "Honorário", "valor": 4500.0, "comissao": 225.0, "num": 43}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Fernanda de Sousa Domingos", "descricao": "Loas", "data_quitacao": "2025-11-10", "tipo": "Honorário", "valor": 797.81, "comissao": 39.89, "num": 44}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Fernanda de Sousa Domingos", "descricao": "Loas", "data_quitacao": "2025-12-10", "tipo": "Honorário", "valor": 797.81, "comissao": 39.89, "num": 45}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Jose Augusto De Souza", "descricao": "Aposentadoria por invalidez", "data_quitacao": "2025-10-15", "tipo": "Honorário", "valor": 2530.0, "comissao": 126.5, "num": 46}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Jose Augusto De Souza", "descricao": "Aposentadoria por invalidez", "data_quitacao": "2025-11-10", "tipo": "Honorário", "valor": 926.5, "comissao": 46.33, "num": 47}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Jose Augusto De Souza", "descricao": "Aposentadoria por invalidez", "data_quitacao": "2025-12-10", "tipo": "Honorário", "valor": 907.75, "comissao": 45.39, "num": 48}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Aparecida Dias Castilho", "descricao": "Aposentadoria por Incapacidade Permanente Previdenciária", "data_quitacao": "2025-10-10", "tipo": "Honorário", "valor": 875.17, "comissao": 43.76, "num": 49}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Aparecida Dias Castilho", "descricao": "Aposentadoria por Incapacidade Permanente Previdenciária", "data_quitacao": "2025-11-10", "tipo": "Honorário", "valor": 875.17, "comissao": 43.76, "num": 50}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Aparecida Dias Castilho", "descricao": "Aposentadoria por Incapacidade Permanente Previdenciária", "data_quitacao": "2025-12-10", "tipo": "Honorário", "valor": 875.17, "comissao": 43.76, "num": 51}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2025-10-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 52}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2025-11-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 53}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2025-12-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 54}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Monica Cristina Abrao", "descricao": "Mandado de segurança", "data_quitacao": "2025-07-30", "tipo": "Honorário", "valor": 759.0, "comissao": 37.95, "num": 55}, {"janela": "Quitação Jul-Dez/2025", "mes_contrato": "Junho/2025", "devedor": "Monica Cristina Abrao", "descricao": "Mandado de segurança", "data_quitacao": "2025-08-10", "tipo": "Honorário", "valor": 759.0, "comissao": 37.95, "num": 56}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-01-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 57}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-02-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 58}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-03-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 59}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "AUXILIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIA", "data_quitacao": "2026-02-05", "tipo": "Honorário", "valor": 303.6, "comissao": 15.18, "num": 60}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "AUXILIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIA", "data_quitacao": "2026-02-05", "tipo": "Honorário", "valor": 303.6, "comissao": 15.18, "num": 61}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2026-01-05", "tipo": "Honorário", "valor": 829.0, "comissao": 41.45, "num": 62}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2026-02-05", "tipo": "Honorário", "valor": 830.0, "comissao": 41.5, "num": 63}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Abril/2025", "devedor": "ADAO ALBERTO DOS REIS", "descricao": "Aposentadoria por tempo de contribuição adm", "data_quitacao": "2026-03-05", "tipo": "Honorário", "valor": 828.0, "comissao": 41.4, "num": 64}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Jandira Pereira Da Silva", "descricao": "Benefício de prestação continuada a pessoa com deficiência", "data_quitacao": "2026-01-22", "tipo": "Honorário", "valor": 6484.0, "comissao": 324.2, "num": 65}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Jose Elias Da Silva", "descricao": "Aposentadoria por tempo de contribuição", "data_quitacao": "2025-10-05", "tipo": "Honorário", "valor": 780.0, "comissao": 39.0, "num": 66}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Jose Elias Da Silva", "descricao": "Aposentadoria por tempo de contribuição", "data_quitacao": "2025-11-05", "tipo": "Honorário", "valor": 780.0, "comissao": 39.0, "num": 67}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Jose Elias Da Silva", "descricao": "Aposentadoria por tempo de contribuição", "data_quitacao": "2025-12-05", "tipo": "Honorário", "valor": 780.0, "comissao": 39.0, "num": 68}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Marcio Miguel Cardillo", "descricao": "Aposentadoria Por Incapacidade Permanente-judicial", "data_quitacao": "2026-02-26", "tipo": "Honorário", "valor": 4657.0, "comissao": 232.85, "num": 69}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Marcio Miguel Cardillo", "descricao": "Aposentadoria Por Incapacidade Permanente-judicial", "data_quitacao": "2026-03-06", "tipo": "Honorário", "valor": 1621.0, "comissao": 81.05, "num": 70}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Marcio Miguel Cardillo", "descricao": "Aposentadoria Por Incapacidade Permanente-judicial", "data_quitacao": "2026-04-08", "tipo": "Honorário", "valor": 206.0, "comissao": 10.3, "num": 71}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Mario Cezar Braz", "descricao": "Ação Criminal - Alvará de soltura", "data_quitacao": "2025-12-04", "tipo": "Honorário", "valor": 750.0, "comissao": 37.5, "num": 72}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Rosalia Lima Da Silva", "descricao": "AUXÍLIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIO", "data_quitacao": "2026-02-25", "tipo": "Honorário", "valor": 486.4, "comissao": 24.32, "num": 73}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Maio/2025", "devedor": "Rosalia Lima Da Silva", "descricao": "AUXÍLIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIO", "data_quitacao": "2026-03-28", "tipo": "Honorário", "valor": 324.2, "comissao": 16.21, "num": 74}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Cil Farnei Luiz Gonçalves", "descricao": "Loas", "data_quitacao": "2026-01-10", "tipo": "Honorário", "valor": 878.36, "comissao": 43.92, "num": 75}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-01-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 76}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-02-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 77}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-03-12", "tipo": "Honorário", "valor": 1000.0, "comissao": 50.0, "num": 78}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Maria Aparecida Dias Castilho", "descricao": "Aposentadoria por Incapacidade Permanente Previdenciária", "data_quitacao": "2026-01-10", "tipo": "Honorário", "valor": 875.17, "comissao": 43.76, "num": 79}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Maria Aparecida Dias Castilho", "descricao": "Aposentadoria por Incapacidade Permanente Previdenciária", "data_quitacao": "2026-02-10", "tipo": "Honorário", "valor": 875.17, "comissao": 43.76, "num": 80}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2026-01-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 81}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2026-02-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 82}, {"janela": "Quitação Jan-Mar/2026", "mes_contrato": "Junho/2025", "devedor": "Maria Regina de Cassia Soares", "descricao": "Aposentadoria por idade - ADM", "data_quitacao": "2026-03-02", "tipo": "Honorário", "valor": 760.63, "comissao": 38.03, "num": 83}, {"janela": "Quitação Abr/2026", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-04-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 84}, {"janela": "Quitação Abr/2026", "mes_contrato": "Março/2025", "devedor": "Fabiana Negrini da Silva", "descricao": "Ação Cível e Criminal", "data_quitacao": "2026-04-12", "tipo": "Honorário", "valor": 500.0, "comissao": 25.0, "num": 85}, {"janela": "Quitação Abr/2026", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "AUXILIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIA", "data_quitacao": "2026-03-05", "tipo": "Honorário", "valor": 303.6, "comissao": 15.18, "num": 86}, {"janela": "Quitação Abr/2026", "mes_contrato": "Março/2025", "devedor": "Rosane Amelia Vieira", "descricao": "Auxílio Por Incapacidade Temporária Previdenciário", "data_quitacao": "2026-04-07", "tipo": "Honorário", "valor": 162.0, "comissao": 8.1, "num": 87}, {"janela": "Quitação Abr/2026", "mes_contrato": "Abril/2025", "devedor": "Jose Carmo de Melo", "descricao": "Aposentadoria por tempo de contribução", "data_quitacao": "2026-03-05", "tipo": "Honorário", "valor": 833.2, "comissao": 41.66, "num": 88}, {"janela": "Quitação Abr/2026", "mes_contrato": "Maio/2025", "devedor": "Rosalia Lima Da Silva", "descricao": "AUXÍLIO POR INCAPACIDADE TEMPORÁRIA PREVIDENCIÁRIO", "data_quitacao": "2026-04-28", "tipo": "Honorário", "valor": 324.2, "comissao": 16.21, "num": 89}];
+
+const fmtBRL = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const fmtDate = s => {
+  const [y,m,d] = s.split('-');
+  return `${d}/${m}/${y}`;
+};
+
+// ---------- Cards ----------
+const totalValor = DATA.reduce((a,r)=>a+r.valor,0);
+const totalComissao = DATA.reduce((a,r)=>a+r.comissao,0);
+document.getElementById('card-total').textContent = fmtBRL(totalComissao);
+document.getElementById('card-base').textContent = fmtBRL(totalValor);
+document.getElementById('card-basevalue').textContent = fmtBRL(totalValor);
+
+// ---------- Janela summary ----------
+const janelaOrder = ["Quitação Jul-Dez/2025","Quitação Jan-Mar/2026","Quitação Abr/2026"];
+const janelaShort = {
+  "Quitação Jul-Dez/2025":"Jul - Dez / 2025",
+  "Quitação Jan-Mar/2026":"Jan - Mar / 2026",
+  "Quitação Abr/2026":"Abril / 2026"
+};
+const janelaTotals = {};
+janelaOrder.forEach(j => janelaTotals[j] = {valor:0, comissao:0, count:0});
+DATA.forEach(r => {
+  janelaTotals[r.janela].valor += r.valor;
+  janelaTotals[r.janela].comissao += r.comissao;
+  janelaTotals[r.janela].count += 1;
+});
+
+const janelaListEl = document.getElementById('janela-list');
+janelaOrder.forEach(j => {
+  const t = janelaTotals[j];
+  const div = document.createElement('div');
+  div.className = 'janela-item';
+  div.innerHTML = `<div class="jn">${janelaShort[j]}<small>${t.count} lançamentos · base ${fmtBRL(t.valor)}</small></div>
+                   <div class="jv">${fmtBRL(t.comissao)}</div>`;
+  janelaListEl.appendChild(div);
+});
+
+new Chart(document.getElementById('janelaChart'), {
+  type: 'bar',
+  data: {
+    labels: janelaOrder.map(j=>janelaShort[j]),
+    datasets: [{
+      label: 'Comissão (R$)',
+      data: janelaOrder.map(j=>janelaTotals[j].comissao),
+      backgroundColor: ['#16335E','#5A3E9C','#2F7D4F'],
+      borderRadius: 6,
+      maxBarThickness: 60
+    }]
+  },
+  options: {
+    responsive:true,
+    plugins:{ legend:{display:false},
+      tooltip:{ callbacks:{ label: ctx => fmtBRL(ctx.parsed.y) } } },
+    scales:{
+      y:{ ticks:{ callback: v => 'R$ '+v.toLocaleString('pt-BR') }, grid:{color:'#EEE'} },
+      x:{ grid:{display:false} }
+    }
+  }
+});
+
+// ---------- Resumo por cliente ----------
+const clientMap = {};
+DATA.forEach(r => {
+  if(!clientMap[r.devedor]) clientMap[r.devedor] = {devedor:r.devedor, meses:new Set(), count:0, valor:0, comissao:0};
+  const c = clientMap[r.devedor];
+  c.meses.add(r.mes_contrato);
+  c.count += 1;
+  c.valor += r.valor;
+  c.comissao += r.comissao;
+});
+const mesOrder = {"Março/2025":1,"Abril/2025":2,"Maio/2025":3,"Junho/2025":4};
+let clientRows = Object.values(clientMap).map(c => ({
+  devedor: c.devedor,
+  meses: Array.from(c.meses).sort((a,b)=>mesOrder[a]-mesOrder[b]).join(', '),
+  count: c.count,
+  valor: Math.round(c.valor*100)/100,
+  comissao: Math.round(c.comissao*100)/100
+}));
+
+let clientSort = {key:'comissao', dir:-1};
+function renderClientTable(){
+  const filter = document.getElementById('search-cliente').value.trim().toLowerCase();
+  let rows = clientRows.filter(r => r.devedor.toLowerCase().includes(filter));
+  rows.sort((a,b) => {
+    const A=a[clientSort.key], B=b[clientSort.key];
+    if (typeof A === 'string') return A.localeCompare(B)*clientSort.dir;
+    return (A-B)*clientSort.dir;
+  });
+  const tbody = document.querySelector('#table-cliente tbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.devedor}</td>
+      <td>${r.meses}</td>
+      <td class="center">${r.count}</td>
+      <td class="num">${fmtBRL(r.valor)}</td>
+      <td class="num">${fmtBRL(r.comissao)}</td>
+    </tr>`).join('');
+  document.getElementById('foot-cliente-valor').textContent = fmtBRL(rows.reduce((a,r)=>a+r.valor,0));
+  document.getElementById('foot-cliente-comissao').textContent = fmtBRL(rows.reduce((a,r)=>a+r.comissao,0));
+}
+document.getElementById('search-cliente').addEventListener('input', renderClientTable);
+document.querySelectorAll('#table-cliente thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (clientSort.key === key) clientSort.dir *= -1;
+    else { clientSort.key = key; clientSort.dir = -1; }
+    document.querySelectorAll('#table-cliente thead .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = clientSort.dir === 1 ? '▴' : '▾';
+    renderClientTable();
+  });
+});
+
+// ---------- Detalhamento ----------
+const janelaBadge = {
+  "Quitação Jul-Dez/2025": '<span class="badge j1">Jul-Dez/2025</span>',
+  "Quitação Jan-Mar/2026": '<span class="badge j2">Jan-Mar/2026</span>',
+  "Quitação Abr/2026": '<span class="badge j3">Abr/2026</span>'
+};
+let activeJanela = 'todas';
+let detSort = {key:'num', dir:1};
+function renderDetTable(){
+  const filter = document.getElementById('search-detalhe').value.trim().toLowerCase();
+  let rows = DATA.filter(r => (activeJanela==='todas' || r.janela===activeJanela)
+    && (r.devedor.toLowerCase().includes(filter) || r.descricao.toLowerCase().includes(filter)));
+  rows = rows.slice().sort((a,b)=>{
+    const A=a[detSort.key], B=b[detSort.key];
+    if (typeof A === 'string') return A.localeCompare(B)*detSort.dir;
+    return (A-B)*detSort.dir;
+  });
+  const tbody = document.querySelector('#table-detalhe tbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="center">${r.num}</td>
+      <td>${janelaBadge[r.janela]}</td>
+      <td>${r.mes_contrato}</td>
+      <td>${r.devedor}</td>
+      <td>${r.descricao}</td>
+      <td>${r.tipo}</td>
+      <td class="center">${fmtDate(r.data_quitacao)}</td>
+      <td class="num">${fmtBRL(r.valor)}</td>
+      <td class="num">${fmtBRL(r.comissao)}</td>
+    </tr>`).join('');
+  document.getElementById('foot-det-valor').textContent = fmtBRL(rows.reduce((a,r)=>a+r.valor,0));
+  document.getElementById('foot-det-comissao').textContent = fmtBRL(rows.reduce((a,r)=>a+r.comissao,0));
+}
+document.getElementById('search-detalhe').addEventListener('input', renderDetTable);
+document.querySelectorAll('.pill-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeJanela = btn.dataset.janela;
+    renderDetTable();
+  });
+});
+document.querySelectorAll('#table-detalhe thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (detSort.key === key) detSort.dir *= -1;
+    else { detSort.key = key; detSort.dir = 1; }
+    renderDetTable();
+  });
+});
+
+renderClientTable();
+renderDetTable();
+</script>
+
+</body>
+</html>
