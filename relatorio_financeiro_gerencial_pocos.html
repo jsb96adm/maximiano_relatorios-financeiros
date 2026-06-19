@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano Advogados — Poços de Caldas · Jan–Mai 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
+// Composição receita
+new Chart('ch-comp-unit',{type:'doughnut',data:{
+  labels:['Prev. Adm (35%)','Prev. Jud (42%)','Civil (10%)','Outros (13%)'],
+  datasets:[{data:[104899,127992,31610,39298],backgroundColor:['rgba(14,168,154,.75)','rgba(62,201,142,.75)','rgba(232,160,48,.75)','rgba(107,132,168,.5)'],borderWidth:0}]
+},options:{responsive:true,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:10,weight:'700'},formatter:(v,ctx)=>{let s=ctx.dataset.data.reduce((a,b)=>a+b,0);return Math.round(v/s*100)+'%';}}}}});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js">
+// Composição receita
+new Chart('ch-comp-unit',{type:'doughnut',data:{
+  labels:['Prev. Adm (35%)','Prev. Jud (42%)','Civil (10%)','Outros (13%)'],
+  datasets:[{data:[104899,127992,31610,39298],backgroundColor:['rgba(14,168,154,.75)','rgba(62,201,142,.75)','rgba(232,160,48,.75)','rgba(107,132,168,.5)'],borderWidth:0}]
+},options:{responsive:true,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:10,weight:'700'},formatter:(v,ctx)=>{let s=ctx.dataset.data.reduce((a,b)=>a+b,0);return Math.round(v/s*100)+'%';}}}}});
+</script>
+<style>
+
+
+:root{
+  --dk:#161a1f;--nv:#1c2126;--nv2:#22272e;--nv3:#2a2f38;
+  --gd:#E8A030;--gd2:#F5C060;--gd-dim:rgba(232,160,48,.1);
+  --teal:#0EA89A;--teal2:#14C4B4;--teal-dim:rgba(14,168,154,.1);
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --muted:#8899AA;--body:rgba(255,255,255,.65);
+  --card:rgba(26,32,40,.85);--border:rgba(232,160,48,.14);--border2:rgba(255,255,255,.07);
+  --r:12px;--sb:240px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(22,26,31,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);line-height:1.2}
+.sb-brand-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-period{margin:.8rem 1.2rem;background:rgba(14,168,154,.09);border:1px solid rgba(14,168,154,.22);border-radius:6px;padding:.4rem .75rem;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal2);font-weight:700;text-align:center}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.74rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--gd);background:rgba(232,160,48,.06);border-left-color:var(--gd)}
+.sb-link svg{width:14px;height:14px;opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-unit{display:flex;align-items:center;gap:.55rem;padding:.42rem 1.2rem;font-size:.73rem;color:rgba(255,255,255,.45);text-decoration:none;transition:all .2s}
+.sb-unit:hover{color:#fff;background:rgba(255,255,255,.04)}
+.sb-unit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.6rem;color:var(--muted);text-align:center;line-height:1.5}
+#main{margin-left:var(--sb);flex:1;min-width:0}
+#hero{min-height:100vh;display:flex;align-items:center;padding:5rem 0 4rem;background:radial-gradient(ellipse 65% 50% at 55% 0%,rgba(14,168,154,.14) 0%,transparent 65%),radial-gradient(ellipse 30% 30% at 95% 75%,rgba(232,160,48,.07) 0%,transparent 55%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(232,160,48,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(232,160,48,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(14,168,154,.1);border:1px solid rgba(14,168,154,.3);border-radius:20px;padding:.32rem .9rem;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal2);margin-bottom:1.2rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-weight:900;font-size:clamp(2.6rem,5vw,4.6rem);line-height:.92;color:#fff;letter-spacing:-.02em}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-note{margin-top:1.1rem;font-size:.79rem;color:rgba(14,196,180,.85);background:rgba(14,168,154,.07);border:1px solid rgba(14,168,154,.2);border-radius:6px;padding:.55rem .9rem;line-height:1.5}
+.hero-sub{margin-top:.65rem;font-size:.88rem;color:rgba(255,255,255,.45);max-width:440px;line-height:1.75}
+.hero-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(22,26,31,.75);padding:1.1rem 1.3rem;transition:background .2s}
+.hk:hover{background:rgba(33,41,48,.8)}
+.hk-val{font-weight:800;font-size:1.7rem;color:var(--gd);line-height:1}
+.hk-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hk-delta{font-size:.68rem;font-weight:700;color:var(--green);margin-top:.15rem}
+.hero-vis{display:flex;align-items:center;justify-content:center}
+.vis-wrap{position:relative;width:290px;height:290px}
+.vis-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(14,168,154,.22);animation:spin 40s linear infinite}
+.vis-ring2{position:absolute;inset:26px;border-radius:50%;border:1px dashed rgba(232,160,48,.16);animation:spin 26s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vis-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:135px;height:135px;border-radius:50%;background:linear-gradient(135deg,rgba(14,168,154,.5),rgba(19,24,32,.96));border:1px solid rgba(232,160,48,.28);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 55px rgba(14,168,154,.2)}
+.vis-core-v{font-weight:900;font-size:1.9rem;color:var(--gd);line-height:1}
+.vis-core-l{font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+.vis-dot{position:absolute;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.52rem;letter-spacing:.04em;text-transform:uppercase;color:var(--gd);font-weight:700;text-align:center;line-height:1.3}
+.vd1{top:-21px;left:calc(50% - 21px)}.vd2{bottom:-21px;left:calc(50% - 21px)}
+.vd3{left:-21px;top:calc(50% - 21px)}.vd4{right:-21px;top:calc(50% - 21px)}
+@media(max-width:860px){.hero-inner{grid-template-columns:1fr}.hero-vis{display:none}}
+section{position:relative;padding:5rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.7rem;color:rgba(255,255,255,.48);max-width:580px;font-size:.88rem;line-height:1.75}
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:2rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}.ks4{grid-template-columns:repeat(4,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.ks5,.ks4{grid-template-columns:repeat(2,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}}
+.kpi{background:rgba(22,26,31,.85);padding:1.2rem .9rem;text-align:center;transition:background .2s}
+.kpi:hover{background:rgba(33,41,48,.8)}
+.kval{font-weight:800;font-size:1.6rem;color:var(--gd);line-height:1}
+.kdelta{display:inline-block;font-size:.66rem;font-weight:700;padding:.1rem .44rem;border-radius:20px;margin:.2rem 0;letter-spacing:.03em}
+.d-up{background:rgba(62,201,142,.14);color:var(--green)}
+.d-dn{background:rgba(240,96,96,.1);color:var(--red)}
+.d-warn{background:rgba(245,160,48,.1);color:var(--amber)}
+.d-teal{background:rgba(14,168,154,.12);color:var(--teal2)}
+.d-blue{background:rgba(46,133,212,.12);color:var(--blue)}
+.klabel{font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.chart-title{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.3rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.3rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.3rem}
+@media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+.leg{display:flex;gap:14px;margin-top:10px;font-size:.7rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+.ucards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:2rem}
+@media(max-width:960px){.ucards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.ucards{grid-template-columns:1fr}}
+.ucard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;transition:transform .22s,border-color .22s,box-shadow .22s;display:block}
+.ucard:hover{transform:translateY(-5px);border-color:rgba(232,160,48,.32);box-shadow:0 16px 36px rgba(0,0,0,.32)}
+.uc-top{padding:.85rem 1.1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border2)}
+.uc-g{background:rgba(62,201,142,.06)}.uc-a{background:rgba(245,160,48,.06)}.uc-b{background:rgba(46,133,212,.06)}.uc-r{background:rgba(240,96,96,.06)}
+.uc-name{font-size:.67rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.uc-body{padding:1.1rem}
+.uc-rec{font-weight:800;font-size:1.65rem;color:var(--gd);line-height:1}
+.uc-meta{font-size:.7rem;color:var(--muted);margin:.18rem 0 .8rem}
+.pbar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.pbar-f{height:100%;border-radius:2px}
+.uc-rows{margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:.3rem}
+.uc-row{display:flex;justify-content:space-between;font-size:.74rem}
+.uc-row .lb{color:var(--muted)}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}.tv-gd{color:var(--gd);font-weight:700}.tv-t{color:var(--teal2)}.tv-b{color:var(--blue)}
+.uc-link{display:flex;align-items:center;gap:.4rem;margin-top:1rem;padding:.5rem .9rem;background:var(--gd-dim);border:1px solid rgba(232,160,48,.18);border-radius:6px;font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gd);transition:background .2s}
+.ucard:hover .uc-link{background:rgba(232,160,48,.16)}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{background:rgba(22,26,31,.9);color:var(--gd);font-size:.61rem;letter-spacing:.13em;text-transform:uppercase;padding:.8rem .88rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ftable th:first-child{text-align:left}
+.ftable td{padding:.8rem .88rem;font-size:.84rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ftable td:first-child{text-align:left;font-weight:600;font-size:.82rem}
+.ftable tr:last-child td{font-weight:700;background:rgba(22,26,31,.5);border-top:1px solid var(--border)}
+.ftable tr:hover td{background:rgba(232,160,48,.022)}
+.nb{background:rgba(14,168,154,.05);border:1px solid rgba(14,168,154,.18);border-radius:8px;padding:.85rem 1.2rem;margin-top:1.2rem;font-size:.82rem;color:rgba(255,255,255,.58);line-height:1.65}
+.nb strong{color:var(--teal2)}
+.nb-gd{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.16)}
+.nb-gd strong{color:var(--gd2)}
+.nb-red{background:rgba(240,96,96,.04);border-color:rgba(240,96,96,.16)}
+.nb-red strong{color:#f08888}
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border2)}
+.ftable tr.total-row td{font-weight:800;background:rgba(22,26,31,.6);border-top:2px solid var(--border);font-size:.86rem}
+.ftable tr.total-row td:first-child{color:var(--gd)}
+.row-alert-g{background:rgba(232,160,48,.04)}
+.row-alert-r{background:rgba(240,96,96,.04)}
+.ebitda-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:680px){.ebitda-grid{grid-template-columns:1fr}}
+.ecard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.6rem}
+.ecard.gestao{border-color:rgba(62,201,142,.22);background:rgba(62,201,142,.03)}
+.ecard.liquido{border-color:rgba(232,160,48,.22);background:rgba(232,160,48,.03)}
+.ecard-label{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.ecard-val{font-weight:900;font-size:2.4rem;color:var(--gd);line-height:1;margin-bottom:.2rem}
+.ecard-margem{font-size:.8rem;color:var(--green);font-weight:700;margin-bottom:1rem}
+.ecard-rows{display:flex;flex-direction:column;gap:.3rem;padding-top:.9rem;border-top:1px solid var(--border2)}
+.ecard-row{display:flex;justify-content:space-between;font-size:.8rem}
+.ecard-row .lb{color:var(--muted)}
+.be-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:680px){.be-grid{grid-template-columns:1fr}}
+.be-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.be-title{font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.be-track{position:relative;height:8px;background:rgba(255,255,255,.07);border-radius:4px;margin:1rem 0;overflow:hidden}
+.be-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px}
+.be-nums{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+.be-unit-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem}
+.be-unit-label{font-size:.78rem;color:rgba(255,255,255,.6);width:90px;flex-shrink:0}
+.be-unit-track{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;position:relative}
+.be-unit-fill{height:100%;border-radius:3px}
+.be-unit-val{font-size:.72rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.hbar-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.9rem}
+.hbar-label{font-size:.78rem;color:rgba(255,255,255,.6);width:110px;flex-shrink:0}
+.hbar-track{flex:1;height:22px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.6rem;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.9);transition:width .8s ease}
+.hbar-pct{font-size:.78rem;font-weight:700;width:48px;text-align:right;flex-shrink:0}
+.inad-row{display:flex;align-items:stretch;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:700px){.inad-row{flex-direction:column}}
+.inad-kpi{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
+.inad-label{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.inad-val{font-weight:800;font-size:2rem;line-height:1;margin:.2rem 0}
+.inad-sub{font-size:.8rem;color:rgba(255,255,255,.45)}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:1.8rem}
+@media(max-width:900px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+.meta-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.meta-unit{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.meta-track-wrap{position:relative;height:10px;background:rgba(255,255,255,.07);border-radius:5px;margin:.8rem 0;overflow:visible}
+.meta-track-fill{position:absolute;left:0;top:0;height:100%;border-radius:5px;transition:width .8s ease}
+.meta-target-line{position:absolute;top:-4px;width:2px;height:18px;background:rgba(255,255,255,.5);border-radius:1px}
+.meta-label-row{display:flex;justify-content:space-between;font-size:.72rem}
+.meta-label-row .lb{color:var(--muted)}
+.meta-pct{font-weight:800;font-size:1.5rem;line-height:1;margin-top:.3rem}
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
+@media(max-width:800px){.fc-grid{grid-template-columns:1fr}}
+.fc-card{border-radius:12px;padding:1.8rem 1.6rem;border:1px solid var(--border2);position:relative;overflow:hidden}
+.fc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fc-cons{background:rgba(107,132,168,.06);border-color:rgba(107,132,168,.2)}.fc-cons::before{background:var(--muted)}
+.fc-real{background:rgba(14,168,154,.05);border-color:rgba(14,168,154,.25)}.fc-real::before{background:var(--teal2)}
+.fc-agr{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.3)}.fc-agr::before{background:var(--gd)}
+.fc-eyebrow{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin-bottom:.5rem}
+.fc-cons .fc-eyebrow{color:var(--muted)}.fc-real .fc-eyebrow{color:var(--teal2)}.fc-agr .fc-eyebrow{color:var(--gd)}
+.fc-value{font-weight:900;font-size:2.6rem;line-height:1;letter-spacing:-.02em;margin-bottom:.2rem}
+.fc-cons .fc-value{color:rgba(255,255,255,.65)}.fc-real .fc-value{color:var(--teal2)}.fc-agr .fc-value{color:var(--gd)}
+.fc-tag{font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:1.2rem}
+.fc-rows{display:flex;flex-direction:column;gap:.45rem;padding-top:1rem;border-top:1px solid var(--border2)}
+.fc-row{display:flex;justify-content:space-between;font-size:.78rem}
+.fc-row .lb{color:var(--muted)}.fc-row .vl{font-weight:700}
+.fc-agr-badge{display:inline-flex;align-items:center;gap:.35rem;background:rgba(232,160,48,.12);border:1px solid rgba(232,160,48,.3);border-radius:20px;padding:.2rem .65rem;font-size:.6rem;font-weight:700;color:var(--gd);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.cfo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+@media(max-width:900px){.cfo-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.cfo-grid{grid-template-columns:1fr}}
+.cfo-c{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.cfo-c.full{grid-column:1/-1}
+.cfo-head{font-weight:700;font-size:.98rem;color:var(--gd);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:1px solid var(--border2)}
+.cfo-text{font-size:.84rem;color:rgba(255,255,255,.58);line-height:1.75}
+.cfo-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.cfo-list li{font-size:.82rem;color:rgba(255,255,255,.6);padding-left:1.1rem;position:relative;line-height:1.5}
+.cfo-list li::before{content:'›';position:absolute;left:0;color:var(--gd)}
+.gloss-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.8rem}
+@media(max-width:800px){.gloss-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.gloss-grid{grid-template-columns:1fr}}
+.gloss-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.3rem}
+.gloss-term{font-weight:700;font-size:.82rem;color:var(--gd2);margin-bottom:.4rem}
+.gloss-def{font-size:.81rem;color:rgba(255,255,255,.52);line-height:1.65}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--dk)}::-webkit-scrollbar-thumb{background:rgba(232,160,48,.28);border-radius:2px}
+footer{border-top:1px solid var(--border);padding:1.8rem 2.5rem;text-align:center}
+footer p{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0}}
+
+</style>
+</head>
+<body>
+<nav id="sidebar">
+  <div class="sb-brand"><div class="sb-brand-name">Maximiano<br/>Advogados</div><div class="sb-brand-sub">Dashboard Financeiro</div></div>
+  <div class="sb-period">Jan–Mai · 2026</div>
+  <nav class="sb-nav">
+    <div class="sb-section">Painel Consolidado</div>
+    <a href="relatorio_financeiro_gerencial.html" class="sb-link"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 2l6 6h-2v6H4V8H2z"/></svg>← Voltar ao Consolidado</a>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Relatórios por Unidade</div>
+    <a href="relatorio_financeiro_gerencial_botelhos.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--amber)"></span>Botelhos</a>
+    <a href="relatorio_financeiro_gerencial_pocos.html" class="sb-unit" style="color:#fff;background:rgba(255,255,255,.08)"><span class="sb-unit-dot" style="background:var(--green)"></span>Poços de Caldas</a>
+    <a href="relatorio_financeiro_gerencial_caboverde.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--blue)"></span>Cabo Verde</a>
+    <a href="relatorio_financeiro_gerencial_nova_resende.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--red)"></span>Nova Resende</a>
+  </nav>
+  <div class="sb-footer">Dados extraídos da DRE real<br/>Documento Confidencial</div>
+</nav>
+<div id="main">
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="badge-dot"></span>Poços de Caldas · Jan–Mai 2026</div>
+      <h1 class="hero-title" style="font-size:clamp(2rem,4vw,3.6rem)">POÇOS DE CALDAS<br/><em>RELATÓRIO</em><br/>FINANCEIRO</h1>
+      <p class="hero-sub">Análise detalhada da unidade com DRE mensal, indicadores e recomendações para decisão de contratação e custos.</p>
+      <div class="hero-kpis">
+        <div class="hk"><div class="hk-val">R$ 304K</div><div class="hk-label">Receita Jan–Mai</div><div class="hk-delta">▲ +37.5% vs 2025</div></div>
+        <div class="hk"><div class="hk-val">R$ 33K</div><div class="hk-label">Resultado Operacional</div><div class="hk-delta">Margem: 11.0%</div></div>
+        <div class="hk"><div class="hk-val">16.0%</div><div class="hk-label">Part. no Grupo</div><div class="hk-delta">do total consolidado</div></div>
+        <div class="hk"><div class="hk-val">R$ 61K</div><div class="hk-label">Receita Média/Mês</div><div class="hk-delta">base para projeção</div></div>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="vis-wrap">
+        <div class="vis-ring"></div><div class="vis-ring2"></div>
+        <div class="vis-core"><div class="vis-core-v">11.0%</div><div class="vis-core-l">Margem</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">DRE Clássica</div>
+    <h2 class="sec-title rv d1">DRE Detalhada <em>Poços de Caldas</em></h2>
+    <p class="sec-body rv d2">Formato DRE tradicional — linha a linha, mês a mês — para conferência direta com a planilha de gestão.</p>
+    <div class="table-wrap rv d2" style="margin-top:1.5rem">
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Rubrica</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Total 5M</th></tr></thead>
+        <tbody>
+<tr><td>Prev. Adm</td><td>R$ 23,055</td><td>R$ 10,272</td><td>R$ 28,088</td><td>R$ 19,645</td><td>R$ 23,839</td><td class='tv-gd'>R$ 104,899</td></tr>
+<tr><td>Consultas</td><td>R$ 750</td><td>R$ 2,250</td><td>R$ 1,200</td><td style='color:var(--muted)'>—</td><td>R$ 450</td><td class='tv-gd'>R$ 4,650</td></tr>
+<tr><td>Serviços</td><td>R$ 250</td><td>R$ 5,000</td><td>R$ 5,000</td><td style='color:var(--muted)'>—</td><td>R$ 5,000</td><td class='tv-gd'>R$ 15,250</td></tr>
+<tr><td>Taxas Manutenção</td><td>R$ 3,318</td><td>R$ 1,729</td><td>R$ 7,011</td><td>R$ 700</td><td>R$ 4,200</td><td class='tv-gd'>R$ 16,958</td></tr>
+<tr><td>MEI</td><td>R$ 600</td><td>R$ 150</td><td>R$ 150</td><td style='color:var(--muted)'>—</td><td style='color:var(--muted)'>—</td><td class='tv-gd'>R$ 900</td></tr>
+<tr><td>Prev. Judicial</td><td>R$ 31,098</td><td>R$ 5,414</td><td>R$ 41,375</td><td>R$ 26,851</td><td>R$ 23,254</td><td class='tv-gd'>R$ 127,992</td></tr>
+<tr><td>Hon. Civil</td><td>R$ 4,851</td><td>R$ 2,000</td><td>R$ 12,759</td><td>R$ 4,250</td><td>R$ 7,750</td><td class='tv-gd'>R$ 31,610</td></tr>
+<tr><td>Hon. Trabalhista</td><td>R$ 1,518</td><td style='color:var(--muted)'>—</td><td style='color:var(--muted)'>—</td><td style='color:var(--muted)'>—</td><td style='color:var(--muted)'>—</td><td class='tv-gd'>R$ 1,518</td></tr>
+<tr class="total-row"><td>RECEITA TOTAL</td><td class='tv-gd'>R$ 65,440</td><td class='tv-gd'>R$ 26,825</td><td class='tv-gd'>R$ 95,583</td><td class='tv-gd'>R$ 51,446</td><td class='tv-gd'>R$ 64,505</td><td class="tv-gd">R$ 303,799</td></tr>
+<tr><td>(-) Custos Totais</td><td class='tv-r'>R$ 46,104</td><td class='tv-r'>R$ 58,536</td><td class='tv-r'>R$ 53,499</td><td class='tv-r'>R$ 58,957</td><td class='tv-r'>R$ 53,339</td><td class="tv-r">R$ 270,435</td></tr>
+<tr class="total-row"><td>RESULTADO</td><td class='tv-g'>R$ 19,336</td><td class='tv-r'>R$ -31,712</td><td class='tv-g'>R$ 42,084</td><td class='tv-r'>R$ -7,510</td><td class='tv-g'>R$ 11,165</td><td class="tv-gd">R$ 33,363</td></tr>
+<tr><td>Margem %</td><td class='tv-g'>29.5%</td><td class='tv-r'>-118.2%</td><td class='tv-g'>44.0%</td><td class='tv-r'>-14.6%</td><td class='tv-g'>17.3%</td><td class="tv-gd">11.0%</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="nb nb-red"><strong>⚠ Evento Histórico — Inventário Jun/2025:</strong> R$ 311.797 de honorário civil em um único mês. Sem esse evento, a receita 2025 de Poços teria sido R$ 727K (não R$ 1,04M). A receita "normalizada" de Poços em 2025 foi ~R$ 60K/mês — compatível com o ritmo atual de 2026 (R$ 61K/mês). O crescimento real é de +1,1%, não os 37,5% aparentes.</div>
+<div class="nb nb-red" style="margin-top:.8rem"><strong>🚨 Inadimplência Disparando:</strong> de R$ 3.110 em 2025 inteiro para R$ 18.486 em 5 meses de 2026 — aumento de 494%. Poços precisa de plano de cobrança URGENTE antes de qualquer decisão de investimento ou contratação.</div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section>
+  <div class="container">
+    <div class="sec-label rv">Evolução Mensal</div>
+    <h2 class="sec-title rv d1">Receita e Resultado <em>Mensal</em></h2>
+    <div class="chart-box rv d2" style="margin-top:1.5rem">
+      <div class="chart-title">Receita vs Resultado — Poços de Caldas Jan–Mai 2026</div>
+      <canvas id="ch-unit-mensal" height="100"></canvas>
+      <div class="leg"><span><span class="leg-dot" style="background:#E8A030"></span>Receita</span><span><span class="leg-dot" style="background:#3EC98E"></span>Resultado +</span><span><span class="leg-dot" style="background:#F06060"></span>Resultado -</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+
+<section class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Composição da Receita</div>
+    <h2 class="sec-title rv d1">Civil <em>vs Previdenciário</em></h2>
+    <div class="kpi-strip ks4 rv d2" style="margin-top:1rem">
+      <div class="kpi"><div class="kval">76.7%</div><span class="kdelta d-teal">Prev. Adm + Jud</span><div class="klabel">Previdenciário</div></div>
+      <div class="kpi"><div class="kval">10.4%</div><span class="kdelta d-warn">R$ 32K</span><div class="klabel">Civil</div></div>
+      <div class="kpi"><div class="kval">R$ 105K</div><span class="kdelta d-teal">Adm</span><div class="klabel">Prev. Administrativo</div></div>
+      <div class="kpi"><div class="kval">R$ 128K</div><span class="kdelta d-up">Judicial</span><div class="klabel">Prev. Judicial</div></div>
+    </div>
+    <div class="g2 rv d3" style="margin-top:1rem">
+      <div class="chart-box">
+        <div class="chart-title">Composição da Receita Jan–Mai 2026</div>
+        <canvas id="ch-comp-unit" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Detalhamento por Rubrica</div>
+        <div style="margin-top:.5rem">
+          <div class="hbar-row"><span class="hbar-label" style="color:var(--teal2)">Prev. Adm</span><div class="hbar-track"><div class="hbar-fill" style="width:35%;background:rgba(14,168,154,.7)">R$ 105K</div></div><span class="hbar-pct tv-t">34.5%</span></div>
+          <div class="hbar-row"><span class="hbar-label" style="color:var(--green)">Prev. Judicial</span><div class="hbar-track"><div class="hbar-fill" style="width:42%;background:rgba(62,201,142,.7)">R$ 128K</div></div><span class="hbar-pct tv-g">42.1%</span></div>
+          <div class="hbar-row"><span class="hbar-label" style="color:var(--gd)">Civil</span><div class="hbar-track"><div class="hbar-fill" style="width:10%;background:rgba(232,160,48,.7)">R$ 32K</div></div><span class="hbar-pct tv-a">10.4%</span></div>
+          <div class="hbar-row"><span class="hbar-label" style="color:var(--muted)">Outros</span><div class="hbar-track"><div class="hbar-fill" style="width:13%;background:rgba(107,132,168,.5)">R$ 39K</div></div><span class="hbar-pct" style="color:var(--muted)">12.9%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Análise e Recomendação</div>
+    <h2 class="sec-title rv d1">Visão <em>CEO</em></h2>
+    <div class="cfo-c full rv d2" style="margin-top:1.5rem">
+      <div class="cfo-head">📋 Diagnóstico — Poços de Caldas</div>
+      <div class="cfo-text">Poços de Caldas apresenta alta variabilidade — resultado positivo em 3 meses (Jan, Mar, Mai) e negativo em 2 (Fev com -R$ 31,7K por rescisórios, Abr com -R$ 7,5K). A margem de 11% é a mais baixa entre as unidades lucrativas. A inadimplência disparando (494% vs 2025) é o maior sinal de alerta. NÃO é recomendável contratar nesta unidade até resolver: (1) inadimplência, (2) estabilidade do resultado mensal, (3) encargos rescisórios recorrentes.</div>
+    </div>
+  </div>
+</section>
+
+<footer><p>Maximiano Advogados · Poços de Caldas · Jan–Mai 2026 · Documento Confidencial</p></footer>
+</div>
+
+<script>
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});},{threshold:.15});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+Chart.register(ChartDataLabels);
+const cfg={responsive:true,plugins:{legend:{display:false},datalabels:{display:false}}};
+const ax=()=>({x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}});
+const meses=['Jan','Fev','Mar','Abr','Mai'];
+const rec=[65440, 26825, 95583, 51446, 64505];
+const res=[19336, -31712, 42084, -7510, 11165];
+new Chart('ch-unit-mensal',{type:'bar',data:{labels:meses,datasets:[
+  {label:'Receita',data:rec,backgroundColor:'rgba(232,160,48,.75)',borderRadius:5,datalabels:{display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:'rgba(232,160,48,.9)',font:{size:9,weight:'700'}}},
+  {label:'Resultado',data:res,backgroundColor:res.map(v=>v>=0?'rgba(62,201,142,.6)':'rgba(240,96,96,.6)'),borderRadius:5,datalabels:{display:true,anchor:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',align:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',formatter:v=>'R$'+Math.round(Math.abs(v)/1000)+'K',color:res.map(v=>v>=0?'rgba(62,201,142,.85)':'rgba(240,96,96,.85)'),font:{size:9,weight:'700'}}}
+]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:ax()}});
+
+// Composição receita
+new Chart('ch-comp-unit',{type:'doughnut',data:{
+  labels:['Prev. Adm (35%)','Prev. Jud (42%)','Civil (10%)','Outros (13%)'],
+  datasets:[{data:[104899,127992,31610,39298],backgroundColor:['rgba(14,168,154,.75)','rgba(62,201,142,.75)','rgba(232,160,48,.75)','rgba(107,132,168,.5)'],borderWidth:0}]
+},options:{responsive:true,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:10,weight:'700'},formatter:(v,ctx)=>{let s=ctx.dataset.data.reduce((a,b)=>a+b,0);return Math.round(v/s*100)+'%';}}}}});
+</script>
+</body>
+</html>
