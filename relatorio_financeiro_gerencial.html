@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano Advogados — Dashboard Financeiro Jan–Mai 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+
+:root{
+  --dk:#161a1f;--nv:#1c2126;--nv2:#22272e;--nv3:#2a2f38;
+  --gd:#E8A030;--gd2:#F5C060;--gd-dim:rgba(232,160,48,.1);
+  --teal:#0EA89A;--teal2:#14C4B4;--teal-dim:rgba(14,168,154,.1);
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;--blue:#2E85D4;
+  --muted:#8899AA;--body:rgba(255,255,255,.65);
+  --card:rgba(26,32,40,.85);--border:rgba(232,160,48,.14);--border2:rgba(255,255,255,.07);
+  --r:12px;--sb:240px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(22,26,31,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);line-height:1.2}
+.sb-brand-sub{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-period{margin:.8rem 1.2rem;background:rgba(14,168,154,.09);border:1px solid rgba(14,168,154,.22);border-radius:6px;padding:.4rem .75rem;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal2);font-weight:700;text-align:center}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.74rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--gd);background:rgba(232,160,48,.06);border-left-color:var(--gd)}
+.sb-link svg{width:14px;height:14px;opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-unit{display:flex;align-items:center;gap:.55rem;padding:.42rem 1.2rem;font-size:.73rem;color:rgba(255,255,255,.45);text-decoration:none;transition:all .2s}
+.sb-unit:hover{color:#fff;background:rgba(255,255,255,.04)}
+.sb-unit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.6rem;color:var(--muted);text-align:center;line-height:1.5}
+#main{margin-left:var(--sb);flex:1;min-width:0}
+#hero{min-height:100vh;display:flex;align-items:center;padding:5rem 0 4rem;background:radial-gradient(ellipse 65% 50% at 55% 0%,rgba(14,168,154,.14) 0%,transparent 65%),radial-gradient(ellipse 30% 30% at 95% 75%,rgba(232,160,48,.07) 0%,transparent 55%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(232,160,48,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(232,160,48,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(14,168,154,.1);border:1px solid rgba(14,168,154,.3);border-radius:20px;padding:.32rem .9rem;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal2);margin-bottom:1.2rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-weight:900;font-size:clamp(2.6rem,5vw,4.6rem);line-height:.92;color:#fff;letter-spacing:-.02em}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-note{margin-top:1.1rem;font-size:.79rem;color:rgba(14,196,180,.85);background:rgba(14,168,154,.07);border:1px solid rgba(14,168,154,.2);border-radius:6px;padding:.55rem .9rem;line-height:1.5}
+.hero-sub{margin-top:.65rem;font-size:.88rem;color:rgba(255,255,255,.45);max-width:440px;line-height:1.75}
+.hero-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(22,26,31,.75);padding:1.1rem 1.3rem;transition:background .2s}
+.hk:hover{background:rgba(33,41,48,.8)}
+.hk-val{font-weight:800;font-size:1.7rem;color:var(--gd);line-height:1}
+.hk-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hk-delta{font-size:.68rem;font-weight:700;color:var(--green);margin-top:.15rem}
+.hero-vis{display:flex;align-items:center;justify-content:center}
+.vis-wrap{position:relative;width:290px;height:290px}
+.vis-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(14,168,154,.22);animation:spin 40s linear infinite}
+.vis-ring2{position:absolute;inset:26px;border-radius:50%;border:1px dashed rgba(232,160,48,.16);animation:spin 26s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vis-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:135px;height:135px;border-radius:50%;background:linear-gradient(135deg,rgba(14,168,154,.5),rgba(19,24,32,.96));border:1px solid rgba(232,160,48,.28);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 55px rgba(14,168,154,.2)}
+.vis-core-v{font-weight:900;font-size:1.9rem;color:var(--gd);line-height:1}
+.vis-core-l{font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+.vis-dot{position:absolute;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.52rem;letter-spacing:.04em;text-transform:uppercase;color:var(--gd);font-weight:700;text-align:center;line-height:1.3}
+.vd1{top:-21px;left:calc(50% - 21px)}.vd2{bottom:-21px;left:calc(50% - 21px)}
+.vd3{left:-21px;top:calc(50% - 21px)}.vd4{right:-21px;top:calc(50% - 21px)}
+@media(max-width:860px){.hero-inner{grid-template-columns:1fr}.hero-vis{display:none}}
+section{position:relative;padding:5rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.7rem;color:rgba(255,255,255,.48);max-width:580px;font-size:.88rem;line-height:1.75}
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:2rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}.ks4{grid-template-columns:repeat(4,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.ks5,.ks4{grid-template-columns:repeat(2,1fr)}.ks3{grid-template-columns:repeat(3,1fr)}}
+.kpi{background:rgba(22,26,31,.85);padding:1.2rem .9rem;text-align:center;transition:background .2s}
+.kpi:hover{background:rgba(33,41,48,.8)}
+.kval{font-weight:800;font-size:1.6rem;color:var(--gd);line-height:1}
+.kdelta{display:inline-block;font-size:.66rem;font-weight:700;padding:.1rem .44rem;border-radius:20px;margin:.2rem 0;letter-spacing:.03em}
+.d-up{background:rgba(62,201,142,.14);color:var(--green)}
+.d-dn{background:rgba(240,96,96,.1);color:var(--red)}
+.d-warn{background:rgba(245,160,48,.1);color:var(--amber)}
+.d-teal{background:rgba(14,168,154,.12);color:var(--teal2)}
+.d-blue{background:rgba(46,133,212,.12);color:var(--blue)}
+.klabel{font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.chart-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.chart-title{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.3rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.3rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.3rem}
+@media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+.leg{display:flex;gap:14px;margin-top:10px;font-size:.7rem;color:var(--muted);flex-wrap:wrap;align-items:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+.ucards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:2rem}
+@media(max-width:960px){.ucards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.ucards{grid-template-columns:1fr}}
+.ucard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;transition:transform .22s,border-color .22s,box-shadow .22s;display:block}
+.ucard:hover{transform:translateY(-5px);border-color:rgba(232,160,48,.32);box-shadow:0 16px 36px rgba(0,0,0,.32)}
+.uc-top{padding:.85rem 1.1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border2)}
+.uc-g{background:rgba(62,201,142,.06)}.uc-a{background:rgba(245,160,48,.06)}.uc-b{background:rgba(46,133,212,.06)}.uc-r{background:rgba(240,96,96,.06)}
+.uc-name{font-size:.67rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.uc-body{padding:1.1rem}
+.uc-rec{font-weight:800;font-size:1.65rem;color:var(--gd);line-height:1}
+.uc-meta{font-size:.7rem;color:var(--muted);margin:.18rem 0 .8rem}
+.pbar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.pbar-f{height:100%;border-radius:2px}
+.uc-rows{margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:.3rem}
+.uc-row{display:flex;justify-content:space-between;font-size:.74rem}
+.uc-row .lb{color:var(--muted)}
+.tv-g{color:var(--green)}.tv-r{color:var(--red)}.tv-a{color:var(--amber)}.tv-gd{color:var(--gd);font-weight:700}.tv-t{color:var(--teal2)}.tv-b{color:var(--blue)}
+.uc-link{display:flex;align-items:center;gap:.4rem;margin-top:1rem;padding:.5rem .9rem;background:var(--gd-dim);border:1px solid rgba(232,160,48,.18);border-radius:6px;font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gd);transition:background .2s}
+.ucard:hover .uc-link{background:rgba(232,160,48,.16)}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{background:rgba(22,26,31,.9);color:var(--gd);font-size:.61rem;letter-spacing:.13em;text-transform:uppercase;padding:.8rem .88rem;text-align:right;font-weight:700;border-bottom:1px solid var(--border)}
+.ftable th:first-child{text-align:left}
+.ftable td{padding:.8rem .88rem;font-size:.84rem;border-bottom:1px solid rgba(255,255,255,.04);text-align:right}
+.ftable td:first-child{text-align:left;font-weight:600;font-size:.82rem}
+.ftable tr:last-child td{font-weight:700;background:rgba(22,26,31,.5);border-top:1px solid var(--border)}
+.ftable tr:hover td{background:rgba(232,160,48,.022)}
+.nb{background:rgba(14,168,154,.05);border:1px solid rgba(14,168,154,.18);border-radius:8px;padding:.85rem 1.2rem;margin-top:1.2rem;font-size:.82rem;color:rgba(255,255,255,.58);line-height:1.65}
+.nb strong{color:var(--teal2)}
+.nb-gd{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.16)}
+.nb-gd strong{color:var(--gd2)}
+.nb-red{background:rgba(240,96,96,.04);border-color:rgba(240,96,96,.16)}
+.nb-red strong{color:#f08888}
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border2)}
+.ftable tr.total-row td{font-weight:800;background:rgba(22,26,31,.6);border-top:2px solid var(--border);font-size:.86rem}
+.ftable tr.total-row td:first-child{color:var(--gd)}
+.row-alert-g{background:rgba(232,160,48,.04)}
+.row-alert-r{background:rgba(240,96,96,.04)}
+.ebitda-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:680px){.ebitda-grid{grid-template-columns:1fr}}
+.ecard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.6rem}
+.ecard.gestao{border-color:rgba(62,201,142,.22);background:rgba(62,201,142,.03)}
+.ecard.liquido{border-color:rgba(232,160,48,.22);background:rgba(232,160,48,.03)}
+.ecard-label{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.ecard-val{font-weight:900;font-size:2.4rem;color:var(--gd);line-height:1;margin-bottom:.2rem}
+.ecard-margem{font-size:.8rem;color:var(--green);font-weight:700;margin-bottom:1rem}
+.ecard-rows{display:flex;flex-direction:column;gap:.3rem;padding-top:.9rem;border-top:1px solid var(--border2)}
+.ecard-row{display:flex;justify-content:space-between;font-size:.8rem}
+.ecard-row .lb{color:var(--muted)}
+.be-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:680px){.be-grid{grid-template-columns:1fr}}
+.be-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.be-title{font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.be-track{position:relative;height:8px;background:rgba(255,255,255,.07);border-radius:4px;margin:1rem 0;overflow:hidden}
+.be-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px}
+.be-nums{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+.be-unit-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem}
+.be-unit-label{font-size:.78rem;color:rgba(255,255,255,.6);width:90px;flex-shrink:0}
+.be-unit-track{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;position:relative}
+.be-unit-fill{height:100%;border-radius:3px}
+.be-unit-val{font-size:.72rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.hbar-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.9rem}
+.hbar-label{font-size:.78rem;color:rgba(255,255,255,.6);width:110px;flex-shrink:0}
+.hbar-track{flex:1;height:22px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.6rem;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.9);transition:width .8s ease}
+.hbar-pct{font-size:.78rem;font-weight:700;width:48px;text-align:right;flex-shrink:0}
+.inad-row{display:flex;align-items:stretch;gap:1.3rem;margin-top:1.8rem}
+@media(max-width:700px){.inad-row{flex-direction:column}}
+.inad-kpi{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
+.inad-label{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.inad-val{font-weight:800;font-size:2rem;line-height:1;margin:.2rem 0}
+.inad-sub{font-size:.8rem;color:rgba(255,255,255,.45)}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:1.8rem}
+@media(max-width:900px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+.meta-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.meta-unit{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.meta-track-wrap{position:relative;height:10px;background:rgba(255,255,255,.07);border-radius:5px;margin:.8rem 0;overflow:visible}
+.meta-track-fill{position:absolute;left:0;top:0;height:100%;border-radius:5px;transition:width .8s ease}
+.meta-target-line{position:absolute;top:-4px;width:2px;height:18px;background:rgba(255,255,255,.5);border-radius:1px}
+.meta-label-row{display:flex;justify-content:space-between;font-size:.72rem}
+.meta-label-row .lb{color:var(--muted)}
+.meta-pct{font-weight:800;font-size:1.5rem;line-height:1;margin-top:.3rem}
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
+@media(max-width:800px){.fc-grid{grid-template-columns:1fr}}
+.fc-card{border-radius:12px;padding:1.8rem 1.6rem;border:1px solid var(--border2);position:relative;overflow:hidden}
+.fc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fc-cons{background:rgba(107,132,168,.06);border-color:rgba(107,132,168,.2)}.fc-cons::before{background:var(--muted)}
+.fc-real{background:rgba(14,168,154,.05);border-color:rgba(14,168,154,.25)}.fc-real::before{background:var(--teal2)}
+.fc-agr{background:rgba(232,160,48,.05);border-color:rgba(232,160,48,.3)}.fc-agr::before{background:var(--gd)}
+.fc-eyebrow{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin-bottom:.5rem}
+.fc-cons .fc-eyebrow{color:var(--muted)}.fc-real .fc-eyebrow{color:var(--teal2)}.fc-agr .fc-eyebrow{color:var(--gd)}
+.fc-value{font-weight:900;font-size:2.6rem;line-height:1;letter-spacing:-.02em;margin-bottom:.2rem}
+.fc-cons .fc-value{color:rgba(255,255,255,.65)}.fc-real .fc-value{color:var(--teal2)}.fc-agr .fc-value{color:var(--gd)}
+.fc-tag{font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:1.2rem}
+.fc-rows{display:flex;flex-direction:column;gap:.45rem;padding-top:1rem;border-top:1px solid var(--border2)}
+.fc-row{display:flex;justify-content:space-between;font-size:.78rem}
+.fc-row .lb{color:var(--muted)}.fc-row .vl{font-weight:700}
+.fc-agr-badge{display:inline-flex;align-items:center;gap:.35rem;background:rgba(232,160,48,.12);border:1px solid rgba(232,160,48,.3);border-radius:20px;padding:.2rem .65rem;font-size:.6rem;font-weight:700;color:var(--gd);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.cfo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-top:1.8rem}
+@media(max-width:900px){.cfo-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.cfo-grid{grid-template-columns:1fr}}
+.cfo-c{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.cfo-c.full{grid-column:1/-1}
+.cfo-head{font-weight:700;font-size:.98rem;color:var(--gd);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:1px solid var(--border2)}
+.cfo-text{font-size:.84rem;color:rgba(255,255,255,.58);line-height:1.75}
+.cfo-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.cfo-list li{font-size:.82rem;color:rgba(255,255,255,.6);padding-left:1.1rem;position:relative;line-height:1.5}
+.cfo-list li::before{content:'›';position:absolute;left:0;color:var(--gd)}
+.gloss-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.8rem}
+@media(max-width:800px){.gloss-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.gloss-grid{grid-template-columns:1fr}}
+.gloss-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.3rem}
+.gloss-term{font-weight:700;font-size:.82rem;color:var(--gd2);margin-bottom:.4rem}
+.gloss-def{font-size:.81rem;color:rgba(255,255,255,.52);line-height:1.65}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--dk)}::-webkit-scrollbar-thumb{background:rgba(232,160,48,.28);border-radius:2px}
+footer{border-top:1px solid var(--border);padding:1.8rem 2.5rem;text-align:center}
+footer p{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand"><div class="sb-brand-name">Maximiano<br/>Advogados</div><div class="sb-brand-sub">Dashboard Financeiro</div></div>
+  <div class="sb-period">Jan–Mai · 2026</div>
+  <nav class="sb-nav">
+    <div class="sb-section">Painel Consolidado</div>
+    <a class="sb-link active" onclick="goTo('hero')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 2l6 6h-2v6H4V8H2z"/></svg>Início</a>
+    <a class="sb-link" onclick="goTo('s-kpis')"><svg viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="9" width="3" height="5"/><rect x="6.5" y="5" width="3" height="9"/><rect x="11" y="2" width="3" height="12"/></svg>KPIs Consolidados</a>
+    <a class="sb-link" onclick="goTo('s-comp')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 12l4-4 3 3 5-7v2h2V2h-4v2h1.5L9 9.5 6 6.5 1 11z"/></svg>2025 vs 2026</a>
+    <a class="sb-link" onclick="goTo('s-receita')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 8m-6 0a6 6 0 1 0 12 0a6 6 0 1 0-12 0" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 2v6h6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Civil vs Previdenciário</a>
+    <a class="sb-link" onclick="goTo('s-dre25')"><svg viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="2"/><rect x="2" y="5.5" width="9" height="1.5"/><rect x="2" y="8.5" width="11" height="1.5"/><rect x="2" y="11.5" width="7" height="1.5"/></svg>DRE 2025</a>
+    <a class="sb-link" onclick="goTo('s-unid')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 14V6l4-4h6l4 4v8H1zm5-8H4v2h2V6zm4 0h-2v2h2V6z"/></svg>Unidades</a>
+    <a class="sb-link" onclick="goTo('s-ebitda')"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 5v3l2 2"/></svg>EBITDA Ajustado</a>
+    <a class="sb-link" onclick="goTo('s-meta')"><svg viewBox="0 0 16 16" fill="currentColor"><rect x="7" y="2" width="2" height="12"/><rect x="5" y="10" width="6" height="2"/><rect x="5" y="6" width="6" height="2"/></svg>Metas 2026</a>
+    <a class="sb-link" onclick="goTo('s-be')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Break-Even</a>
+    <a class="sb-link" onclick="goTo('s-proj-unit')"><svg viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="9" width="3" height="5"/><rect x="6.5" y="5" width="3" height="9"/><rect x="11" y="2" width="3" height="12"/></svg>Projeção Unidades</a>
+    <a class="sb-link" onclick="goTo('s-inad')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11 4.3 13.5l1.4-4.3L2 6.5h4.5z"/></svg>Inadimplência</a>
+    <a class="sb-link" onclick="goTo('s-fore')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 12l3-5 3 2 3-4 3 7H2z"/></svg>Forecast 2026</a>
+    <a class="sb-link" onclick="goTo('s-cfo')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M3 4h10v1.5l-4 3L3 5.5V4zm0 8V7l6 4.5L15 7v5H3z" fill-rule="evenodd"/></svg>Visão CEO</a>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Relatórios por Unidade</div>
+    <a href="relatorio_financeiro_gerencial_botelhos.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--amber)"></span>Botelhos</a>
+    <a href="relatorio_financeiro_gerencial_pocos.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--green)"></span>Poços de Caldas</a>
+    <a href="relatorio_financeiro_gerencial_caboverde.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--blue)"></span>Cabo Verde</a>
+    <a href="relatorio_financeiro_gerencial_nova_resende.html" class="sb-unit"><span class="sb-unit-dot" style="background:var(--red)"></span>Nova Resende</a>
+  </nav>
+  <div class="sb-footer">Dados extraídos da DRE real<br/>Documento Confidencial</div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="badge-dot"></span>Relatório Consolidado · Jan–Mai 2026</div>
+      <h1 class="hero-title">DASHBOARD<br/><em>FINANCEIRO</em><br/>CONSOLIDADO</h1>
+      <div class="hero-note">📊 4 unidades operacionais · 5 meses fechados · Dados 100% reais da DRE · Distorções não recorrentes identificadas e isoladas · Foco em decisão de contratação e estrutura de custos.</div>
+      <p class="hero-sub">Painel estratégico para a CVO e Líderes — com inteligência de dados, análise de composição de receita (Civil vs. Previdenciário) e indicadores de maturidade financeira.</p>
+      <div class="hero-kpis">
+        <div class="hk"><div class="hk-val">R$ 1,90M</div><div class="hk-label">Receita Jan–Mai 2026</div><div class="hk-delta">▲ +70,1% vs Jan–Mai 2025</div></div>
+        <div class="hk"><div class="hk-val">R$ 765K</div><div class="hk-label">Resultado Operacional</div><div class="hk-delta">Margem real: 40,4%</div></div>
+        <div class="hk"><div class="hk-val">R$ 939K</div><div class="hk-label">EBITDA Ajustado</div><div class="hk-delta">Margem gestão: 49,5%</div></div>
+        <div class="hk"><div class="hk-val">+441%</div><div class="hk-label">Crescimento Resultado</div><div class="hk-delta">de R$ 142K para R$ 765K</div></div>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="vis-wrap">
+        <div class="vis-ring"></div><div class="vis-ring2"></div>
+        <div class="vis-core"><div class="vis-core-v">40,4%</div><div class="vis-core-l">Margem Real</div></div>
+        <div class="vis-dot vd1">R$<br/>1,90M</div>
+        <div class="vis-dot vd2">R$<br/>765K</div>
+        <div class="vis-dot vd3">4<br/>UN.</div>
+        <div class="vis-dot vd4">+441%<br/>Res.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- KPIs -->
+<section id="s-kpis" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Indicadores-Chave · Jan–Mai 2026</div>
+    <h2 class="sec-title rv d1">Panorama <em>Consolidado</em></h2>
+    <p class="sec-body rv d2">5 meses fechados de 2026 (Janeiro a Maio) comparados ao mesmo período de 2025. Eventos não recorrentes isolados — Repasse Maylon R$ 168K em 2026.</p>
+    <div class="kpi-strip ks5 rv d2">
+      <div class="kpi"><div class="kval">R$ 1,896M</div><span class="kdelta d-up">▲ +70,1%</span><div class="klabel">Receita Total Jan–Mai</div></div>
+      <div class="kpi"><div class="kval">R$ 1,130M</div><span class="kdelta d-warn">59,6% da receita</span><div class="klabel">Custos e Despesas</div></div>
+      <div class="kpi"><div class="kval">R$ 765K</div><span class="kdelta d-up">Margem 40,4%</span><div class="klabel">Resultado Operacional</div></div>
+      <div class="kpi"><div class="kval">R$ 939K</div><span class="kdelta d-teal">Ajustado ★</span><div class="klabel">EBITDA de Gestão</div></div>
+      <div class="kpi"><div class="kval">R$ 52,8K</div><span class="kdelta d-dn">vs R$ 54,9K/2025 inteiro</span><div class="klabel">Inadimplência 2026</div></div>
+    </div>
+    <div class="nb nb-gd rv d3">
+      <strong>★ EBITDA Ajustado de Gestão:</strong> Resultado de R$ 765.277 + R$ 168.110 do Repasse Maylon (não recorrente — encerramento de parceria em Botelhos, concentrado em maio com R$ 115K) + R$ 5.165 de distribuição de lucros contabilizada como custo = <strong>R$ 938.551</strong>. Margem de gestão: <strong>49,5%</strong>.
+    </div>
+    <div class="nb nb-red rv d3">
+      <strong>⚠ Repasse Maylon em 2026:</strong> já são R$ 168.110 em 5 meses (vs R$ 469.629 no ano inteiro de 2025). O mês de maio concentrou R$ 115.196, indicando que pagamentos de acerto continuam distorcendo meses individuais. Em maio, sem o Maylon, o resultado de Botelhos teria sido R$ 296.603 (margem de 68,8%).
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.5rem">
+      <div class="chart-title">Receita vs. Resultado Operacional Mensal — Jan–Mai 2026</div>
+      <canvas id="ch-mensal" height="90"></canvas>
+      <div class="leg"><span><span class="leg-dot" style="background:#E8A030"></span>Receita Bruta</span><span><span class="leg-dot" style="background:#3EC98E"></span>Resultado Positivo</span><span><span class="leg-dot" style="background:#F06060"></span>Resultado Negativo</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- COMPARATIVO 2025 vs 2026 -->
+<section id="s-comp">
+  <div class="container">
+    <div class="sec-label rv">Análise Comparativa</div>
+    <h2 class="sec-title rv d1">Jan–Mai 2025 <em>vs 2026</em></h2>
+    <p class="sec-body rv d2">Comparativo direto dos primeiros 5 meses de cada ano. A evolução de +70% na receita e +441% no resultado demonstra a transformação estrutural da operação.</p>
+    <div class="kpi-strip ks4 rv d2">
+      <div class="kpi"><div class="kval">R$ 1,114M</div><span class="kdelta d-blue">Jan–Mai 2025</span><div class="klabel">Receita 2025 (5M)</div></div>
+      <div class="kpi"><div class="kval">R$ 1,896M</div><span class="kdelta d-up">▲ +R$ 782K</span><div class="klabel">Receita 2026 (5M)</div></div>
+      <div class="kpi"><div class="kval">R$ 142K</div><span class="kdelta d-blue">Margem 12,7%</span><div class="klabel">Resultado 2025 (5M)</div></div>
+      <div class="kpi"><div class="kval">R$ 765K</div><span class="kdelta d-up">▲ +441% resultado</span><div class="klabel">Resultado 2026 (5M)</div></div>
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.5rem;overflow-x:auto">
+      <div class="chart-title">Quadro Comparativo — Jan–Mai 2025 vs 2026</div>
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Indicador</th><th>Jan–Mai 2025</th><th>Jan–Mai 2026</th><th>Variação R$</th><th>Variação %</th></tr></thead>
+        <tbody>
+          <tr><td>Receita Total</td><td>R$ 1.114.249</td><td class="tv-gd">R$ 1.895.742</td><td class="tv-g">+ R$ 781.493</td><td class="tv-g">+ 70,1%</td></tr>
+          <tr><td>Custos e Despesas</td><td>R$ 972.698</td><td class="tv-a">R$ 1.130.465</td><td class="tv-r">+ R$ 157.767</td><td class="tv-r">+ 16,2%</td></tr>
+          <tr><td>Resultado Operacional</td><td class="tv-b">R$ 141.551</td><td class="tv-g">R$ 765.277</td><td class="tv-g">+ R$ 623.726</td><td class="tv-g">+ 440,6%</td></tr>
+          <tr><td>Margem Operacional</td><td class="tv-b">12,7%</td><td class="tv-g">40,4%</td><td class="tv-g">+ 27,7 pp</td><td class="tv-g">—</td></tr>
+          <tr><td>Pico de Faturamento</td><td class="tv-a">Mar/25: R$ 318K</td><td class="tv-gd">Mai/26: R$ 594K</td><td class="tv-g">+ R$ 276K</td><td class="tv-g">+ 86,7%</td></tr>
+          <tr><td><strong>EBITDA Ajustado de Gestão</strong></td><td>—</td><td class="tv-gd">R$ 938.551</td><td>—</td><td class="tv-gd">Margem 49,5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nb rv d3">
+      <strong>Leitura-chave:</strong> a receita cresceu 70,1% enquanto os custos subiram apenas 16,2% — clássica alavancagem operacional. A margem saltou de 12,7% para 40,4%, mostrando que a estrutura de custos está controlada e cada real adicional de receita converte em resultado com alta eficiência. O mês de maio/2026 (R$ 594K) foi o maior mês individual da história do grupo.
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.3rem">
+      <div class="chart-title">Receita Mensal — Jan–Mai 2025 vs 2026</div>
+      <canvas id="ch-comp" height="95"></canvas>
+      <div class="leg"><span><span class="leg-dot" style="background:rgba(46,133,212,.7)"></span>2025</span><span><span class="leg-dot" style="background:rgba(232,160,48,.8)"></span>2026 Receita</span><span><span class="leg-dot" style="background:rgba(62,201,142,.8)"></span>2026 Resultado</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- COMPOSIÇÃO DA RECEITA: CIVIL vs PREVIDENCIÁRIO -->
+<section id="s-receita" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Estratégia de Receita</div>
+    <h2 class="sec-title rv d1">Civil <em>vs Previdenciário</em></h2>
+    <p class="sec-body rv d2">A diversificação de receita é prioridade estratégica. Aqui está a evolução da composição — onde o dinheiro está vindo e quanto o civil já representa.</p>
+    <div class="kpi-strip ks4 rv d2">
+      <div class="kpi"><div class="kval">82,6%</div><span class="kdelta d-teal">Prev. Adm + Jud</span><div class="klabel">Previdenciário 2026</div></div>
+      <div class="kpi"><div class="kval">11,4%</div><span class="kdelta d-warn">R$ 215K</span><div class="klabel">Civil 2026</div></div>
+      <div class="kpi"><div class="kval">15,7%</div><span class="kdelta d-blue">Jan–Mai 2025</span><div class="klabel">Civil era em 2025*</div></div>
+      <div class="kpi"><div class="kval">-4,3pp</div><span class="kdelta d-dn">▼ queda</span><div class="klabel">Variação Civil</div></div>
+    </div>
+    <div class="nb nb-red rv d3">
+      <strong>⚠ Civil diminuiu, não cresceu:</strong> a participação do civil caiu de 15,7% (Jan-Mai/25) para 11,4% (Jan-Mai/26) — na contramão da estratégia de expansão. O crescimento brutal do previdenciário judicial (+134% no período, de R$ 429K para R$ 1.011K) "diluiu" o civil. Em termos absolutos, o civil cresceu 23,4% (de R$ 174K para R$ 215K), mas está muito abaixo do ritmo do previdenciário. *Nota: 2025 completo sem inventário Poços (R$ 312K), civil era 15,5%.*
+    </div>
+    <div class="g2 rv d3">
+      <div class="chart-box">
+        <div class="chart-title">Composição da Receita — Jan–Mai 2026</div>
+        <canvas id="ch-comp-receita" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Evolução Mensal — Civil vs Prev. 2026</div>
+        <canvas id="ch-civil-mensal" height="220"></canvas>
+      </div>
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.3rem;overflow-x:auto">
+      <div class="chart-title">Detalhamento por Categoria de Receita — Jan–Mai 2025 vs 2026</div>
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Categoria</th><th>Jan–Mai 2025</th><th>% 2025</th><th>Jan–Mai 2026</th><th>% 2026</th><th>Variação</th></tr></thead>
+        <tbody>
+          <tr><td>Prev. Administrativo</td><td>R$ 443.419</td><td>39,8%</td><td class="tv-gd">R$ 553.891</td><td class="tv-gd">29,2%</td><td class="tv-g">+24,9%</td></tr>
+          <tr><td>Prev. Judicial</td><td>R$ 428.751</td><td>38,5%</td><td class="tv-gd">R$ 1.011.270</td><td class="tv-gd">53,3%</td><td class="tv-g">+135,9%</td></tr>
+          <tr><td>Honorário Civil</td><td>R$ 174.427</td><td>15,7%</td><td class="tv-a">R$ 215.317</td><td class="tv-a">11,4%</td><td class="tv-g">+23,4%</td></tr>
+          <tr><td>Consultas/Serv./Taxas/MEI</td><td>R$ 56.489</td><td>5,1%</td><td>R$ 105.854</td><td>5,6%</td><td class="tv-g">+87,4%</td></tr>
+          <tr><td>Trabalhista + Criminal</td><td>R$ 11.162</td><td>1,0%</td><td>R$ 12.718</td><td>0,7%</td><td class="tv-g">+13,9%</td></tr>
+        </tbody>
+        <tfoot><tr class="total-row"><td>TOTAL</td><td>R$ 1.114.249</td><td>100%</td><td class="tv-gd">R$ 1.895.742</td><td class="tv-gd">100%</td><td class="tv-g">+70,1%</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="nb nb-gd rv d3">
+      <strong>Para crescer o civil de 11% para 20%:</strong> mantendo o previdenciário no ritmo atual (~R$ 313K/mês), seria necessário R$ 78K/mês adicionais de civil (vs. média atual de R$ 43K/mês). A expansão civil com os 4 advogados especializados, a frente de inventário/sucessão e os contratos/dissolução societária precisam acelerar — o crescimento orgânico de 23% está abaixo do necessário para mudar a composição do portfólio.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- DRE 2025 -->
+<section id="s-dre25">
+  <div class="container">
+    <div class="sec-label rv">Histórico Real</div>
+    <h2 class="sec-title rv d1">DRE Consolidado <em>2025</em></h2>
+    <p class="sec-body rv d2">Todos os 12 meses de 2025. <strong style="color:var(--gd)">Junho</strong> distorcido pelo honorário civil atípico de R$ 312K em Poços. <strong style="color:var(--red)">Novembro</strong> com acerto Maylon R$ 250K em Botelhos.</p>
+    <div class="table-wrap rv d2" style="margin-top:1.5rem">
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Mês</th><th>Receita</th><th>Custos</th><th>Resultado</th><th>Margem</th><th>Obs.</th></tr></thead>
+        <tbody>
+          <tr><td>Janeiro</td><td>R$ 188.655</td><td class="tv-r">-R$ 144.362</td><td class="tv-g">R$ 44.293</td><td class="tv-g">23,5%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr><td>Fevereiro</td><td>R$ 194.611</td><td class="tv-r">-R$ 167.443</td><td class="tv-g">R$ 27.168</td><td class="tv-g">14,0%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr><td>Março</td><td>R$ 318.137</td><td class="tv-r">-R$ 211.365</td><td class="tv-g">R$ 106.772</td><td class="tv-g">33,6%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">Pico judicial</td></tr>
+          <tr><td>Abril</td><td>R$ 265.738</td><td class="tv-r">-R$ 282.679</td><td class="tv-r">-R$ 16.940</td><td class="tv-r">-6,4%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">Distrib. lucros R$ 57K</td></tr>
+          <tr><td>Maio</td><td>R$ 147.108</td><td class="tv-r">-R$ 166.849</td><td class="tv-r">-R$ 19.741</td><td class="tv-r">-13,4%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">Receita baixa</td></tr>
+          <tr class="row-alert-g"><td class="tv-gd">⭐ Junho</td><td class="tv-gd">R$ 597.887</td><td class="tv-r">-R$ 215.002</td><td class="tv-gd">R$ 382.885</td><td class="tv-gd">64,0%</td><td style="color:var(--gd);font-size:.73rem;font-weight:600">Inventário R$ 312K Poços — atípico</td></tr>
+          <tr><td>Julho</td><td>R$ 320.813</td><td class="tv-r">-R$ 295.654</td><td class="tv-g">R$ 25.160</td><td class="tv-g">7,8%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr><td>Agosto</td><td>R$ 327.473</td><td class="tv-r">-R$ 255.867</td><td class="tv-g">R$ 71.606</td><td class="tv-g">21,9%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr><td>Setembro</td><td>R$ 370.617</td><td class="tv-r">-R$ 275.178</td><td class="tv-g">R$ 95.439</td><td class="tv-g">25,8%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr><td>Outubro</td><td>R$ 238.978</td><td class="tv-r">-R$ 259.573</td><td class="tv-r">-R$ 20.596</td><td class="tv-r">-8,6%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+          <tr class="row-alert-r"><td class="tv-r">⚠ Novembro</td><td>R$ 272.421</td><td class="tv-r">-R$ 509.117</td><td class="tv-r">-R$ 236.695</td><td class="tv-r">-86,9%</td><td style="color:var(--red);font-size:.73rem;font-weight:600">Maylon R$ 250K — extraordinário</td></tr>
+          <tr><td>Dezembro</td><td>R$ 405.198</td><td class="tv-r">-R$ 300.172</td><td class="tv-g">R$ 105.027</td><td class="tv-g">25,9%</td><td style="color:rgba(255,255,255,.3);font-size:.75rem">—</td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row"><td>TOTAL 2025</td><td>R$ 3.647.637</td><td class="tv-r">-R$ 3.083.260</td><td class="tv-g">R$ 564.377</td><td class="tv-g">15,5%</td><td></td></tr>
+          <tr class="total-row" style="opacity:.65;font-size:.78rem"><td style="color:var(--teal2)">Ex-Distorções*</td><td style="color:var(--teal2)">R$ 3.024.045</td><td></td><td style="color:var(--teal2)">R$ 417.188</td><td style="color:var(--teal2)">13,8%</td><td></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">*Ex-Distorções: exclui Jun (inventário R$ 312K) e Nov (Maylon R$ 250K). Receita: -R$ 624K. Resultado ajustado: R$ 417K.</p>
+    <div class="chart-box rv d2" style="margin-top:1.5rem">
+      <div class="chart-title">Receita Mensal 2025 — Consolidado (R$)</div>
+      <canvas id="ch-rec25" height="85"></canvas>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- UNIDADES -->
+<section id="s-unid" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Análise por Unidade</div>
+    <h2 class="sec-title rv d1">Desempenho <em>Individualizado</em></h2>
+    <p class="sec-body rv d2">Jan–Mai 2026. Clique em cada unidade para o relatório completo com DRE detalhada.</p>
+    <div class="ucards">
+      <a href="relatorio_financeiro_gerencial_botelhos.html" class="ucard rv d1">
+        <div class="uc-top uc-a"><span class="uc-name">Botelhos</span><span class="kdelta d-warn" style="font-size:.6rem">65,8% da receita</span></div>
+        <div class="uc-body">
+          <div class="uc-rec">R$ 1,25M</div><div class="uc-meta">Motor do grupo · Mai pico R$ 431K</div>
+          <div class="pbar"><div class="pbar-f" style="width:100%;background:var(--amber)"></div></div>
+          <div class="uc-rows">
+            <div class="uc-row"><span class="lb">Resultado Jan–Mai</span><span class="tv-g">R$ 536.253</span></div>
+            <div class="uc-row"><span class="lb">Margem média</span><span class="tv-g">43,0%</span></div>
+            <div class="uc-row"><span class="lb">Repasse Maylon</span><span class="tv-r">R$ 159.134 ⚠</span></div>
+            <div class="uc-row"><span class="lb">vs Jan–Mai 2025</span><span class="tv-g">▲ +90,8%</span></div>
+          </div>
+          <div class="uc-link">Ver relatório completo →</div>
+        </div>
+      </a>
+      <a href="relatorio_financeiro_gerencial_pocos.html" class="ucard rv d2">
+        <div class="uc-top uc-g"><span class="uc-name">Poços de Caldas</span><span class="kdelta d-up" style="font-size:.6rem">16,0% da receita</span></div>
+        <div class="uc-body">
+          <div class="uc-rec">R$ 304K</div><div class="uc-meta">Mar pico R$ 96K · Alta variabilidade</div>
+          <div class="pbar"><div class="pbar-f" style="width:24.4%;background:var(--green)"></div></div>
+          <div class="uc-rows">
+            <div class="uc-row"><span class="lb">Resultado Jan–Mai</span><span class="tv-a">R$ 33.363</span></div>
+            <div class="uc-row"><span class="lb">Margem média</span><span class="tv-a">11,0%</span></div>
+            <div class="uc-row"><span class="lb">Mês crítico</span><span class="tv-r">Fev: -R$ 31.712</span></div>
+            <div class="uc-row"><span class="lb">vs Jan–Mai 2025</span><span class="tv-g">▲ +37,5%</span></div>
+          </div>
+          <div class="uc-link">Ver relatório completo →</div>
+        </div>
+      </a>
+      <a href="relatorio_financeiro_gerencial_caboverde.html" class="ucard rv d3">
+        <div class="uc-top uc-b"><span class="uc-name">Cabo Verde</span><span class="kdelta d-blue" style="font-size:.6rem">16,6% da receita</span></div>
+        <div class="uc-body">
+          <div class="uc-rec">R$ 316K</div><div class="uc-meta">Joia da coroa · Mai pico R$ 98K</div>
+          <div class="pbar"><div class="pbar-f" style="width:25.3%;background:var(--blue)"></div></div>
+          <div class="uc-rows">
+            <div class="uc-row"><span class="lb">Resultado Jan–Mai</span><span class="tv-g">R$ 200.546</span></div>
+            <div class="uc-row"><span class="lb">Margem média</span><span class="tv-g">63,5%</span></div>
+            <div class="uc-row"><span class="lb">Melhor margem</span><span class="tv-g">Mai: 75,9%</span></div>
+            <div class="uc-row"><span class="lb">vs Jan–Mai 2025</span><span class="tv-g">▲ +57,0%</span></div>
+          </div>
+          <div class="uc-link">Ver relatório completo →</div>
+        </div>
+      </a>
+      <a href="relatorio_financeiro_gerencial_nova_resende.html" class="ucard rv d4">
+        <div class="uc-top uc-r"><span class="uc-name">Nova Resende</span><span class="kdelta d-dn" style="font-size:.6rem">0,3% da receita</span></div>
+        <div class="uc-body">
+          <div class="uc-rec">R$ 4,9K</div><div class="uc-meta">Reestruturação em andamento</div>
+          <div class="pbar"><div class="pbar-f" style="width:2%;background:var(--red)"></div></div>
+          <div class="uc-rows">
+            <div class="uc-row"><span class="lb">Resultado Jan–Mai</span><span class="tv-r">-R$ 29.864</span></div>
+            <div class="uc-row"><span class="lb">Custo fixo mensal</span><span class="tv-a">~R$ 6.950</span></div>
+            <div class="uc-row"><span class="lb">Fase atual</span><span class="tv-a">Investimento</span></div>
+            <div class="uc-row"><span class="lb">Rafael (Líder Jul/26)</span><span class="tv-t">Em transição</span></div>
+          </div>
+          <div class="uc-link">Ver relatório completo →</div>
+        </div>
+      </a>
+    </div>
+    <div class="chart-box rv" style="margin-top:2rem;overflow-x:auto">
+      <div class="chart-title">Comparativo Consolidado por Unidade — Jan–Mai 2026</div>
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Unidade</th><th>Receita</th><th>Custos</th><th>Resultado</th><th>Margem</th><th>Part. Receita</th><th>vs 2025</th></tr></thead>
+        <tbody>
+          <tr><td>Botelhos</td><td>R$ 1.246.464</td><td>R$ 710.211</td><td class="tv-g">R$ 536.253</td><td class="tv-g">43,0%</td><td>65,8%</td><td class="tv-g">▲ +90,8%</td></tr>
+          <tr><td>Cabo Verde</td><td>R$ 315.612</td><td>R$ 115.066</td><td class="tv-g">R$ 200.546</td><td class="tv-g">63,5%</td><td>16,6%</td><td class="tv-g">▲ +57,0%</td></tr>
+          <tr><td>Poços de Caldas</td><td>R$ 303.799</td><td>R$ 270.435</td><td class="tv-a">R$ 33.363</td><td class="tv-a">11,0%</td><td>16,0%</td><td class="tv-g">▲ +37,5%</td></tr>
+          <tr><td>Nova Resende</td><td>R$ 4.889</td><td>R$ 34.753</td><td class="tv-r">-R$ 29.864</td><td class="tv-r">—</td><td>0,3%</td><td class="tv-r">▼ -87,5%</td></tr>
+          <tr><td><strong>CONSOLIDADO</strong></td><td class="tv-gd">R$ 1.895.742</td><td>R$ 1.130.465</td><td class="tv-gd">R$ 765.277</td><td class="tv-gd">40,4%</td><td class="tv-gd">100%</td><td class="tv-g">▲ +70,1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- EBITDA -->
+<section id="s-ebitda">
+  <div class="container">
+    <div class="sec-label rv">Resultado Duplo</div>
+    <h2 class="sec-title rv d1">EBITDA <em>Ajustado</em> e Resultado Real</h2>
+    <p class="sec-body rv d2">Duas leituras: <strong style="color:var(--green)">Gestão Operacional</strong> (capacidade real antes de eventos não recorrentes) e <strong style="color:var(--gd)">Resultado Líquido Real</strong> (o que ficou no caixa).</p>
+    <div class="ebitda-grid rv d2">
+      <div class="ecard gestao">
+        <div class="ecard-label">EBITDA de Gestão</div>
+        <div class="ecard-val">R$ 938.551</div>
+        <div class="ecard-margem">Margem de Gestão: 49,5%</div>
+        <div class="ecard-rows">
+          <div class="ecard-row"><span class="lb">Resultado Operacional Real</span><span class="tv-g">+ R$ 765.277</span></div>
+          <div class="ecard-row"><span class="lb">(+) Repasse Maylon</span><span class="tv-a">+ R$ 168.110</span></div>
+          <div class="ecard-row"><span class="lb">(+) Distribuição Lucros</span><span class="tv-a">+ R$ 5.165</span></div>
+          <div class="ecard-row"><span class="lb"><strong>= EBITDA Ajustado</strong></span><span class="tv-gd">R$ 938.551</span></div>
+        </div>
+      </div>
+      <div class="ecard liquido">
+        <div class="ecard-label">Resultado Líquido Real</div>
+        <div class="ecard-val">R$ 765.277</div>
+        <div class="ecard-margem">Margem Líquida: 40,4%</div>
+        <div class="ecard-rows">
+          <div class="ecard-row"><span class="lb">Receita Total</span><span>R$ 1.895.742</span></div>
+          <div class="ecard-row"><span class="lb">(-) Custos e Despesas</span><span class="tv-r">-R$ 1.130.465</span></div>
+          <div class="ecard-row"><span class="lb">Incl. Maylon (R$ 168K)</span><span class="tv-r">dentro dos custos</span></div>
+          <div class="ecard-row"><span class="lb"><strong>= Resultado Real</strong></span><span class="tv-gd">R$ 765.277</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- INADIMPLÊNCIA -->
+<section id="s-inad" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Gestão de Crédito</div>
+    <h2 class="sec-title rv d1">Painel de <em>Inadimplência</em></h2>
+    <p class="sec-body rv d2">Dados atualizados com planilha de inadimplência até maio/2026, incluindo aberturas de abril e maio.</p>
+    <div class="inad-row rv d2">
+      <div class="inad-kpi" style="border-color:rgba(240,96,96,.2);background:rgba(240,96,96,.03)">
+        <div class="inad-label">Estoque 2025 (ano completo)</div>
+        <div class="inad-val tv-r">R$ 54.891,62</div>
+        <div class="inad-sub">Acumulado em Botelhos, Cabo Verde e Poços</div>
+        <div style="margin-top:.5rem;font-size:.78rem;color:var(--muted)">Bot: R$ 34.686 · CV: R$ 17.096 · Poços: R$ 3.110</div>
+      </div>
+      <div class="inad-kpi" style="border-color:rgba(240,96,96,.25);background:rgba(240,96,96,.04)">
+        <div class="inad-label">Estoque 2026 (Jan–Mai atualizado)</div>
+        <div class="inad-val tv-r">R$ 52.775,48</div>
+        <div class="inad-sub">5 meses — já 96% do total de 2025 inteiro</div>
+        <div style="margin-top:.5rem;font-size:.78rem;color:var(--muted)">Bot: R$ 29.966 · Poços: R$ 18.486 · CV: R$ 4.323</div>
+      </div>
+      <div class="inad-kpi" style="border-color:rgba(14,168,154,.2);background:rgba(14,168,154,.03)">
+        <div class="inad-label">Inadimplência Histórica Total</div>
+        <div class="inad-val tv-t">R$ 147.847</div>
+        <div class="inad-sub">Acumulado desde 2016</div>
+        <div style="margin-top:.5rem;font-size:.78rem;color:var(--muted)">Bot: R$ 86.899 · Poços: R$ 33.624 · CV: R$ 27.324</div>
+      </div>
+    </div>
+    <div class="nb nb-red rv d3">
+      <strong>🚨 Alerta crítico — Inadimplência 2026:</strong> em apenas 5 meses, R$ 52.775 de novos devedores — ritmo de R$ 10.555/mês. Se mantido, o ano fecha em <strong>R$ 127K</strong>, mais que o dobro de 2025. <strong>Poços de Caldas</strong> é o maior alerta: saltou de R$ 3.110 em 2025 inteiro para R$ 18.486 em 5 meses — aumento de 494%. Botelhos concentra R$ 29.966 (56,8% do estoque 2026). Ação imediata de cobrança e política de crédito são indispensáveis.
+    </div>
+    <div class="chart-box rv d2" style="margin-top:1.3rem">
+      <div class="chart-title">Evolução do Estoque de Inadimplência por Ano</div>
+      <canvas id="ch-inad" height="90"></canvas>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- TERMÔMETRO DE METAS -->
+<section class="sec-alt" id="s-meta">
+  <div class="container">
+    <div class="sec-label rv">Performance vs. Meta</div>
+    <h2 class="sec-title rv d1">Termômetro <em>de Metas 2026</em></h2>
+    <p class="sec-body rv d2">Confronto do faturamento real dos 5 primeiros meses contra a meta anual de R$ 5.000.000 definida pela liderança.</p>
+    <div class="chart-box rv d2" style="margin-top:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+        <div>
+          <div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:700">🎯 Meta Anual Estratégica — 2026</div>
+          <div style="font-weight:900;font-size:2.8rem;color:var(--gd);line-height:1;margin-top:.3rem">R$ 5.000.000</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Objetivo definido pela Sócia para o exercício completo</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal2);font-weight:700">Realizado Jan–Mai (5 meses)</div>
+          <div style="font-weight:900;font-size:2.4rem;color:var(--teal2);line-height:1;margin-top:.3rem">R$ 1.895.742</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">37,9% da meta anual · ritmo: 12 meses = R$ 4,55M</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:.3rem">
+        <span>Jan–Mai 2026 (concluído)</span><span>Jun–Dez 2026 (7 meses restantes)</span>
+      </div>
+      <div style="height:18px;background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden;position:relative">
+        <div style="width:37.9%;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:9px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;margin-top:.4rem">
+        <span style="color:var(--green);font-weight:700">R$ 1.895.742 realizado</span>
+        <span style="color:var(--red);font-weight:700">Falta: R$ 3.104.258</span>
+        <span style="color:var(--muted)">Meta: R$ 5.000.000</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:1.5rem;background:var(--border);border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+        <div style="background:rgba(22,26,31,.8);padding:1rem;text-align:center">
+          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem">Ritmo Atual (5M)</div>
+          <div style="font-weight:800;font-size:1.4rem;color:var(--teal2)">R$ 379K<span style="font-size:.75rem;font-weight:400">/mês</span></div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">Projeção anual: R$ 4,55M</div>
+        </div>
+        <div style="background:rgba(22,26,31,.8);padding:1rem;text-align:center">
+          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem">Necessário (Jun–Dez)</div>
+          <div style="font-weight:800;font-size:1.4rem;color:var(--red)">R$ 443K<span style="font-size:.75rem;font-weight:400">/mês</span></div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">+17% sobre o ritmo atual</div>
+        </div>
+        <div style="background:rgba(22,26,31,.8);padding:1rem;text-align:center">
+          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem">Gap Mensal a Fechar</div>
+          <div style="font-weight:800;font-size:1.4rem;color:var(--red)">R$ 64K<span style="font-size:.75rem;font-weight:400">/mês</span></div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">Adicional necessário por mês</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.3rem">
+      <div class="chart-title">Projeção Acumulada vs. Meta R$ 5M — Exercício 2026</div>
+      <canvas id="ch-meta5m" height="80"></canvas>
+      <div class="leg"><span><span class="leg-dot" style="background:rgba(62,201,142,.8)"></span>Realizado (Jan–Mai)</span><span><span class="leg-dot" style="background:rgba(232,160,48,.5)"></span>Projeção ritmo atual</span><span><span class="leg-dot" style="background:rgba(14,168,154,.7)"></span>Meta R$ 5M</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- BREAK-EVEN -->
+<section id="s-be">
+  <div class="container">
+    <div class="sec-label rv">Ponto de Equilíbrio</div>
+    <h2 class="sec-title rv d1">Break-Even <em>por Unidade</em></h2>
+    <p class="sec-body rv d2">Receita mínima mensal para cobrir todos os custos. Acima do break-even = lucro. Folga = quanto a receita está acima do BE.</p>
+    <div class="be-grid rv d2">
+      <div class="be-card">
+        <div class="be-title">Consolidado — Break-Even Mensal</div>
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.2rem">
+          <span style="color:var(--muted)">Break-Even Mensal</span>
+          <span class="tv-t" style="font-weight:700">R$ 226.093/mês</span>
+        </div>
+        <div class="be-track"><div class="be-fill" style="width:60%;background:linear-gradient(90deg,var(--teal),var(--green))"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin:1rem 0 .3rem">
+          <span style="color:var(--muted)">Receita média real</span>
+          <span class="tv-g" style="font-weight:700">R$ 379.148/mês</span>
+        </div>
+        <div class="be-track" style="height:10px"><div class="be-fill" style="width:100%;background:linear-gradient(90deg,var(--green),#19e090)"></div></div>
+        <div class="be-nums"><span>R$ 0</span><span style="color:var(--teal2)">BE: R$ 226K</span><span style="color:var(--green)">Receita: R$ 379K</span></div>
+        <div class="nb nb-gd" style="margin-top:.8rem;font-size:.77rem">
+          A receita média de <strong>R$ 379K</strong> está <strong>R$ 153K (67,7%) acima do break-even</strong>. Folga sólida — o grupo suporta até 40% de queda de receita antes de entrar em prejuízo.
+        </div>
+      </div>
+      <div class="be-card">
+        <div class="be-title">Break-Even por Unidade — Mensal</div>
+        <div style="margin-top:.5rem">
+          <div class="be-unit-row"><span class="be-unit-label" style="color:var(--amber)">Botelhos</span><div class="be-unit-track"><div class="be-unit-fill" style="width:100%;background:var(--amber)"></div></div><span class="be-unit-val tv-a">R$ 142K</span></div>
+          <div style="font-size:.71rem;color:var(--muted);margin:-6px 0 8px 90px">Receita: R$ 249K · Folga: R$ 107K/mês (75,4%)</div>
+          <div class="be-unit-row"><span class="be-unit-label" style="color:var(--blue)">Cabo Verde</span><div class="be-unit-track"><div class="be-unit-fill" style="width:16%;background:var(--blue)"></div></div><span class="be-unit-val tv-b">R$ 23,0K</span></div>
+          <div style="font-size:.71rem;color:var(--muted);margin:-6px 0 8px 90px">Receita: R$ 63K · Folga: R$ 40K/mês (174%)</div>
+          <div class="be-unit-row"><span class="be-unit-label" style="color:var(--green)">Poços</span><div class="be-unit-track"><div class="be-unit-fill" style="width:38%;background:var(--green)"></div></div><span class="be-unit-val tv-g">R$ 54,1K</span></div>
+          <div style="font-size:.71rem;color:var(--muted);margin:-6px 0 8px 90px">Receita: R$ 60,8K · Folga estreita: R$ 6,7K/mês (12,3%)</div>
+          <div class="be-unit-row"><span class="be-unit-label" style="color:var(--red)">Nova Resende</span><div class="be-unit-track"><div class="be-unit-fill" style="width:5%;background:var(--red)"></div></div><span class="be-unit-val tv-r">R$ 6,95K</span></div>
+          <div style="font-size:.71rem;color:var(--muted);margin:-6px 0 8px 90px">Receita: R$ 978 · <strong style="color:var(--red)">Abaixo do BE — fase investimento</strong></div>
+        </div>
+        <div class="nb nb-red" style="margin-top:1rem;font-size:.77rem">
+          <strong>Poços:</strong> folga de apenas R$ 6,7K/mês (12,3%). Com a saída do Augusto e do Rafael, é essencial monitorar se os custos caem proporcionalmente. Qualquer rescisório pode levar ao negativo.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- PROJEÇÃO POR UNIDADE -->
+<section class="sec-alt" id="s-proj-unit">
+  <div class="container">
+    <div class="sec-label rv">Projeção por Unidade</div>
+    <h2 class="sec-title rv d1">Fechamento <em>2026 Projetado</em></h2>
+    <p class="sec-body rv d2">Projeção de receita anual por unidade, baseada no ritmo dos 5 meses realizados e nos ajustes conhecidos (novas contratações, saídas, Nova Resende com Rafael).</p>
+    <div class="chart-box rv d2" style="margin-top:1.5rem;overflow-x:auto">
+      <table class="ftable">
+        <thead><tr><th style="text-align:left">Unidade</th><th>Realizado (5M)</th><th>Média/Mês</th><th>Projeção Conserv.</th><th>Projeção Realista</th><th>Meta CVO</th></tr></thead>
+        <tbody>
+          <tr><td>Botelhos</td><td>R$ 1.246.464</td><td>R$ 249.293</td><td>R$ 2.740K</td><td class="tv-gd">R$ 2.990K</td><td>R$ 1.863K</td></tr>
+          <tr><td>Cabo Verde</td><td>R$ 315.612</td><td>R$ 63.122</td><td>R$ 694K</td><td class="tv-gd">R$ 757K</td><td>R$ 1.250K</td></tr>
+          <tr><td>Poços de Caldas</td><td>R$ 303.799</td><td>R$ 60.760</td><td>R$ 668K</td><td class="tv-gd">R$ 729K</td><td>R$ 1.742K</td></tr>
+          <tr><td>Nova Resende</td><td>R$ 4.889</td><td>R$ 978</td><td>R$ 55K</td><td class="tv-a">R$ 85K</td><td>R$ 146K</td></tr>
+          <tr class="total-row"><td>CONSOLIDADO</td><td class="tv-gd">R$ 1.895.742</td><td class="tv-gd">R$ 379K</td><td>R$ 3.907K</td><td class="tv-gd">R$ 4.200K</td><td class="tv-gd">R$ 5.000K</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nb nb-gd rv d3">
+      <strong>Premissas da projeção realista:</strong> Botelhos mantém ritmo atual (R$ 249K/mês), Cabo Verde cresce ~5% com nova contratação (R$ 63→67K/mês), Poços estabiliza no ritmo atual (R$ 61K/mês), Nova Resende inicia receita de R$ 10-15K/mês a partir de agosto com Rafael. A projeção conservadora desconta 10% por sazonalidade e transições de equipe.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- FORECAST -->
+<section id="s-fore">
+  <div class="container">
+    <div class="sec-label rv">Projeções</div>
+    <h2 class="sec-title rv d1">Forecast <em>2026</em></h2>
+    <p class="sec-body rv d2">Três cenários baseados nos 5 meses realizados. Meta R$ 5M da CVO atualizada com ritmo real. <em style="font-size:.78rem;color:var(--red)">⚠ Estimativas — não substituem planejamento formal.</em></p>
+    <div class="fc-grid rv d2">
+      <div class="fc-card fc-cons">
+        <div class="fc-eyebrow">Cenário Conservador</div>
+        <div class="fc-value">R$ 3,9M</div>
+        <div class="fc-tag">Sazonalidade desfavorável</div>
+        <div class="fc-rows">
+          <div class="fc-row"><span class="lb">Receita projetada</span><span class="vl">R$ 3,90M</span></div>
+          <div class="fc-row"><span class="lb">Ritmo jun–dez</span><span class="vl">~R$ 286K/mês</span></div>
+          <div class="fc-row"><span class="lb">Margem estimada</span><span class="vl">25–30%</span></div>
+        </div>
+      </div>
+      <div class="fc-card fc-real">
+        <div class="fc-eyebrow">★ Cenário Realista</div>
+        <div class="fc-value">R$ 4,2M</div>
+        <div class="fc-tag">Ritmo ajustado por sazonalidade</div>
+        <div class="fc-rows">
+          <div class="fc-row"><span class="lb">Receita projetada</span><span class="vl">R$ 4,20M</span></div>
+          <div class="fc-row"><span class="lb">Ritmo jun–dez</span><span class="vl">R$ 329K/mês</span></div>
+          <div class="fc-row"><span class="lb">Margem estimada</span><span class="vl">30–35%</span></div>
+        </div>
+      </div>
+      <div class="fc-card fc-agr">
+        <div class="fc-agr-badge">⭐ Meta CVO</div>
+        <div class="fc-eyebrow">Cenário Agressivo</div>
+        <div class="fc-value">R$ 5,0M</div>
+        <div class="fc-tag">+37% sobre 2025</div>
+        <div class="fc-rows">
+          <div class="fc-row"><span class="lb">Receita projetada</span><span class="vl" style="color:var(--gd)">R$ 5.000.000</span></div>
+          <div class="fc-row"><span class="lb">Ritmo jun–dez</span><span class="vl" style="color:var(--gd)">R$ 443K/mês</span></div>
+          <div class="fc-row"><span class="lb">Gap mensal</span><span class="vl" style="color:var(--red)">+R$ 64K/mês</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-box rv d3" style="margin-top:1.5rem">
+      <div class="chart-title">Receita Mensal 2026 — Realizado + Cenários vs 2025 (ref.)</div>
+      <canvas id="ch-forecast" height="90"></canvas>
+      <div class="leg"><span><span class="leg-dot" style="background:rgba(14,196,180,.85)"></span>Realizado 2026</span><span><span class="leg-dot" style="background:rgba(107,132,168,.5)"></span>Conservador</span><span><span class="leg-dot" style="background:rgba(46,133,212,.6)"></span>Realista</span><span><span class="leg-dot" style="background:rgba(232,160,48,.75)"></span>Meta R$ 5M</span><span><span class="leg-dot" style="background:rgba(255,255,255,.18)"></span>2025 (ref.)</span></div>
+    </div>
+    <div class="nb nb-gd rv d3">
+      <strong>Diagnóstico Meta R$ 5M:</strong> o cenário realista projeta R$ 4,2M — R$ 800K abaixo da meta. Para atingir R$ 5M, os 7 meses restantes precisam de R$ 443K/mês. Maio/2026 já mostrou que é possível (R$ 594K), mas esse foi um mês atípico com previd. judicial concentrado. O cenário otimista (R$ 4,55M) mantém o ritmo atual e depende de meses fortes no 2S2026.
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- VISÃO CEO -->
+<section id="s-cfo" class="sec-alt">
+  <div class="container">
+    <div class="sec-label rv">Análise Estratégica</div>
+    <h2 class="sec-title rv d1">Visão <em>CEO</em></h2>
+    <p class="sec-body rv d2">Diagnóstico executivo com foco em <strong style="color:var(--gd)">contratação, estrutura de custos e ações imediatas</strong>.</p>
+    <div class="cfo-grid rv d2">
+      <div class="cfo-c full">
+        <div class="cfo-head">📋 Diagnóstico Executivo — Jan–Mai 2026</div>
+        <div class="cfo-text">
+          Os primeiros 5 meses de 2026 consolidam uma <strong style="color:var(--green)">transformação real de rentabilidade</strong>. A receita cresceu 70,1% e o resultado operacional 441%, com margem de 40,4% — o grupo gera quase R$ 153K de resultado por mês, vs. R$ 28K no mesmo período de 2025.
+          <br/><br/>
+          <strong style="color:var(--gd)">Cabo Verde é a unidade mais eficiente:</strong> margem de 63,5%, com maio atingindo 75,9%. Custos baixos pós-obra e receita crescente. É a unidade com maior capacidade de absorver contratação sem comprometer margem.
+          <br/><br/>
+          <strong style="color:var(--amber)">Botelhos é o motor, mas o Repasse Maylon distorce:</strong> R$ 168K em 5 meses de repasse — sem isso, a margem seria de ~54%. A concentração de 65,8% da receita na unidade é relevante, mas reflete a maturidade operacional da carteira.
+          <br/><br/>
+          <strong style="color:var(--teal2)">Civil cresceu em receita absoluta (+23%, de R$ 174K para R$ 215K),</strong> mas perdeu participação percentual (de 15,7% para 11,4%) porque o previdenciário judicial cresceu 136% no mesmo período. A diluição é efeito do sucesso previdenciário, não do fracasso civil — mas a expansão civil precisa acelerar para mudar a composição do portfólio.
+          <br/><br/>
+          <strong style="color:var(--red)">Inadimplência é emergência:</strong> R$ 52.775 em 5 meses, quase o total de 2025 inteiro. Intensificar a execução e cobrança imediatamente — criação de número exclusivo para cobrança e plano intensivo em junho e julho.
+        </div>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">📊 Contratação — Decisões em Andamento</div>
+        <ul class="cfo-list">
+          <li><strong style="color:var(--amber)">Botelhos — PRECISA:</strong> Fernanda saiu no mês passado e Ulianny entra em licença maternidade no início de julho. Contratar advogado(a) para reposição imediata</li>
+          <li><strong style="color:var(--green)">Cabo Verde — SIM:</strong> margem de 63,5% sustenta contratação. Efetivar advogado para expandir carteira civil e previdenciária</li>
+          <li><strong style="color:var(--amber)">Poços — ESTAGIÁRIO(S):</strong> Augusto saiu este mês e Rafael vai para Nova Resende a partir de 01/07. Contratar estagiário(s) para suprir. Ponto de atenção: confirmar nos próximos meses que a comissão do advogado saia do centro de custo onde prestou o serviço, não apenas da unidade</li>
+          <li><strong style="color:var(--green)">Nova Resende — EFETIVAR:</strong> Rafael assume como Líder em jul/2026. Estrutura já simulada (advogado + comercial + administrativo = R$ 12.881/mês de custo fixo)</li>
+          <li><strong style="color:var(--blue)">Marketing — UPGRADE:</strong> trocar colaborador atual por um profissional sênior para acelerar captação em todas as unidades</li>
+        </ul>
+      </div>
+      <div class="cfo-c">
+        <div class="cfo-head">🎯 Ações Imediatas (30–90 dias)</div>
+        <ul class="cfo-list">
+          <li>Plano de cobrança intensivo em junho e julho — criar número de telefone exclusivo para cobrança</li>
+          <li>Acelerar expansão civil: meta de 20% da receita até dez/2026 exige R$ 78K/mês (vs. R$ 43K atual)</li>
+          <li>Efetivar contratações: advogados para Cabo Verde, Botelhos e Nova Resende; estagiários para Poços; troca do marketing por sênior</li>
+          <li>Acompanhar Rafael em Nova Resende (jul/2026) — meta de break-even em 90 dias (R$ 12.881/mês)</li>
+          <li>Criar reserva operacional mínima de R$ 450K (2 meses de custos)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- GLOSSÁRIO -->
+<section>
+  <div class="container">
+    <div class="sec-label rv">Glossário</div>
+    <h2 class="sec-title rv d1">Entendendo <em>os Termos</em></h2>
+    <div class="gloss-grid rv d2">
+      <div class="gloss-card"><div class="gloss-term">EBITDA Ajustado</div><div class="gloss-def">Resultado operacional real somado aos itens não recorrentes (Repasse Maylon, distribuição de lucros). Mostra a verdadeira capacidade de geração de caixa do negócio.</div></div>
+      <div class="gloss-card"><div class="gloss-term">Margem Operacional</div><div class="gloss-def">Resultado ÷ Receita. Quanto de cada R$ 1 de faturamento sobra depois de pagar todos os custos. Acima de 30% é excelente para escritório de advocacia.</div></div>
+      <div class="gloss-card"><div class="gloss-term">Break-Even</div><div class="gloss-def">Ponto em que a receita cobre exatamente os custos. Abaixo disso = prejuízo. Acima = lucro. Cada unidade tem seu próprio break-even mensal.</div></div>
+      <div class="gloss-card"><div class="gloss-term">Receita Recorrente</div><div class="gloss-def">Honorários previdenciários administrativos, consultas, taxas de manutenção — chegam mensalmente com previsibilidade. Base estável do caixa.</div></div>
+      <div class="gloss-card"><div class="gloss-term">Receita Volátil</div><div class="gloss-def">Honorários judiciais e civis — dependem do calendário processual. Podem variar 3-5x entre meses. Exigem reserva de caixa para amortecer.</div></div>
+      <div class="gloss-card"><div class="gloss-term">Repasse Maylon</div><div class="gloss-def">Pagamento contratual ao ex-advogado parceiro (encerramento de vínculo). Não recorrente na essência, mas vem aparecendo recorrentemente em 2026. Precisa de data de encerramento definitivo.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer><p>Maximiano Advogados · Dashboard Financeiro Consolidado · Jan–Mai 2026 · Documento Confidencial · Elaborado em Junho/2026</p></footer>
+</div><!-- /main -->
+
+<script>
+// Navigation
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+
+// Scroll reveal
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.15});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Chart defaults
+Chart.register(ChartDataLabels);
+const cfg={responsive:true,plugins:{legend:{display:false},datalabels:{display:false}}};
+const ax=()=>({x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}});
+
+// 1. Receita vs Resultado mensal 2026
+const meses26=['Jan','Fev','Mar','Abr','Mai'];
+const rec26=[392548,263703,356543,289025,593924];
+const res26=[171734,71977,175588,77482,268495];
+new Chart('ch-mensal',{type:'bar',data:{labels:meses26,datasets:[
+  {label:'Receita',data:rec26,backgroundColor:'rgba(232,160,48,.75)',borderColor:'#E8A030',borderWidth:1,borderRadius:5,datalabels:{display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:'rgba(232,160,48,.9)',font:{size:9,weight:'700'}}},
+  {label:'Resultado',data:res26,backgroundColor:res26.map(v=>v>=0?'rgba(62,201,142,.6)':'rgba(240,96,96,.6)'),borderColor:res26.map(v=>v>=0?'#3EC98E':'#F06060'),borderWidth:1,borderRadius:5,datalabels:{display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:res26.map(v=>v>=0?'rgba(62,201,142,.9)':'rgba(240,96,96,.9)'),font:{size:9,weight:'700'}}}
+]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:ax()}});
+
+// 2. Comparativo 2025 vs 2026
+const rec25_5m=[188655,194611,318137,265738,147108];
+new Chart('ch-comp',{type:'bar',data:{labels:meses26,datasets:[
+  {label:'2025',data:rec25_5m,backgroundColor:'rgba(46,133,212,.5)',borderColor:'rgba(46,133,212,.7)',borderWidth:1,borderRadius:5,datalabels:{display:false}},
+  {label:'2026 Receita',data:rec26,backgroundColor:'rgba(232,160,48,.7)',borderColor:'#E8A030',borderWidth:1,borderRadius:5,datalabels:{display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:'rgba(232,160,48,.85)',font:{size:9,weight:'700'}}},
+  {label:'2026 Resultado',data:res26,type:'line',borderColor:'rgba(62,201,142,.8)',backgroundColor:'rgba(62,201,142,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:4,datalabels:{display:false}}
+]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:ax()}});
+
+// 3. Composição receita (doughnut)
+new Chart('ch-comp-receita',{type:'doughnut',data:{
+  labels:['Prev. Adm (29,2%)','Prev. Jud (53,3%)','Civil (11,4%)','Outros (6,1%)'],
+  datasets:[{data:[553891,1011270,215317,115264],backgroundColor:['rgba(14,168,154,.75)','rgba(62,201,142,.75)','rgba(232,160,48,.75)','rgba(46,133,212,.5)'],borderWidth:0}]
+},options:{responsive:true,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:10,weight:'700'},formatter:(v,ctx)=>{let sum=ctx.dataset.data.reduce((a,b)=>a+b,0);return Math.round(v/sum*100)+'%';}}}}});
+
+// 4. Civil vs Prev mensal
+const prevAdm26=[90086,73622,125937,120849,143397];
+const prevJud26=[194435,147606,182781,109533,376915];
+const civil26=[82031,23802,20940,47834,40709];
+new Chart('ch-civil-mensal',{type:'bar',data:{labels:meses26,datasets:[
+  {label:'Prev. Adm',data:prevAdm26,backgroundColor:'rgba(14,168,154,.65)',borderRadius:3},
+  {label:'Prev. Judicial',data:prevJud26,backgroundColor:'rgba(62,201,142,.65)',borderRadius:3},
+  {label:'Civil',data:civil26,backgroundColor:'rgba(232,160,48,.75)',borderRadius:3}
+]},options:{responsive:true,plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(255,255,255,.4)',font:{size:10}}},datalabels:{display:false}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// 5. DRE 2025
+const rec25full=[188655,194611,318137,265738,147108,597887,320813,327473,370617,238978,272421,405198];
+new Chart('ch-rec25',{type:'bar',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],datasets:[{
+  data:rec25full,backgroundColor:rec25full.map((_,i)=>i===5?'rgba(232,160,48,.8)':i===10?'rgba(240,96,96,.5)':'rgba(14,168,154,.55)'),borderRadius:5,
+  datalabels:{display:true,anchor:'end',align:'end',formatter:v=>'R$'+Math.round(v/1000)+'K',color:'rgba(255,255,255,.5)',font:{size:9,weight:'700'}}
+}]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:ax()}});
+
+// 6. Inadimplência
+const inadAnos=[2016,2017,2019,2020,2021,2022,2023,2024,2025,2026];
+const inadVals=[546,2985,4825,2269,790,5642,17944,25155,54892,52775];
+new Chart('ch-inad',{type:'bar',data:{labels:inadAnos.map(String),datasets:[{
+  data:inadVals,backgroundColor:inadAnos.map(a=>a===2026?'rgba(240,96,96,.85)':a===2025?'rgba(245,160,48,.7)':'rgba(107,132,168,.45)'),borderRadius:5,
+  datalabels:{display:true,anchor:'end',align:'end',formatter:v=>v>=1000?'R$'+Math.round(v/1000)+'K':'R$'+v,color:'rgba(255,255,255,.5)',font:{size:9,weight:'700'}}
+}]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// 7. Forecast
+const meses12=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const real26f=[392548,263703,356543,289025,593924,null,null,null,null,null,null,null];
+const cons26f=[null,null,null,null,null,286000,286000,286000,286000,286000,286000,286000];
+const real26f2=[null,null,null,null,null,329000,329000,329000,329000,329000,329000,329000];
+const agr26f=[null,null,null,null,null,443466,443466,443466,443466,443466,443466,443466];
+new Chart('ch-forecast',{type:'bar',data:{labels:meses12,datasets:[
+  {label:'Realizado 2026',data:real26f,backgroundColor:'rgba(14,196,180,.75)',borderColor:'#14C4B4',borderWidth:1,borderRadius:5,
+   datalabels:{display:true,anchor:'end',align:'end',formatter:v=>v?'R$'+Math.round(v/1000)+'K':'',color:'rgba(14,196,180,.9)',font:{size:9,weight:'700'}}},
+  {label:'Conservador (~R$3,9M)',data:cons26f,backgroundColor:'rgba(107,132,168,.35)',borderRadius:5,datalabels:{display:false}},
+  {label:'Realista (~R$4,2M)',data:real26f2,backgroundColor:'rgba(46,133,212,.4)',borderRadius:5,datalabels:{display:false}},
+  {label:'Meta R$5M',data:agr26f,backgroundColor:'rgba(232,160,48,.45)',borderRadius:5,datalabels:{display:false}},
+  {label:'2025 (ref.)',data:rec25full,type:'line',borderColor:'rgba(255,255,255,.18)',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false,tension:.3,datalabels:{display:false}}
+]},options:{...cfg,plugins:{...cfg.plugins,datalabels:{}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+Math.round(v/1000)+'K'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// META 5M - projeção acumulada
+const meses12m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const realizadoAcum=[392548,656251,1012794,1301819,1895742,null,null,null,null,null,null,null];
+const ritmoM=379148;
+const projecaoAcum=[null,null,null,null,1895742,1895742+ritmoM,1895742+ritmoM*2,1895742+ritmoM*3,1895742+ritmoM*4,1895742+ritmoM*5,1895742+ritmoM*6,1895742+ritmoM*7];
+const metaL=Array(12).fill(5000000);
+new Chart('ch-meta5m',{type:'line',data:{labels:meses12m,datasets:[
+  {label:'Realizado',data:realizadoAcum,borderColor:'rgba(62,201,142,.95)',backgroundColor:'rgba(62,201,142,.12)',fill:true,tension:.3,borderWidth:2.5,pointRadius:5,spanGaps:false},
+  {label:'Projeção ritmo atual',data:projecaoAcum,borderColor:'rgba(232,160,48,.7)',backgroundColor:'rgba(232,160,48,.06)',fill:true,tension:.3,borderWidth:2,borderDash:[6,4],pointRadius:4,spanGaps:false},
+  {label:'Meta R$ 5M',data:metaL,borderColor:'rgba(14,168,154,.8)',fill:false,tension:0,borderWidth:1.5,borderDash:[4,4],pointRadius:0}
+]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.raw?' '+c.dataset.label+': R$ '+Math.round(c.raw/1000)+'K':null}}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:11},callback:v=>'R$'+(v/1000000).toFixed(1)+'M'},grid:{color:'rgba(255,255,255,.04)'},min:0,max:5500000}}}});
+</script>
+</body>
+</html>
