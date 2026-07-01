@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano · Acompanhamento Mensal 2026</title>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;--nv3:#152D50;
+  --gd:#E8A030;--gd2:#F5C060;--gd-dim:rgba(232,160,48,.1);
+  --teal:#0EA89A;--teal2:#14C4B4;--teal-dim:rgba(14,168,154,.1);
+  --green:#3EC98E;--red:#F06060;--amber:#F5A030;
+  --muted:#6B84A8;--body:rgba(255,255,255,.65);
+  --card:#0A1F38;--border:rgba(232,160,48,.16);--border2:rgba(255,255,255,.06);
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.65;overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:.6rem 2rem;background:rgba(4,17,31,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-brand{font-weight:800;font-size:.88rem;letter-spacing:.12em;color:var(--gd);text-transform:uppercase}
+.nav-brand span{color:rgba(255,255,255,.22);margin:0 .4rem}
+.nav-tag{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:.16rem .65rem;border-radius:20px}
+
+.hero{padding:5rem 2rem 2.5rem;max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.hero-left h1{font-weight:900;font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:.92;letter-spacing:-.02em}
+.hero-left h1 em{color:var(--gd);font-style:normal}
+.hero-left p{margin-top:.65rem;font-size:.85rem;color:rgba(255,255,255,.4)}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(14,168,154,.1);border:1px solid rgba(14,168,154,.3);border-radius:20px;padding:.3rem .9rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal2);font-weight:700;margin-bottom:.9rem}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+
+.mes-selector{display:flex;gap:5px;flex-wrap:wrap}
+.mes-btn{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:6px;cursor:pointer;color:rgba(255,255,255,.35);padding:.42rem 1rem;transition:all .2s;position:relative}
+.mes-btn:hover{border-color:var(--border);color:rgba(255,255,255,.65)}
+.mes-btn.active{background:var(--gd-dim);border-color:rgba(232,160,48,.45);color:var(--gd)}
+.mes-btn.closed::after{content:'✓';position:absolute;top:-5px;right:-5px;width:13px;height:13px;background:var(--green);border-radius:50%;font-size:.5rem;line-height:13px;text-align:center;color:#000;font-weight:900}
+.mes-btn.live::after{content:'';position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:var(--amber);border-radius:50%;animation:blink 1.5s infinite}
+
+.container{max-width:1100px;margin:0 auto;padding:0 2rem}
+.section{padding:2.5rem 0}
+.sec-label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--gd);font-style:normal}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+
+.status-banner{background:linear-gradient(135deg,rgba(14,168,154,.07),rgba(9,26,46,.7));border:1px solid rgba(14,168,154,.2);border-radius:var(--r);padding:1.2rem 1.6rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.8rem}
+.sb-left{display:flex;align-items:center;gap:1.1rem}
+.sb-icon{font-size:1.8rem}
+.sb-title{font-weight:800;font-size:1.2rem;color:var(--gd);letter-spacing:-.01em}
+.sb-sub{font-size:.77rem;color:rgba(255,255,255,.42);margin-top:.1rem}
+.sb-kpis{display:flex;gap:2rem;flex-wrap:wrap}
+.sbk{text-align:right}
+.sbk-val{font-weight:800;font-size:1.5rem;line-height:1;letter-spacing:-.01em}
+.sbk-val.ok{color:var(--green)}.sbk-val.warn{color:var(--amber)}.sbk-val.live-color{color:var(--gd)}
+.sbk-lbl{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
+
+.totais-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:2rem}
+@media(max-width:700px){.totais-grid{grid-template-columns:repeat(2,1fr)}}
+.tot-kpi{background:rgba(9,26,46,.85);padding:1.1rem;text-align:center;transition:background .2s}
+.tot-kpi:hover{background:rgba(21,45,80,.8)}
+.tot-val{font-weight:800;font-size:1.55rem;line-height:1;letter-spacing:-.01em}
+.tot-lbl{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+
+/* RANKING */
+.ranking-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}
+.rank-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:border-color .2s,transform .15s}
+.rank-card:hover{border-color:rgba(232,160,48,.22);transform:translateX(3px)}
+.rank-card.rank-1{border-left:3px solid var(--gd)}
+.rank-card.rank-2{border-left:3px solid rgba(255,255,255,.15)}
+.rank-card.rank-3{border-left:3px solid rgba(14,168,154,.3)}
+.rank-card.rank-4{border-left:3px solid rgba(255,255,255,.06)}
+.rank-card.rank-5{border-left:3px solid rgba(255,255,255,.04)}
+/* Canal Digital — destaque teal sutil */
+.rank-card.digital{border-left-color:rgba(14,168,154,.45)}
+.rank-inner{display:grid;grid-template-columns:46px 1fr auto auto auto;align-items:stretch}
+@media(max-width:680px){.rank-inner{grid-template-columns:40px 1fr auto auto}}
+.rank-num{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.25rem;padding:.8rem .4rem;border-right:1px solid var(--border2)}
+.rank-1 .rank-num{color:var(--gd)}
+.rank-2 .rank-num{color:rgba(255,255,255,.35)}
+.rank-3 .rank-num{color:var(--teal2)}
+.rank-4 .rank-num,.rank-5 .rank-num{color:rgba(255,255,255,.18)}
+.rank-main{padding:.85rem 1.1rem;flex:1}
+.rank-name{font-weight:700;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.88);margin-bottom:.48rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.lider-tag{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gd-dim);border:1px solid rgba(232,160,48,.3);color:var(--gd);padding:.1rem .45rem;border-radius:10px}
+.digital-tag{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(14,168,154,.1);border:1px solid rgba(14,168,154,.25);color:var(--teal2);padding:.1rem .45rem;border-radius:10px}
+.rank-bar-wrap{position:relative;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:visible}
+.rank-bar{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);position:relative}
+.rank-bar::after{content:attr(data-pct);position:absolute;right:0;top:-17px;font-size:.63rem;font-weight:700;color:inherit;white-space:nowrap}
+.rank-meta-label{font-size:.6rem;color:var(--muted);margin-top:.38rem;display:flex;justify-content:space-between}
+.rank-realizado{padding:.85rem 1.2rem;display:flex;flex-direction:column;justify-content:center;text-align:right;border-left:1px solid var(--border2);min-width:115px}
+@media(max-width:680px){.rank-realizado{min-width:88px;padding:.85rem .7rem}}
+.rank-real-val{font-weight:800;font-size:1.3rem;color:var(--gd);line-height:1;letter-spacing:-.01em}
+.rank-real-lbl{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
+.rank-gap{padding:.85rem 1.1rem;display:flex;flex-direction:column;justify-content:center;text-align:right;border-left:1px solid var(--border2);min-width:115px}
+@media(max-width:680px){.rank-gap{display:none}}
+.rank-gap-val{font-weight:700;font-size:1rem;line-height:1}
+.rank-gap-val.gok{color:var(--green)}.rank-gap-val.gno{color:var(--amber)}.rank-gap-val.na{color:rgba(255,255,255,.2);font-size:.8rem}
+.rank-gap-lbl{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
+.rank-gap-ritmo{font-size:.65rem;font-weight:600;color:var(--amber);margin-top:.2rem}
+.rank-prot{padding:.85rem 1.1rem;display:flex;flex-direction:column;justify-content:center;text-align:center;border-left:1px solid var(--border2);min-width:88px}
+@media(max-width:680px){.rank-prot{min-width:58px;padding:.85rem .6rem}}
+.rank-prot-val{font-weight:900;font-size:1.55rem;color:#fff;line-height:1;letter-spacing:-.01em}
+.rank-prot-na{font-size:.75rem;color:rgba(255,255,255,.2);font-style:italic;line-height:1}
+.rank-prot-sub{font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.1rem}
+.rank-prot-detail{font-size:.63rem;color:var(--gd);margin-top:.12rem;font-weight:600}
+
+/* HISTÓRICO */
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.8rem;margin-top:1.4rem}
+.hist-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.hist-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.hist-card.month-closed::before{background:var(--green)}
+.hist-card.month-live::before{background:var(--amber)}
+.hist-card:hover{border-color:rgba(232,160,48,.22);transform:translateY(-2px)}
+.hist-card.active-month{border-color:rgba(232,160,48,.38);background:rgba(232,160,48,.05)}
+.hist-mes{font-weight:700;font-size:.73rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.hist-total{font-weight:800;font-size:1.38rem;line-height:1.1;color:var(--gd);margin:.26rem 0 .15rem;letter-spacing:-.01em}
+.hist-pct{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:10px}
+.pct-ok{background:rgba(62,201,142,.13);color:var(--green)}
+.pct-live{background:rgba(245,160,48,.13);color:var(--amber)}
+.hist-meta{font-size:.63rem;color:var(--muted);margin-top:.26rem}
+
+/* ANUAL TABLE */
+.anual-table{width:100%;border-collapse:collapse;margin-top:1.4rem}
+.anual-table th{background:rgba(9,26,46,.92);color:var(--gd);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.75rem 1rem;text-align:left;font-weight:700;border-bottom:1px solid var(--border)}
+.anual-table th:not(:first-child){text-align:right}
+.anual-table td{padding:.75rem 1rem;font-size:.84rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--body)}
+.anual-table td:not(:first-child){text-align:right}
+.anual-table tr:last-child td{font-weight:700;background:rgba(9,26,46,.6);border-top:1px solid var(--border);color:#fff}
+.anual-table tr:hover td{background:rgba(232,160,48,.02)}
+.anual-table tr.digital-row td{color:rgba(255,255,255,.5)}
+.anual-table tr.digital-row:hover td{background:rgba(14,168,154,.03)}
+.a-rank-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:900}
+.arn-1{background:rgba(232,160,48,.18);color:var(--gd)}
+.arn-2{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55)}
+.arn-3{background:rgba(14,168,154,.12);color:var(--teal2)}
+.arn-4,.arn-5{background:rgba(255,255,255,.04);color:rgba(255,255,255,.25)}
+.gap-ok{color:var(--green);font-weight:700}
+.gap-warn{color:var(--amber);font-weight:700}
+.mini-bar-wrap{width:80px;height:4px;background:rgba(255,255,255,.07);border-radius:2px;display:inline-block;vertical-align:middle}
+.mini-bar{height:100%;border-radius:2px}
+.tv-gd{color:var(--gd);font-weight:700}
+
+footer{border-top:1px solid var(--border2);padding:1.8rem 2rem;text-align:center;font-size:.66rem;color:rgba(255,255,255,.18);letter-spacing:.06em;text-transform:uppercase}
+
+/* ABA ANUAL */
+.ano-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-top:1.5rem}
+.ano-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.3rem 1.4rem;transition:border-color .2s}
+.ano-card:hover{border-color:rgba(232,160,48,.22)}
+.ano-card.digital-card{border-color:rgba(14,168,154,.15)}
+.ano-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.ano-card-name{font-weight:700;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.ano-pct-badge{font-weight:800;font-size:1.1rem;padding:.2rem .65rem;border-radius:8px;line-height:1}
+.ano-bar-wrap{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:.75rem}
+.ano-bar{height:100%;border-radius:4px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.ano-nums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.8rem}
+.ano-num{text-align:center;padding:.5rem .3rem;background:rgba(255,255,255,.03);border-radius:8px}
+.ano-num-val{font-weight:800;font-size:.95rem;line-height:1;letter-spacing:-.01em}
+.ano-num-lbl{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.ano-ritmo{background:rgba(232,160,48,.07);border:1px solid rgba(232,160,48,.18);border-radius:8px;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.ano-ritmo.ok{background:rgba(62,201,142,.07);border-color:rgba(62,201,142,.2)}
+.ano-ritmo-label{font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.ano-ritmo-val{font-weight:800;font-size:1rem;color:var(--gd)}
+.ano-ritmo.ok .ano-ritmo-val{color:var(--green)}
+.ano-total-banner{background:linear-gradient(135deg,rgba(232,160,48,.08),rgba(9,26,46,.7));border:1px solid rgba(232,160,48,.2);border-radius:var(--r);padding:1.3rem 1.6rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background-color:rgba(232,160,48,.12);margin-bottom:1.8rem;overflow:hidden}
+.ano-total-banner>div{background:rgba(9,26,46,.85);padding:1rem 1.2rem;text-align:center}
+.ano-sel-btn{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:6px;cursor:pointer;color:rgba(255,255,255,.35);padding:.42rem 1rem;transition:all .2s}
+.ano-sel-btn:hover{border-color:var(--border);color:rgba(255,255,255,.65)}
+.ano-sel-btn.active{background:var(--gd-dim);border-color:rgba(232,160,48,.45);color:var(--gd)}
+.mes-divider{width:1px;height:20px;background:rgba(255,255,255,.12);margin:0 3px;display:inline-block;vertical-align:middle}
+
+/* VISÃO POR UNIDADE */
+.unidade-selector{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.5rem}
+.unidade-btn{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;cursor:pointer;color:rgba(255,255,255,.4);padding:.5rem 1.1rem;transition:all .2s}
+.unidade-btn:hover{border-color:var(--border);color:rgba(255,255,255,.7)}
+.unidade-btn.active{background:var(--gd-dim);border-color:rgba(232,160,48,.45);color:var(--gd)}
+.unidade-btn.digital.active{background:rgba(14,168,154,.1);border-color:rgba(14,168,154,.4);color:var(--teal2)}
+.unidade-painel{margin-top:1.8rem}
+.u-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.8rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border2)}
+.u-nome{font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1;letter-spacing:-.02em}
+.u-nome em{color:var(--gd);font-style:normal}
+.u-nome.digital-nome em{color:var(--teal2)}
+.u-kpis{display:flex;gap:1.5rem;flex-wrap:wrap}
+.u-kpi{text-align:right}
+.u-kpi-val{font-weight:800;font-size:1.4rem;line-height:1;letter-spacing:-.01em}
+.u-kpi-lbl{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
+.u-meses{display:flex;flex-direction:column;gap:.6rem}
+.u-mes-row{background:var(--card);border:1px solid var(--border2);border-radius:10px;display:grid;grid-template-columns:80px 1fr auto auto auto;align-items:center;gap:0;overflow:hidden;transition:border-color .2s}
+.u-mes-row:hover{border-color:rgba(232,160,48,.18)}
+.u-mes-row.bateu{border-left:3px solid var(--green)}
+.u-mes-row.parcial{border-left:3px solid var(--amber)}
+.u-mes-row.nao-bateu{border-left:3px solid var(--red)}
+.u-mes-row.atual{border-left:3px solid var(--gd);background:rgba(232,160,48,.04)}
+.u-mes-label{padding:.75rem 1rem;font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);border-right:1px solid var(--border2)}
+.u-mes-bar-area{padding:.75rem 1.1rem;flex:1}
+.u-mes-bar-wrap{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:.3rem}
+.u-mes-bar-inner{height:100%;border-radius:3px;transition:width 1s ease}
+.u-mes-bar-labels{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted)}
+.u-mes-real{padding:.75rem 1rem;text-align:right;border-left:1px solid var(--border2);min-width:100px}
+.u-mes-real-val{font-weight:800;font-size:1.1rem;color:var(--gd);line-height:1}
+.u-mes-real-lbl{font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.1rem}
+.u-mes-pct{padding:.75rem 1rem;text-align:center;border-left:1px solid var(--border2);min-width:70px}
+.u-mes-pct-val{font-weight:900;font-size:1.15rem;line-height:1}
+.u-mes-prot{padding:.75rem 1rem;text-align:center;border-left:1px solid var(--border2);min-width:70px}
+.u-mes-prot-val{font-weight:900;font-size:1.15rem;color:#fff;line-height:1}
+.u-mes-prot-lbl{font-size:.55rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.1rem}
+.u-trophy{display:inline-flex;align-items:center;gap:.4rem;background:rgba(62,201,142,.1);border:1px solid rgba(62,201,142,.25);border-radius:20px;padding:.25rem .7rem;font-size:.65rem;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-left:.6rem;vertical-align:middle}
+.u-total-row{background:linear-gradient(135deg,rgba(232,160,48,.08),rgba(9,26,46,.6));border:1px solid rgba(232,160,48,.2);border-radius:10px;display:grid;grid-template-columns:80px 1fr auto auto auto;align-items:center;gap:0;overflow:hidden;margin-top:.5rem}
+@media(max-width:680px){
+  .u-mes-row,.u-total-row{grid-template-columns:70px 1fr auto auto}
+  .u-mes-prot{display:none}
+}
+
+/* BANNERS ESPECIAIS *//* BANNERS ESPECIAIS */
+.special-banner{border-radius:var(--r);padding:1.4rem 1.8rem;margin-bottom:1.8rem;position:relative;overflow:hidden}
+.special-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.banner-comemorativo{background:linear-gradient(135deg,rgba(62,201,142,.08),rgba(9,26,46,.8));border:1px solid rgba(62,201,142,.25)}
+.banner-comemorativo::before{background:linear-gradient(90deg,var(--green),rgba(62,201,142,.3))}
+.banner-encorajamento{background:linear-gradient(135deg,rgba(232,160,48,.08),rgba(9,26,46,.8));border:1px solid rgba(232,160,48,.2)}
+.banner-encorajamento::before{background:linear-gradient(90deg,var(--gd),rgba(232,160,48,.3))}
+.sb-emoji{font-size:2rem;margin-bottom:.5rem}
+.sb-quote{font-size:1rem;font-weight:600;color:#fff;line-height:1.5;margin-bottom:.4rem}
+.sb-quote em{font-style:italic;color:var(--gd)}
+.sb-quote-verde em{font-style:italic;color:var(--green)}
+.sb-ref{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.06em}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Maximiano <span>·</span> Líderes</div>
+  <div class="nav-tag" id="nav-mes-label">Maio 2026</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-badge"><span class="badge-dot"></span><span id="hero-badge-txt">Em andamento · 18/05</span></div>
+    <h1>Ranking<br><em>de Produção</em></h1>
+    <p>Metas, realizados e protocolos · Jan–Jul 2026</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <div class="mes-selector" id="mes-selector"></div>
+    <div class="mes-divider"></div>
+    <button class="ano-sel-btn" id="btn-ano" onclick="toggleAnoView()">Ano 2026</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="status-banner" id="status-banner">
+    <div class="sb-left">
+      <div class="sb-icon" id="sb-icon">⚡</div>
+      <div>
+        <div class="sb-title" id="sb-title"></div>
+        <div class="sb-sub" id="sb-sub"></div>
+      </div>
+    </div>
+    <div class="sb-kpis" id="sb-kpis"></div>
+  </div>
+
+  <div class="totais-grid" id="totais-grid"></div>
+
+  <div class="section">
+    <div class="sec-label">Ranking Mensal</div>
+    <div class="sec-title">Desempenho por <em>Unidade</em></div>
+  </div>
+  <div class="ranking-list" id="ranking-list"></div>
+
+  <div class="divider" style="margin:3rem 0"></div>
+
+  <!-- VISÃO POR UNIDADE -->
+  <div class="section">
+    <div class="sec-label">Por Unidade</div>
+    <div class="sec-title">Histórico por <em>Unidade</em></div>
+    <div class="unidade-selector" id="unidade-selector"></div>
+    <div id="unidade-painel"></div>
+  </div>
+
+  <!-- ABA ANUAL -->
+  <div id="ano-view" style="display:none">
+    <div class="section">
+      <div class="sec-label">Visão Anual</div>
+      <div class="sec-title">Progresso <em>2026</em></div>
+    </div>
+    <div class="ano-total-banner" id="ano-total-banner"></div>
+    <div class="ano-grid" id="ano-grid"></div>
+    <div style="height:3rem"></div>
+  </div>
+
+  <div id="mes-view">
+
+  <div class="divider" style="margin:3rem 0"></div>
+
+  <div class="section">
+    <div class="sec-label">Histórico 2026</div>
+    <div class="sec-title">Todos os <em>Meses</em></div>
+    <div class="hist-grid" id="hist-grid"></div>
+  </div>
+
+  <div class="divider" style="margin:3rem 0"></div>
+
+  <div class="section">
+    <div class="sec-label">Acumulado 2026</div>
+    <div class="sec-title">Ranking <em>Anual</em></div>
+    <div style="overflow-x:auto">
+      <table class="anual-table" id="anual-table"></table>
+    </div>
+  </div>
+
+  </div><!-- /mes-view -->
+</div>
+<footer>Maximiano Advogados · Grupo Pilar · Acompanhamento Mensal 2026 · Jean Barbosa, CEO · Documento Interno</footer>
+
+<script>
+// ============================================================
+// DADOS — edite apenas este bloco para atualizar
+// ============================================================
+const MESES = [
+  {
+    id:'jan', nome:'Janeiro', ano:2026, status:'closed', dataRef:'Fechamento 31/01',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:199093, real:298519,   prot:{adm:21,jud:8},  digital:false},
+      {nome:'Poços',         meta:203523, real:327587,   prot:{adm:12,jud:7},  digital:false},
+      {nome:'Cabo Verde',    meta:176619, real:134016,   prot:{adm:11,jud:4},  digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:1300,     prot:{total:0},       digital:false},
+      {nome:'Canal Digital', meta:0,      real:50148,    prot:null,      digital:true},
+    ]
+  },
+  {
+    id:'fev', nome:'Fevereiro', ano:2026, status:'closed', dataRef:'Fechamento 28/02',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:379833, real:207579,   prot:{adm:24,jud:15}, digital:false},
+      {nome:'Poços',         meta:191563, real:278309,   prot:{adm:30,jud:7},  digital:false},
+      {nome:'Cabo Verde',    meta:212473, real:150286,   prot:{adm:29,jud:6},  digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:5932,     prot:{total:0},       digital:false},
+      {nome:'Canal Digital', meta:27326,  real:19526,    prot:null,       digital:true},
+    ]
+  },
+  {
+    id:'mar', nome:'Março', ano:2026, status:'closed', dataRef:'Fechamento 31/03',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:195648, real:237761,   prot:{adm:23,jud:35}, digital:false},
+      {nome:'Poços',         meta:142325, real:186268,   prot:{total:37},      digital:false},
+      {nome:'Cabo Verde',    meta:203017, real:375182,   prot:{adm:27,jud:16}, digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:49066,    prot:{total:1},       digital:false},
+      {nome:'Canal Digital', meta:58291,  real:25936,    prot:null,       digital:true},
+    ]
+  },
+  {
+    id:'abr', nome:'Abril', ano:2026, status:'closed', dataRef:'Fechamento 30/04',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:331403, real:388385,   prot:{adm:27,jud:11}, digital:false},
+      {nome:'Cabo Verde',    meta:174444, real:256398,   prot:{adm:22,jud:15}, digital:false},
+      {nome:'Poços',         meta:297352, real:316632,   prot:{adm:26,jud:12}, digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:28692,    prot:{total:0},       digital:false},
+      {nome:'Canal Digital', meta:21859,  real:58356,    prot:null,            digital:true},
+    ]
+  },
+  {
+    id:'mai', nome:'Maio', ano:2026, status:'closed', dataRef:'Fechamento 29/05',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:389830, real:552206.88, prot:{adm:27,jud:12}, digital:false},
+      {nome:'Cabo Verde',    meta:314051, real:385980.10, prot:{adm:28,jud:17}, digital:false},
+      {nome:'Poços',         meta:263609, real:264022.24, prot:{total:28}, digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:27232.80,  prot:{total:6},  digital:false},
+      {nome:'Canal Digital', meta:163820, real:123196,    prot:null,       digital:true},
+    ]
+  },
+  {
+    id:'jun', nome:'Junho', ano:2026, status:'closed', dataRef:'Fechamento 30/06',
+    semProtocolos:false,
+    unidades:[
+      {nome:'Botelhos',      meta:290031, real:596515.88, prot:{adm:24,jud:6},  digital:false},
+      {nome:'Cabo Verde',    meta:352236, real:353463.26, prot:{adm:29,jud:11}, digital:false},
+      {nome:'Poços',         meta:414920, real:419427.88, prot:{adm:35,jud:7},  digital:false},
+      {nome:'Nova Resende',  meta:26384,  real:31493,     prot:{adm:1,jud:1},   digital:false},
+      {nome:'Canal Digital', meta:247009, real:104070,    prot:null,            digital:true},
+    ]
+  },
+  {
+    id:'ago', nome:'Julho', ano:2026, status:'live', dataRef:'Posição 01/07', diasUteisRestantes:21,
+    semProtocolos:true,
+    unidades:[
+      {nome:'Botelhos',      meta:395734, real:0, prot:null, digital:false},
+      {nome:'Poços',         meta:396962, real:0, prot:null, digital:false},
+      {nome:'Cabo Verde',    meta:326764, real:0, prot:null, digital:false},
+      {nome:'Nova Resende',  meta:34299,  real:0, prot:null, digital:false},
+      {nome:'Canal Digital', meta:165401, real:0, prot:null, digital:true},
+    ]
+  }
+];
+
+const META_ANUAL = {
+  'Botelhos':4499456, 'Cabo Verde':3014921, 'Poços':4206570,
+  'Nova Resende':364092, 'Canal Digital':1774405
+};
+// ============================================================
+
+let mesSelecionado = 'ago';
+
+function fBRL(v){
+  if(v>=1e6) return 'R$ '+(v/1e6).toFixed(2).replace('.',',')+'M';
+  if(v>=1000) return 'R$ '+Math.round(v/1000).toLocaleString('pt-BR')+'k';
+  return 'R$ '+Math.round(v).toLocaleString('pt-BR');
+}
+function pct(r,m){ return (!m||m===0)?null:Math.round(r/m*100); }
+function getMes(id){ return MESES.find(m=>m.id===id); }
+function barColor(p){
+  if(p===null) return 'rgba(255,255,255,.15)';
+  if(p>=100) return '#3EC98E';
+  if(p>=70)  return '#E8A030';
+  if(p>=50)  return '#F5A030';
+  return '#F06060';
+}
+
+function getAcum(nome){
+  return MESES.reduce((a,mes)=>{
+    const u = mes.unidades.find(x=>x.nome===nome);
+    return a+(u?u.real:0);
+  },0);
+}
+
+function renderMesSelector(){
+  const el = document.getElementById('mes-selector');
+  el.innerHTML='';
+  MESES.forEach(mes=>{
+    const btn = document.createElement('button');
+    btn.className='mes-btn'
+      +(mes.status==='closed'?' closed':mes.status==='live'?' live':'')
+      +(mes.id===mesSelecionado?' active':'');
+    btn.textContent = mes.nome;
+    btn.onclick=()=>{ mesSelecionado=mes.id; renderAll(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderStatusBanner(mes){
+  const totReal = mes.unidades.reduce((a,u)=>a+u.real,0);
+  const totMeta = mes.unidades.reduce((a,u)=>a+u.meta,0);
+  const p = pct(totReal,totMeta);
+  const isLive = mes.status==='live';
+  document.getElementById('nav-mes-label').textContent = mes.nome+' '+mes.ano;
+  document.getElementById('hero-badge-txt').textContent = isLive?'Em andamento · '+mes.dataRef:'Encerrado · '+mes.dataRef;
+  document.getElementById('sb-icon').textContent = isLive?'⚡':'🏆';
+  document.getElementById('sb-title').textContent = mes.nome+' '+mes.ano+(isLive?' · Em Andamento':' · Encerrado');
+  let sub = mes.dataRef+' · '+mes.unidades.length+' canais ('+mes.unidades.filter(u=>!u.digital).length+' unidades físicas + Canal Digital)';
+  if(isLive&&mes.diasUteisRestantes) sub+=' · '+mes.diasUteisRestantes+' dias úteis restantes';
+  document.getElementById('sb-sub').textContent = sub;
+  const fisReal = mes.unidades.filter(u=>!u.digital).reduce((a,u)=>a+u.real,0);
+  const fisMeta = mes.unidades.filter(u=>!u.digital).reduce((a,u)=>a+u.meta,0);
+  const digU = mes.unidades.find(u=>u.digital);
+  const kpis = document.getElementById('sb-kpis');
+  let khtml=`
+    <div class="sbk"><div class="sbk-val live-color">${fBRL(totReal)}</div><div class="sbk-lbl">Total Realizado</div></div>
+    <div class="sbk"><div class="sbk-val" style="color:rgba(255,255,255,.32)">${fBRL(totMeta)}</div><div class="sbk-lbl">Meta Total</div></div>
+    <div class="sbk"><div class="sbk-val ${p&&p>=100?'ok':'warn'}">${p!==null?p+'%':'—'}</div><div class="sbk-lbl">da Meta</div></div>
+  `;
+  if(isLive&&mes.diasUteisRestantes){
+    const gap=totMeta-totReal;
+    if(gap>0) khtml+=`<div class="sbk"><div class="sbk-val warn">${fBRL(gap/mes.diasUteisRestantes)}/dia</div><div class="sbk-lbl">Ritmo necessário</div></div>`;
+  }
+  kpis.innerHTML=khtml;
+}
+
+function renderTotais(mes){
+  const totReal=mes.unidades.reduce((a,u)=>a+u.real,0);
+  const totMeta=mes.unidades.reduce((a,u)=>a+u.meta,0);
+  const p=pct(totReal,totMeta);
+  const fisReal=mes.unidades.filter(u=>!u.digital).reduce((a,u)=>a+u.real,0);
+  const digU=mes.unidades.find(u=>u.digital);
+  const fisComProt=mes.unidades.filter(u=>!u.digital&&u.prot);
+  const temDetalhe=fisComProt.length>0&&fisComProt[0].prot.adm!==undefined;
+  const totProt=mes.semProtocolos?null:fisComProt.reduce((a,u)=>a+(u.prot.total!==undefined?u.prot.total:(u.prot.adm+u.prot.jud)),0);
+  const totAdm=(temDetalhe&&!mes.semProtocolos)?fisComProt.reduce((a,u)=>a+u.prot.adm,0):null;
+  const totJud=(temDetalhe&&!mes.semProtocolos)?fisComProt.reduce((a,u)=>a+u.prot.jud,0):null;
+  const fisRealVal=mes.unidades.filter(u=>!u.digital).reduce((a,u)=>a+u.real,0);
+  const digReal=digU?digU.real:0;
+  document.getElementById('totais-grid').innerHTML=`
+    <div class="tot-kpi"><div class="tot-val" style="color:var(--gd)">${fBRL(totReal)}</div><div class="tot-lbl">Total Realizado</div></div>
+    <div class="tot-kpi"><div class="tot-val" style="color:${p&&p>=100?'var(--green)':'var(--amber)'}">${p!==null?p+'%':'—'}</div><div class="tot-lbl">da Meta · ${fBRL(totMeta)}</div></div>
+    <div class="tot-kpi"><div class="tot-val" style="color:rgba(255,255,255,.75)">${fBRL(fisRealVal)}</div><div class="tot-lbl">Unidades Físicas</div></div>
+    <div class="tot-kpi">
+      ${totProt!==null
+        ?`<div class="tot-val" style="color:#fff">${totProt} <span style="font-size:.75rem;color:var(--muted);font-weight:400">prot.</span></div><div class="tot-lbl">${temDetalhe?totAdm+' adm · '+totJud+' jud':'Total consolidado'}</div>`
+        :`<div class="tot-val" style="color:rgba(255,255,255,.2);font-size:1rem;font-style:italic">—</div><div class="tot-lbl">Protocolos</div>`
+      }
+    </div>
+  `;
+}
+
+function renderRanking(mes){
+  const sorted=[...mes.unidades].sort((a,b)=>{
+    // sem meta (digital jan): vai por valor absoluto
+    const pa=a.meta?pct(a.real,a.meta):null;
+    const pb=b.meta?pct(b.real,b.meta):null;
+    if(pa===null&&pb===null) return b.real-a.real;
+    if(pa===null) return 1;
+    if(pb===null) return -1;
+    return pb-pa;
+  });
+  const el=document.getElementById('ranking-list');
+  el.innerHTML='';
+  sorted.forEach((u,i)=>{
+    const p=u.meta?pct(u.real,u.meta):null;
+    const gap=u.meta?(u.meta-u.real):null;
+    const bc=u.digital?'#14C4B4':barColor(p);
+    const card=document.createElement('div');
+    card.className=`rank-card rank-${i+1}${u.digital?' digital':''}`;
+    let gapHtml='';
+    if(gap!==null){
+      let ritmo='';
+      if(mes.status==='live'&&mes.diasUteisRestantes&&gap>0)
+        ritmo=`<div class="rank-gap-ritmo">→ ${fBRL(gap/mes.diasUteisRestantes)}/dia</div>`;
+      gapHtml=`<div class="rank-gap">
+        <div class="rank-gap-val ${gap<=0?'gok':'gno'}">${gap<=0?'+ '+fBRL(Math.abs(gap)):fBRL(gap)}</div>
+        <div class="rank-gap-lbl">${gap<=0?'Excedente':'Gap restante'}</div>
+        ${ritmo}
+      </div>`;
+    } else {
+      gapHtml=`<div class="rank-gap"><div class="rank-gap-val na">sem meta</div><div class="rank-gap-lbl">Jan/sem meta</div></div>`;
+    }
+    let protHtml='';
+    if(mes.semProtocolos||u.digital){
+      protHtml=`<div class="rank-prot"><div class="rank-prot-na">—</div><div class="rank-prot-sub">Protocolos</div></div>`;
+    } else if(u.prot){
+      const temDetalhe = u.prot.adm!==undefined && u.prot.jud!==undefined;
+      const total = temDetalhe ? u.prot.adm+u.prot.jud : u.prot.total;
+      const detalhe = temDetalhe ? `<div class="rank-prot-detail">${u.prot.adm} adm · ${u.prot.jud} jud</div>` : '';
+      protHtml=`<div class="rank-prot">
+        <div class="rank-prot-val">${total}</div>
+        <div class="rank-prot-sub">Protocolos</div>
+        ${detalhe}
+      </div>`;
+    }
+    const pctLabel=p!==null?p+'%':'—';
+    const barW=p!==null?Math.min(p,100)+'%':'0%';
+    card.innerHTML=`
+      <div class="rank-inner">
+        <div class="rank-num">${i+1}</div>
+        <div class="rank-main">
+          <div class="rank-name">
+            ${u.nome}
+            ${i===0&&!u.digital&&mes.status==='closed'?'<span class="lider-tag">Líder</span>':''}
+            ${u.digital?'<span class="digital-tag">Digital</span>':''}
+          </div>
+          <div class="rank-bar-wrap">
+            <div class="rank-bar" style="width:0%;background:${bc}" data-w="${barW}" data-pct="${pctLabel}"></div>
+          </div>
+          <div class="rank-meta-label"><span>0%</span><span>${u.meta?'Meta: '+fBRL(u.meta):'Sem meta definida'}</span></div>
+        </div>
+        <div class="rank-realizado">
+          <div class="rank-real-val">${fBRL(u.real)}</div>
+          <div class="rank-real-lbl">Realizado</div>
+        </div>
+        ${gapHtml}
+        ${protHtml}
+      </div>
+    `;
+    el.appendChild(card);
+    setTimeout(()=>{ card.querySelector('.rank-bar').style.width=barW; },80+i*60);
+  });
+}
+
+function renderHistorico(){
+  const el=document.getElementById('hist-grid');
+  el.innerHTML='';
+  MESES.forEach(mes=>{
+    const totReal=mes.unidades.reduce((a,u)=>a+u.real,0);
+    const totMeta=mes.unidades.reduce((a,u)=>a+u.meta,0);
+    const p=pct(totReal,totMeta);
+    const card=document.createElement('div');
+    card.className=`hist-card month-${mes.status}${mes.id===mesSelecionado?' active-month':''}`;
+    card.innerHTML=`
+      <div class="hist-mes">${mes.nome} ${mes.ano}</div>
+      <div class="hist-total">${fBRL(totReal)}</div>
+      <span class="hist-pct ${mes.status==='closed'?'pct-ok':'pct-live'}">${p!==null?p+'% da meta':'—'}</span>
+      <div class="hist-meta">Meta: ${totMeta?fBRL(totMeta):'—'}</div>
+    `;
+    card.onclick=()=>{ mesSelecionado=mes.id; renderAll(); };
+    el.appendChild(card);
+  });
+}
+
+function renderAnualRank(){
+  const unidades=['Botelhos','Cabo Verde','Poços','Nova Resende','Canal Digital'];
+  const rows=unidades.map(nome=>{
+    const acum=getAcum(nome);
+    const meta=META_ANUAL[nome]||0;
+    const p=pct(acum,meta);
+    const isDigital=nome==='Canal Digital';
+    return {nome,acum,meta,p,gap:meta-acum,isDigital};
+  }).sort((a,b)=>b.acum-a.acum);
+
+  const table=document.getElementById('anual-table');
+  table.innerHTML=`<thead><tr>
+    <th style="width:36px">#</th><th>Unidade</th>
+    <th>Acumulado 2026</th><th>Meta Anual</th>
+    <th>% da Meta</th><th>Gap Anual</th><th>Progresso</th>
+  </tr></thead><tbody id="anual-tbody"></tbody>`;
+
+  const tbody=table.querySelector('tbody');
+  rows.forEach((r,i)=>{
+    const bc=r.isDigital?'#14C4B4':barColor(r.p);
+    const tr=document.createElement('tr');
+    if(r.isDigital) tr.className='digital-row';
+    tr.innerHTML=`
+      <td><span class="a-rank-num arn-${i+1}">${i+1}</span></td>
+      <td style="font-weight:600;color:${r.isDigital?'var(--teal2)':'#fff'}">${r.nome}${r.isDigital?' <span style="font-size:.65rem;opacity:.6">(digital)</span>':''}</td>
+      <td class="tv-gd" style="color:${r.isDigital?'var(--teal2)':'var(--gd)'}">${fBRL(r.acum)}</td>
+      <td style="color:rgba(255,255,255,.35)">${fBRL(r.meta)}</td>
+      <td><span style="font-weight:700;color:${bc}">${r.p!==null?r.p+'%':'—'}</span></td>
+      <td class="${r.gap<=0?'gap-ok':'gap-warn'}">${r.gap<=0?'+ '+fBRL(Math.abs(r.gap)):fBRL(r.gap)+' faltam'}</td>
+      <td><div class="mini-bar-wrap"><div class="mini-bar" style="width:${r.p?Math.min(r.p,100):0}%;background:${bc}"></div></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  const totalAcum=rows.reduce((a,r)=>a+r.acum,0);
+  const totalMeta=rows.reduce((a,r)=>a+r.meta,0);
+  const totalGap=totalMeta-totalAcum;
+  const ttr=document.createElement('tr');
+  ttr.innerHTML=`
+    <td></td><td>TOTAL GERAL</td>
+    <td class="tv-gd">${fBRL(totalAcum)}</td>
+    <td>${fBRL(totalMeta)}</td>
+    <td>${pct(totalAcum,totalMeta)}%</td>
+    <td class="${totalGap<=0?'gap-ok':'gap-warn'}">${totalGap<=0?'+ '+fBRL(Math.abs(totalGap)):fBRL(totalGap)+' faltam'}</td>
+    <td></td>
+  `;
+  tbody.appendChild(ttr);
+}
+
+function renderBannerEspecial(mes){
+  // Remove banner anterior se existir
+  const old = document.getElementById('banner-especial');
+  if(old) old.remove();
+
+  let html = '';
+
+  if(mes.id === 'jun' && mes.status === 'closed'){
+    html = `
+    <div id="banner-especial" class="special-banner banner-comemorativo">
+      <div class="sb-emoji">🏆</div>
+      <div class="sb-quote sb-quote-verde">
+        "Junho entrou para a história da Maximiano.<br>
+        <em>4 de 4 unidades físicas bateram a meta.</em><br>
+        Botelhos brilhou com 205,7%. Cabo Verde cruzou a linha no último dia. Poços e Nova Resende confirmaram o ritmo. O time entregou mais um mês acima de 100%."
+      </div>
+      <div class="sb-ref">✦ Total: R$ 1.504.970 — 113,1% da meta. Parabéns, time! ✦</div>
+    </div>`;
+  }
+
+  if(mes.id === 'mai' && mes.status === 'closed'){
+    html = `
+    <div id="banner-especial" class="special-banner banner-comemorativo">
+      <div class="sb-emoji">🏆</div>
+      <div class="sb-quote sb-quote-verde">
+        "Abril nos mostrou o que somos capazes.<br>
+        <em>Maio confirmou quem somos.</em><br>
+        4 de 4 unidades físicas bateram a meta — R$ 1.352.638 realizados, 116,8% do objetivo.<br>
+        Botelhos fez a virada mais bonita do semestre: 141%. Cabo Verde voou para 122%. Poços cruzou a linha com precisão. Nova Resende se firmou.<br>
+        Esse resultado foi construído dia a dia, contrato a contrato, por cada pessoa dessa equipe."
+      </div>
+      <div class="sb-ref">✦ Parabéns, time Maximiano. Orgulho de cada um. ✦</div>
+    </div>`;
+  }
+
+
+
+  if(mes.id === 'jul'){
+    html = `
+    <div id="banner-especial" class="special-banner banner-encorajamento">
+      <div class="sb-emoji">🚀</div>
+      <div class="sb-quote">
+        <em>"Os planos do diligente tendem à abundância."</em>
+      </div>
+      <div class="sb-ref" style="margin-bottom:.7rem">Provérbios 21:5</div>
+      <div class="sb-quote" style="font-size:.88rem;color:rgba(255,255,255,.65);font-weight:400">
+        Junho foi histórico. Julho é uma nova folha em branco.<br>
+        <span style="color:var(--gd);font-weight:600">Meta: R$ 1.319.160 · 21 dias úteis · Vamos construir mais um mês sólido! 💪</span>
+      </div>
+    </div>`;
+  }
+
+  if(html){
+    const rankSection = document.querySelector('.ranking-list');
+    rankSection.insertAdjacentHTML('beforebegin', html);
+  }
+}
+
+// ============================================================
+// ABA ANUAL
+// ============================================================
+const MESES_RESTANTES = 5; // Ago–Dez
+
+// Metas mensais Jan–Mai por unidade (plano comercial)
+const METAS_ACUMULADAS = {
+  'Botelhos':    2181572,
+  'Poços':       1910254,
+  'Cabo Verde':  1759604,
+  'Nova Resende':192603,
+  'Canal Digital':683706,
+};
+
+// Metas mensais restantes por unidade (Jun–Dez, do plano comercial)
+const METAS_RESTANTES = {
+  'Botelhos':    [313880,570280,477758,550566,405400],
+  'Poços':       [390641,370399,497552,536027,501697],
+  'Cabo Verde':  [247957,413734,165673,294117,133836],
+  'Nova Resende':[34299, 34299, 34299, 34299, 34293],
+  'Canal Digital':[176331,190357,330545,269597,123869],
+};
+
+function getAcumAnual(nome){
+  return MESES.reduce((a,mes)=>{
+    const u=mes.unidades.find(x=>x.nome===nome);
+    return a+(u?u.real:0);
+  },0);
+}
+
+function renderAnoView(){
+  const unidades=[
+    {nome:'Botelhos',   digital:false},
+    {nome:'Poços',      digital:false},
+    {nome:'Cabo Verde', digital:false},
+    {nome:'Nova Resende',digital:false},
+    {nome:'Canal Digital',digital:true},
+  ];
+
+  // Banner totais anuais
+  const totalAcum = unidades.reduce((a,u)=>a+getAcumAnual(u.nome),0);
+  const totalMeta = unidades.reduce((a,u)=>a+(META_ANUAL[u.nome]||0),0);
+  const totalRestMetas = unidades.reduce((a,u)=>a+(METAS_RESTANTES[u.nome]||[]).reduce((x,y)=>x+y,0),0);
+  const totalGapAnual = totalMeta - totalAcum;
+  const pTotal = Math.round(totalAcum/totalMeta*100);
+
+  document.getElementById('ano-total-banner').innerHTML=`
+    <div><div class="tot-val" style="color:var(--gd)">${fBRL(totalAcum)}</div><div class="tot-lbl">Acumulado Jan–Jun</div></div>
+    <div><div class="tot-val" style="color:${pTotal>=100?'var(--green)':'var(--amber)'}">${pTotal}%</div><div class="tot-lbl">da Meta Anual</div></div>
+    <div><div class="tot-val" style="color:rgba(255,255,255,.75)">${fBRL(totalMeta)}</div><div class="tot-lbl">Meta Anual Total</div></div>
+    <div><div class="tot-val" style="color:${totalGapAnual<=0?'var(--green)':'var(--amber)'}">${totalGapAnual<=0?'+ '+fBRL(Math.abs(totalGapAnual)):fBRL(totalGapAnual)}</div><div class="tot-lbl">Gap Anual Restante</div></div>
+  `;
+
+  // Cards por unidade
+  const grid = document.getElementById('ano-grid');
+  grid.innerHTML='';
+
+  // Ordena por % atingido desc
+  const rows = unidades.map(u=>{
+    const acum = getAcumAnual(u.nome);
+    const meta = META_ANUAL[u.nome]||0;
+    const p = Math.round(acum/meta*100);
+    const gap = meta - acum;
+    const metasRest = METAS_RESTANTES[u.nome]||[];
+    const totalMetaRest = metasRest.reduce((a,b)=>a+b,0);
+    const ritmoMes = MESES_RESTANTES>0 ? gap/MESES_RESTANTES : 0;
+    // % do ritmo acumulado Jan-Mai (realizado vs meta dos meses passados)
+    const metaAcum = METAS_ACUMULADAS[u.nome]||0;
+    const pAcum = metaAcum>0?Math.round(acum/metaAcum*100):0;
+    // % esperado do ano até junho (meta Jan-Jun / meta anual)
+    const metaJulAcum = metaAcum + (METAS_RESTANTES[u.nome]||[])[0];
+    const pEsperado = Math.round(metaJulAcum/meta*100);
+    return {...u, acum, meta, p, gap, totalMetaRest, ritmoMes, pAcum, pEsperado};
+  }).sort((a,b)=>b.pAcum-a.pAcum);
+
+  rows.forEach(r=>{
+    const bc = r.digital?'#14C4B4':barColor(r.p);
+    const isOk = r.gap<=0;
+    const card = document.createElement('div');
+    card.className='ano-card'+(r.digital?' digital-card':'');
+    const bcAcum = r.pAcum>=100?'#3EC98E':r.pAcum>=80?'#E8A030':'#F06060';
+    card.innerHTML=`
+      <div class="ano-card-header">
+        <div class="ano-card-name">${r.nome}${r.digital?' <span style="font-size:.6rem;color:var(--teal2);font-weight:700;border:1px solid rgba(14,168,154,.3);padding:.05rem .35rem;border-radius:8px">digital</span>':''}</div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <div style="text-align:center">
+            <div class="ano-pct-badge" style="background:${r.digital?'rgba(14,168,154,.12)':'rgba(62,201,142,.1)'};color:${bcAcum};font-size:.85rem">${r.pAcum}%</div>
+            <div style="font-size:.52rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.15rem">jan–jun</div>
+          </div>
+          <div style="text-align:center">
+            <div class="ano-pct-badge" style="background:${r.digital?'rgba(14,168,154,.12)':'rgba(232,160,48,.08)'};color:${bc};font-size:.85rem">${r.p}%</div>
+            <div style="font-size:.52rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.15rem">do ano</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:.6rem">
+        <div>
+          <div style="font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem">Ritmo Jan–Mai</div>
+          <div class="ano-bar-wrap" style="margin-bottom:0">
+            <div class="ano-bar" style="width:0%;background:${bcAcum}" data-w="${Math.min(r.pAcum,100)}%"></div>
+          </div>
+          <div style="font-size:.6rem;color:${bcAcum};font-weight:700;margin-top:.2rem">${r.pAcum}% da meta do período</div>
+        </div>
+        <div>
+          <div style="font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem">Progresso Anual</div>
+          <div class="ano-bar-wrap" style="margin-bottom:0">
+            <div class="ano-bar" style="width:0%;background:${bc}" data-w="${Math.min(r.p,100)}%"></div>
+          </div>
+          <div style="font-size:.6rem;color:var(--muted);font-weight:500;margin-top:.2rem">${r.p}% — esperado ≈ ${r.pEsperado}% em ago</div>
+        </div>
+      </div>
+      <div class="ano-nums">
+        <div class="ano-num">
+          <div class="ano-num-val" style="color:var(--gd)">${fBRL(r.acum)}</div>
+          <div class="ano-num-lbl">Acumulado</div>
+        </div>
+        <div class="ano-num">
+          <div class="ano-num-val" style="color:rgba(255,255,255,.4)">${fBRL(r.meta)}</div>
+          <div class="ano-num-lbl">Meta Anual</div>
+        </div>
+        <div class="ano-num">
+          <div class="ano-num-val" style="color:${isOk?'var(--green)':'var(--amber)'}">${isOk?'+ '+fBRL(Math.abs(r.gap)):fBRL(r.gap)}</div>
+          <div class="ano-num-lbl">${isOk?'Excedente':'Falta'}</div>
+        </div>
+      </div>
+      <div class="ano-ritmo${isOk?' ok':''}">
+        <div class="ano-ritmo-label">${isOk?'Meta anual superada! 🏆':'Ritmo mensal necessário (Jun–Dez)'}</div>
+        <div class="ano-ritmo-val">${isOk?'+ '+fBRL(Math.abs(r.gap)):fBRL(Math.max(r.ritmoMes,0))+'/mês'}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+    setTimeout(()=>{
+      card.querySelector('.ano-bar').style.width = card.querySelector('.ano-bar').dataset.w;
+    },100);
+  });
+}
+
+let anoViewAtivo = false;
+
+function toggleAnoView(){
+  anoViewAtivo = !anoViewAtivo;
+  document.getElementById('ano-view').style.display = anoViewAtivo?'block':'none';
+  document.getElementById('mes-view').style.display  = anoViewAtivo?'none':'block';
+  document.getElementById('btn-ano').classList.toggle('active', anoViewAtivo);
+  // desativa seleção de mês quando aba anual está ativa
+  document.querySelectorAll('.mes-btn').forEach(b=>b.classList.toggle('inactive',anoViewAtivo));
+  if(anoViewAtivo) renderAnoView();
+}
+
+// ============================================================
+// VISÃO POR UNIDADE
+// ============================================================
+
+const UNIDADES_LIST = [
+  {nome:'Botelhos',    digital:false},
+  {nome:'Poços',       digital:false},
+  {nome:'Cabo Verde',  digital:false},
+  {nome:'Nova Resende',digital:false},
+  {nome:'Canal Digital',digital:true},
+];
+
+// Metas mensais completas por unidade (do plano comercial)
+const METAS_MENSAIS = {
+  'Botelhos':    {jan:199093,fev:379833,mar:195648,abr:331403,mai:389830,jun:290031,ago:395734},
+  'Poços':       {jan:203523,fev:191563,mar:142325,abr:297352,mai:263609,jun:414920,ago:396962},
+  'Cabo Verde':  {jan:176619,fev:212473,mar:203017,abr:174444,mai:314051,jun:352236,ago:326764},
+  'Nova Resende':{jan:26384, fev:26384, mar:26384, abr:26384, mai:26384, jun:26384, ago:34299},
+  'Canal Digital':{jan:0,   fev:27326, mar:58291, abr:21859, mai:163820,jun:247009,ago:165401},
+};
+
+const MESES_LABELS = {jan:'Jan',fev:'Fev',mar:'Mar',abr:'Abr',mai:'Mai',jun:'Jun'};
+const MESES_IDS    = ['jan','fev','mar','abr','mai','jun','ago'];
+
+let unidadeSelecionada = 'Botelhos';
+
+function getUnidadeData(nome){
+  return MESES_IDS.map(mid=>{
+    const mes = MESES.find(m=>m.id===mid);
+    const u   = mes ? mes.unidades.find(x=>x.nome===nome) : null;
+    const meta = METAS_MENSAIS[nome]?.[mid] || 0;
+    const real = u ? u.real : 0;
+    const prot = u ? u.prot : null;
+    const status = mes ? mes.status : 'future';
+    const hasData = real > 0;
+    return {mid, label:MESES_LABELS[mid], meta, real, prot, status, hasData};
+  });
+}
+
+function barColorUnit(p, semMeta){
+  if(semMeta) return '#3EC98E'; // sem meta mas produziu = verde
+  if(p===null||p===0) return 'rgba(255,255,255,.12)';
+  if(p>=100) return '#3EC98E';
+  if(p>=80)  return '#E8A030';
+  if(p>=60)  return '#F5A030';
+  return '#F06060';
+}
+
+function rowClass(d, isDigital){
+  if(!d.hasData && d.status!=='live') return '';
+  const p = d.meta>0 ? d.real/d.meta*100 : null;
+  if(d.status==='live') return 'atual';
+  if(p===null) return '';
+  if(p>=100) return 'bateu';
+  if(p>=80)  return 'parcial';
+  return 'nao-bateu';
+}
+
+function renderUnidadeSelector(){
+  const el = document.getElementById('unidade-selector');
+  el.innerHTML='';
+  UNIDADES_LIST.forEach(u=>{
+    const btn = document.createElement('button');
+    btn.className='unidade-btn'+(u.digital?' digital':'')+(u.nome===unidadeSelecionada?' active':'');
+    btn.textContent = u.nome;
+    btn.onclick=()=>{ unidadeSelecionada=u.nome; renderUnidadePainel(); renderUnidadeSelector(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderUnidadePainel(){
+  const isDigital = unidadeSelecionada==='Canal Digital';
+  const dados = getUnidadeData(unidadeSelecionada);
+  const acum  = dados.reduce((a,d)=>a+d.real,0);
+  const metaAcum = dados.reduce((a,d)=>a+d.meta,0);
+  const mesesBatidos = dados.filter(d=>d.hasData&&d.meta>0&&d.real>=d.meta).length;
+  const totalProt = dados.reduce((a,d)=>{
+    if(!d.prot) return a;
+    if(d.prot.total!==undefined) return a+d.prot.total;
+    if(d.prot.adm!==undefined)   return a+d.prot.adm+d.prot.jud;
+    return a;
+  },0);
+  const pAcum = metaAcum>0?Math.round(acum/metaAcum*100):0;
+  const bcAcum = barColorUnit(pAcum);
+  const metaAnual = META_ANUAL[unidadeSelecionada]||0;
+  const pAnual = metaAnual>0?Math.round(acum/metaAnual*100):0;
+
+  let html = `
+    <div class="unidade-painel">
+      <div class="u-header">
+        <div>
+          <div class="u-nome${isDigital?' digital-nome':''}">
+            ${unidadeSelecionada.split(' ')[0]} <em>${unidadeSelecionada.split(' ').slice(1).join(' ')||'2026'}</em>
+          </div>
+          <div style="margin-top:.5rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+            <span style="font-size:.75rem;color:var(--muted)">Jan–Jul 2026</span>
+            ${mesesBatidos>=4?'<span class="u-trophy">🏆 '+mesesBatidos+' meses batidos</span>':''}
+          </div>
+        </div>
+        <div class="u-kpis">
+          <div class="u-kpi">
+            <div class="u-kpi-val" style="color:var(--gd)">${fBRL(acum)}</div>
+            <div class="u-kpi-lbl">Total Realizado</div>
+          </div>
+          <div class="u-kpi">
+            <div class="u-kpi-val" style="color:${bcAcum}">${pAcum}%</div>
+            <div class="u-kpi-lbl">das Metas Jan–Jul</div>
+          </div>
+          <div class="u-kpi">
+            <div class="u-kpi-val" style="color:rgba(255,255,255,.4)">${pAnual}%</div>
+            <div class="u-kpi-lbl">da Meta Anual</div>
+          </div>
+          ${!isDigital&&totalProt>0?`<div class="u-kpi"><div class="u-kpi-val" style="color:#fff">${totalProt}</div><div class="u-kpi-lbl">Protocolos</div></div>`:''}
+        </div>
+      </div>
+      <div class="u-meses">
+  `;
+
+  // Header
+  html += `
+    <div style="display:grid;grid-template-columns:80px 1fr auto auto auto;padding:.4rem 1rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">
+      <div>Mês</div><div>Progresso</div>
+      <div style="min-width:100px;text-align:right">Realizado</div>
+      <div style="min-width:70px;text-align:center">%</div>
+      <div style="min-width:70px;text-align:center">Prot.</div>
+    </div>
+  `;
+
+  dados.forEach(d=>{
+    const semMeta = d.meta===0 && d.real>0;
+    const p = d.meta>0 ? Math.round(d.real/d.meta*100) : null;
+    const bc = barColorUnit(p, semMeta);
+    const rc = semMeta ? 'bateu' : rowClass(d, isDigital);
+    const barW = semMeta ? '100%' : (d.hasData&&d.meta>0 ? Math.min(p,100)+'%' : '0%');
+    const pLabel = semMeta ? '✓' : (d.status==='live'&&!d.hasData ? '—' : (p!==null?p+'%':'—'));
+    const badge = rc==='bateu'?'✓':rc==='atual'?'⚡':'';
+
+    // Protocolo display
+    let protStr = '—';
+    if(d.prot){
+      if(d.prot.total!==undefined) protStr = d.prot.total;
+      else if(d.prot.adm!==undefined) protStr = d.prot.adm+d.prot.jud;
+    }
+    if(isDigital) protStr = '—';
+
+    const isCurrentMonth = d.status==='live';
+    const rowStyle = !d.hasData&&!isCurrentMonth?'opacity:.35':'';
+
+    html += `
+      <div class="u-mes-row ${rc}" style="${rowStyle}">
+        <div class="u-mes-label">${d.label} ${badge?'<span style="color:'+bc+'">'+badge+'</span>':''}</div>
+        <div class="u-mes-bar-area">
+          <div class="u-mes-bar-wrap">
+            <div class="u-mes-bar-inner" style="width:${barW};background:${bc}" data-w="${barW}"></div>
+          </div>
+          <div class="u-mes-bar-labels">
+            <span>Meta: ${d.meta>0?fBRL(d.meta):'—'}</span>
+            ${isCurrentMonth?'<span style="color:var(--amber);font-weight:600">Em andamento</span>':''}
+          </div>
+        </div>
+        <div class="u-mes-real">
+          <div class="u-mes-real-val" style="color:${d.hasData?'var(--gd)':'rgba(255,255,255,.2)'}">${d.hasData?fBRL(d.real):'—'}</div>
+          <div class="u-mes-real-lbl">Realizado</div>
+        </div>
+        <div class="u-mes-pct">
+          <div class="u-mes-pct-val" style="color:${bc}">${pLabel}</div>
+        </div>
+        <div class="u-mes-prot">
+          <div class="u-mes-prot-val">${protStr}</div>
+          <div class="u-mes-prot-lbl">Prot.</div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Total row enriquecida
+  const pTot    = metaAcum>0?Math.round(acum/metaAcum*100):0;
+  const bcTot   = barColorUnit(pTot);
+  const metaAno = META_ANUAL[unidadeSelecionada]||0;
+  const pAno    = metaAno>0?Math.round(acum/metaAno*100):0;
+  const bcAno   = barColorUnit(pAno);
+  const gapAno  = metaAno - acum;
+  // Meta restante Jun–Dez do plano
+  const metaRestArr = METAS_RESTANTES[unidadeSelecionada]||[];
+  const metaRestTotal = metaRestArr.reduce((a,b)=>a+b,0);
+  const ritmoNec = gapAno > 0 ? gapAno/6 : 0;
+  const superavit = gapAno <= 0;
+
+  html += `
+    <div class="u-total-row" style="border-radius:var(--r);margin-top:.8rem">
+      <div class="u-mes-label" style="color:var(--gd);font-size:.72rem;letter-spacing:.04em">TOTAL<br>Jan–Jul</div>
+      <div class="u-mes-bar-area">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.4rem">
+          <div>
+            <div style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem">Ritmo Jan–Jul vs Meta</div>
+            <div class="u-mes-bar-wrap" style="margin-bottom:.2rem">
+              <div class="u-mes-bar-inner" style="width:${Math.min(pTot,100)}%;background:${bcTot}"></div>
+            </div>
+            <div style="font-size:.65rem;font-weight:700;color:${bcTot}">${pTot}% da meta do período · ${fBRL(metaAcum)}</div>
+          </div>
+          <div>
+            <div style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem">Progresso Meta Anual</div>
+            <div class="u-mes-bar-wrap" style="margin-bottom:.2rem">
+              <div class="u-mes-bar-inner" style="width:${Math.min(pAno,100)}%;background:${bcAno}"></div>
+            </div>
+            <div style="font-size:.65rem;font-weight:700;color:${bcAno}">${pAno}% da meta anual · ${fBRL(metaAno)}</div>
+          </div>
+        </div>
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:${superavit?'rgba(62,201,142,.1)':'rgba(232,160,48,.1)'};border:1px solid ${superavit?'rgba(62,201,142,.25)':'rgba(232,160,48,.25)'};border-radius:8px;padding:.35rem .8rem;margin-top:.1rem">
+          <span style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">${superavit?'Superávit anual':'Ritmo necessário Ago–Dez (5 meses)'}</span>
+          <span style="font-weight:800;font-size:.95rem;color:${superavit?'var(--green)':'var(--amber)'}">${superavit?'+ '+fBRL(Math.abs(gapAno)):fBRL(ritmoNec)+'/mês'}</span>
+          ${!superavit?`<span style="font-size:.6rem;color:var(--muted)">· falta ${fBRL(gapAno)} no ano</span>`:''}
+        </div>
+      </div>
+      <div class="u-mes-real" style="border-left:1px solid var(--border)">
+        <div class="u-mes-real-val" style="color:var(--gd);font-size:1.2rem">${fBRL(acum)}</div>
+        <div class="u-mes-real-lbl">Realizado</div>
+      </div>
+      <div class="u-mes-pct">
+        <div class="u-mes-pct-val" style="color:${bcTot};font-size:1.15rem">${pTot}%</div>
+        <div style="font-size:.55rem;color:var(--muted);margin-top:.15rem">jan–jun</div>
+      </div>
+      <div class="u-mes-prot">
+        ${!isDigital&&totalProt>0
+          ?`<div class="u-mes-prot-val" style="font-size:1.2rem">${totalProt}</div><div class="u-mes-prot-lbl">Prot.</div>`
+          :'<div class="u-mes-prot-val" style="color:rgba(255,255,255,.2)">—</div>'
+        }
+      </div>
+    </div>
+  `;
+
+  html += `</div></div>`;
+  document.getElementById('unidade-painel').innerHTML = html;
+
+  // Animate bars
+  setTimeout(()=>{
+    document.querySelectorAll('.u-mes-bar-inner').forEach(b=>{
+      if(b.dataset.w) b.style.width=b.dataset.w;
+    });
+  },80);
+}
+
+// ============================================================
+
+function renderAll(){
+  const mes=getMes(mesSelecionado);
+  renderMesSelector();
+  renderStatusBanner(mes);
+  renderTotais(mes);
+  renderBannerEspecial(mes);
+  renderRanking(mes);
+  renderHistorico();
+  renderAnualRank();
+  renderUnidadeSelector();
+  renderUnidadePainel();
+}
+renderAll();
+</script>
+</body>
+</html>
